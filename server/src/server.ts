@@ -1,22 +1,13 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
+import app from './app.js';
 import connectDB from './db.js';
 
-dotenv.config();
+const PORT = process.env.PORT || 4750;
 
-const app = express();
-const PORT = process.env.PORT || 4500;
+const startServer = async () => {
+    await connectDB();
+    app.listen(PORT, () => {
+        console.log(`Server is running at http://localhost:${PORT}`);
+    });
+};
 
-app.use(cors());
-app.use(express.json(), express.urlencoded({ extended: true }));
-
-connectDB();
-
-app.get('/', (req, res) => {
-    res.send('Hello, TypeScript with ES6!');
-});
-
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+startServer();
