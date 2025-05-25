@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 import companyRoutes from './routes/company.routes.js';
+import profileRoutes from './routes/businessProfile.routes.js';
 
 dotenv.config();
 
@@ -13,5 +14,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/companies', companyRoutes);
+app.use('/api/profile', profileRoutes);
 
 export default app;

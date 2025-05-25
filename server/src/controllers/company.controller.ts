@@ -1,8 +1,7 @@
-import { Request, Response } from 'express';
 import Company from '../models/company.model.js';
 
 // Create
-export const createCompany = async (req: Request, res: Response) => {
+export const createCompany = async (req: any, res: any) => {
     try {
         const company = await Company.create(req.body);
         res.status(201).json(company);
@@ -12,7 +11,7 @@ export const createCompany = async (req: Request, res: Response) => {
 };
 
 // Get All
-export const getAllCompanies = async (_req: Request, res: Response) => {
+export const getAllCompanies = async (_req: any, res: any) => {
     try {
         const companies = await Company.find().sort({ created_at: -1 });
         res.json(companies);
