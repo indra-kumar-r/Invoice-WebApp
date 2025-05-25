@@ -1,9 +1,47 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {}
+export class HomeComponent {
+  tabs = [
+    {
+      title: 'Invoices',
+      path: 'invoices',
+      image: 'invoices.jpg',
+    },
+    {
+      title: 'GST',
+      path: 'gst',
+      image: 'gst.jpg',
+    },
+    {
+      title: 'Companies',
+      path: 'companies',
+      image: 'companies.jpg',
+    },
+    {
+      title: 'Profile',
+      path: 'profile',
+      image: 'profile.jpg',
+    },
+    {
+      title: 'Settings',
+      path: 'settings',
+      image: 'settings.jpg',
+    },
+  ];
+
+  activeTab = this.tabs[0];
+
+  constructor(private router: Router) {}
+
+  navigateToTab(path: string): void {
+    this.router.navigate([path]);
+  }
+}

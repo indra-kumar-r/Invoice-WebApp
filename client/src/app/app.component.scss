@@ -1,0 +1,18 @@
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--Primary-Snow-white_FFFFFF, #ffffff);
+
+  .header {
+    width: 100%;
+    height: 7.5%;
+    background: var(--Greys-Grey1_F7F8FF, #f7f8ff);
+  }
+
+  .content {
+    width: 100%;
+    height: 92.5%;
+  }
+}
