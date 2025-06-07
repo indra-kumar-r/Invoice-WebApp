@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class HeaderComponent {
   constructor(private router: Router) {}
 
-  goToHome(): void {
+  navigateToHome(): void {
     this.router.navigate(['home']);
   }
 }

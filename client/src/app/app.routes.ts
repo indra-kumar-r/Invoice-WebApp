@@ -1,21 +1,20 @@
 import { Routes } from '@angular/router';
+import { CompanyComponent } from './features/companies/company/company.component';
+import { ManageCompanyComponent } from './features/companies/manage-company/manage-company.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./features/login/login.component').then((m) => m.LoginComponent),
+    title: 'Login - YHE Admin',
+  },
   {
     path: 'home',
     loadComponent: () =>
       import('./features/home/home.component').then((m) => m.HomeComponent),
     title: 'Home - YHE Admin',
-  },
-  {
-    path: 'companies',
-    loadComponent: () =>
-      import('./features/companies/companies.component').then(
-        (m) => m.CompaniesComponent
-      ),
-    title: 'Companies - YHE Admin',
   },
   {
     path: 'invoices',
@@ -32,26 +31,22 @@ export const routes: Routes = [
     title: 'GST - YHE Admin',
   },
   {
-    path: 'profile',
+    path: 'companies',
     loadComponent: () =>
-      import('./features/profile/profile.component').then(
-        (m) => m.ProfileComponent
+      import('./features/companies/companies.component').then(
+        (m) => m.CompaniesComponent
       ),
-    title: 'Profile - YHE Admin',
-  },
-  {
-    path: 'login',
-    loadComponent: () =>
-      import('./features/login/login.component').then((m) => m.LoginComponent),
-    title: 'Login - YHE Admin',
-  },
-  {
-    path: 'settings',
-    loadComponent: () =>
-      import('./features/settings/settings.component').then(
-        (m) => m.SettingsComponent
-      ),
-    title: 'Settings - YHE Admin',
+    title: 'Companies - YHE Admin',
+    children: [
+      {
+        path: '',
+        component: ManageCompanyComponent,
+      },
+      {
+        path: 'company/:uuid',
+        component: CompanyComponent,
+      },
+    ],
   },
   {
     path: '**',

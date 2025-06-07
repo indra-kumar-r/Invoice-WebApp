@@ -25,16 +25,6 @@ export class HomeComponent {
       path: 'companies',
       image: 'companies.jpg',
     },
-    {
-      title: 'Profile',
-      path: 'profile',
-      image: 'profile.jpg',
-    },
-    {
-      title: 'Settings',
-      path: 'settings',
-      image: 'settings.jpg',
-    },
   ];
 
   activeTab = this.tabs[0];
