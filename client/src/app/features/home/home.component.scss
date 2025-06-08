@@ -5,6 +5,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   padding: 32px;
+  overflow: hidden;
 
   .container {
     width: 100%;
@@ -13,11 +14,18 @@
     align-items: center;
     justify-content: center;
     gap: 50px;
+    padding: 48px;
     flex-wrap: wrap;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .tab-wrapper {
       width: 20%;
-      height: 50%;
+      width: 350px;
+      height: 70%;
       display: flex;
       align-items: center;
       justify-content: center;

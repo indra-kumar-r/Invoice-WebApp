@@ -1,0 +1,52 @@
+<div class="manage-companies-wrapper">
+  <div class="header">
+    <div class="title">
+      <div class="btn btn-light" (click)="navigateToHome()">
+        <i class="bi bi-arrow-left-short"></i>
+      </div>
+      <div class="text-secondary fw-bold fs-6 text-uppercase">Companies</div>
+    </div>
+
+    <div class="options">
+      <div class="add-company-btn">
+        <div
+          class="btn btn-light btn-sm py-2 px-4 text-success fw-bolder d-flex gap-6"
+          (click)="createCompany()"
+        >
+          <i class="bi bi-plus"></i>
+          <span>Add Company</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="companies-details">
+    <div class="options">
+      <div class="compnay-count">
+        <div class="text-secondary fw-bold fs-6">
+          {{ companies!.length }} Companies
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="companies" class="companies">
+      <div
+        class="company"
+        *ngFor="let company of companies"
+        (click)="viewCompanyDetails(company.uuid)"
+      >
+        <div class="company-icon" [ngStyle]="{ color: company?.color }">
+          {{ company.company_name[0] }}
+        </div>
+        <div class="company-name">{{ company.company_name }}</div>
+
+        <div class="notify">
+          <span [ngStyle]="{ color: company?.color }"
+            >Click to view details</span
+          >
+          <i class="bi bi-box-arrow-in-up-right" style="font-size: 48px"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

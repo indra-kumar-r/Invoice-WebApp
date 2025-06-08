@@ -1,0 +1,60 @@
+<div class="company-wrapper">
+  <div class="header">
+    <div class="title">
+      <div class="btn btn-light" (click)="navigateToCompanies()">
+        <i class="bi bi-arrow-left-short"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="company-details">
+    <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+      <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
+        <span>{{ companyId !== "create" ? "Update" : "Add new" }}</span> Company
+      </div>
+
+      <div class="input-section">
+        <app-input
+          label="Company Name"
+          placeholder="Enter company name"
+          type="text"
+          [formControl]="getControl('company_name')"
+        ></app-input>
+
+        <app-input
+          label="Company Address"
+          placeholder="Enter company address"
+          type="text"
+          [formControl]="getControl('company_address')"
+        ></app-input>
+
+        <app-input
+          label="GST Number"
+          placeholder="Enter GST number"
+          type="text"
+          [formControl]="getControl('company_gst_no')"
+        ></app-input>
+      </div>
+
+      <div class="btns">
+        <button
+          *ngIf="companyId !== 'create'"
+          type="button"
+          class="btn btn-danger"
+          [disabled]="companyForm.invalid"
+          (click)="deleteCompany()"
+        >
+          Delete Company
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-success"
+          [disabled]="companyForm.invalid"
+        >
+          {{ companyId !== "create" ? "Update" : "Create" }} Company
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

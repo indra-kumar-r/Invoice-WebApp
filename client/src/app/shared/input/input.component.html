@@ -1,1 +1,13 @@
-<p>input works!</p>
+<div class="input-wrapper">
+  <label *ngIf="label">{{ label }} <span>*</span></label>
+
+  <input
+    [type]="type"
+    [placeholder]="placeholder"
+    [readonly]="readonly"
+    [value]="value"
+    (input)="onInput($event)"
+  />
+
+  <div *ngIf="errorMsg" class="input-error">{{ errorMsg }}</div>
+</div>

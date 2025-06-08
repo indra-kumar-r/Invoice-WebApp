@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { CompanyComponent } from './features/companies/company/company.component';
 import { ManageCompanyComponent } from './features/companies/manage-company/manage-company.component';
+import { ManageInvoicesComponent } from './features/invoice/manage-invoices/manage-invoices.component';
+import { ViewInvoiceComponent } from './features/invoice/view-invoice/view-invoice.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -23,6 +25,16 @@ export const routes: Routes = [
         (m) => m.InvoiceComponent
       ),
     title: 'Invoices - YHE Admin',
+    children: [
+      {
+        path: '',
+        component: ManageInvoicesComponent,
+      },
+      {
+        path: 'invoice/:uuid',
+        component: ViewInvoiceComponent,
+      },
+    ],
   },
   {
     path: 'gst',

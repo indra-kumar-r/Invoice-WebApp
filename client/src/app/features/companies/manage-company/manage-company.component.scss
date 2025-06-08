@@ -1,0 +1,127 @@
+.manage-companies-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 42px;
+  font-family: "Manrope", "Roboto";
+  overflow: hidden;
+
+  .header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      letter-spacing: 2px;
+    }
+  }
+
+  .companies-details {
+    width: 100%;
+    height: 100%;
+    padding: 24px 0;
+
+    .options {
+      width: 100%;
+      padding: 8px;
+    }
+
+    .companies {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 84px;
+      padding: 32px 0px 120px 0px;
+      overflow: auto;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .company {
+        width: 180px;
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+        border-radius: 16px;
+        box-shadow: 0px 0px 12px rgba(211, 211, 211);
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        overflow: hidden;
+        position: relative;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+
+        .company-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 64px;
+          font-weight: bold;
+          font-family: "Manrope", "Roboto";
+          color: black;
+        }
+
+        .company-name {
+          width: 100%;
+          padding: 0 24px;
+          font-size: small;
+          font-family: "Manrope", "Roboto";
+          font-weight: bold;
+          text-align: center;
+        }
+
+        .notify {
+          width: 100%;
+          height: 80%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column-reverse;
+          gap: 8px;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          display: none;
+          z-index: 1;
+          font-size: small;
+          font-family: "Roboto";
+          background-color: rgba(255, 255, 255, 0.75);
+          transition: all 0.3s ease-in-out;
+
+          &:hover {
+            height: 100%;
+            transform: scale(1.05);
+          }
+        }
+
+        &:hover .notify {
+          display: flex;
+          font-weight: bold;
+        }
+
+        &:hover .company-name,
+        &:hover .company-icon {
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+}
