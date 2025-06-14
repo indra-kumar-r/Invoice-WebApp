@@ -13,4 +13,8 @@ export class PageNotFoundComponent {
   navigateToHome(): void {
     this.router.navigate(['home']);
   }
+
+  navigateBack(): void {
+    window.history.back();
+  }
 }

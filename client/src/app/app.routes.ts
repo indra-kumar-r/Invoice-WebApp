@@ -46,7 +46,7 @@ export const routes: Routes = [
         component: InvoiceAmountDetailsComponent,
       },
       {
-        path: 'invoice/:uuid',
+        path: 'view-invoice/:uuid',
         component: ViewInvoiceComponent,
       },
     ],
