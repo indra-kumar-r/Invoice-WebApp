@@ -72,6 +72,7 @@ export class InvoiceItemsDetailsComponent {
     if (this.itemForm.invalid) return;
 
     const item: InvoiceItem = this.itemForm.getRawValue();
+    item.name = item.name.toUpperCase();
     item.amount = item.quantity * item.rate;
     item.uuid = crypto.randomUUID();
 
@@ -95,6 +96,7 @@ export class InvoiceItemsDetailsComponent {
   updateItem(): void {
     if (this.itemForm.invalid || this.selectedIndex === null) return;
     const updated = this.itemForm.getRawValue();
+    updated.name = updated.name.toUpperCase();
     updated.uuid = this.invoiceItems[this.selectedIndex].uuid;
     updated.amount = updated.quantity * updated.rate;
     this.invoiceItems[this.selectedIndex] = updated;

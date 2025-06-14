@@ -22,9 +22,9 @@
 
   <div *ngIf="invoices.length; else noInvoices" class="invoices-details">
     <div class="invoices-header">
-      <div class="invoices-count">
+      <div *ngIf="invoices.length" class="invoices-count">
         <div class="text-secondary fw-bold fs-6">
-          {{ invoices.length }} Invoices
+          Invoices: {{ invoices.length }}
         </div>
       </div>
 
@@ -50,7 +50,7 @@
           <div class="invoice-date text-danger">Date: {{ invoice.date }}</div>
 
           <div *ngIf="invoice.grand_total" class="invoice-amount text-success">
-            Amount: {{ invoice.grand_total }} Rs
+            Amount: {{ invoice.grand_total }} ₹
           </div>
         </div>
 
@@ -133,7 +133,7 @@
               *ngIf="selectedInvoice?.grand_total"
               class="invoice-amount text-secondary"
             >
-              Amount: {{ selectedInvoice?.grand_total }} Rs
+              Amount: {{ selectedInvoice?.grand_total }} ₹
             </div>
           </div>
 

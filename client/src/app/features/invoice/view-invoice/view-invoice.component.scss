@@ -1,0 +1,279 @@
+.view-invoice-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12px 0;
+  overflow: hidden;
+}
+
+.invoice-details {
+  width: 70%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .header-section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 42px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid lightgray;
+
+    .company-details {
+      width: 60%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 8px;
+
+      .company-logo {
+        width: 70px;
+        margin-top: 8px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+
+      section {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-direction: column;
+        font-size: small;
+      }
+    }
+
+    .tax-invoice-title {
+      width: 40%;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-direction: column;
+
+      .mobile {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        font-size: small;
+        gap: 4px;
+
+        .numbers {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+
+  .content-section {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    padding: 12px 42px;
+
+    .info-section {
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      font-size: small;
+
+      .invoice-info-section {
+        display: flex;
+        align-items: flex-end;
+        flex-direction: column;
+      }
+    }
+
+    .extras-section {
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
+      font-size: small;
+    }
+
+    .items-section {
+      width: 100%;
+      height: 100%;
+
+      .items-list {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .list-header {
+          border-bottom: 1px solid lightgray;
+        }
+
+        .list-header,
+        .list-item {
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          font-size: small;
+          border-bottom: 1px solid lightgray;
+
+          .name {
+            flex: 1 1 60%;
+            min-width: 50%;
+            word-break: break-word;
+          }
+
+          .quantity,
+          .rate,
+          .amount {
+            flex: 0 0 12%;
+            text-align: right;
+          }
+        }
+      }
+    }
+
+    .amount-section {
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+
+      .grand-total-amount-section {
+        width: 70%;
+        font-size: small;
+      }
+
+      .total-amount-section {
+        width: 30%;
+        height: 100%;
+        font-size: small;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        gap: 42px;
+
+        .label-section,
+        .values-section {
+          display: flex;
+          align-items: flex-end;
+          justify-content: flex-end;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+
+  .footer-section {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 12px 42px;
+    border-top: 1px solid lightgray;
+
+    .conditions {
+      width: 50%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-direction: column;
+      font-size: small;
+    }
+
+    .signatures {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-evenly;
+      font-size: small;
+
+      .signature-section {
+        height: 100%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        flex-direction: column;
+
+        .signature-area {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          img {
+            height: 55px;
+            object-fit: contain;
+          }
+        }
+      }
+    }
+  }
+}
+
+.no-invoice {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+
+  .title {
+    letter-spacing: 7px;
+  }
+
+  .image-container {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}
+
+.print-options {
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  top: 16px;
+  right: 16px;
+
+  @media print {
+    display: none;
+  }
+}
