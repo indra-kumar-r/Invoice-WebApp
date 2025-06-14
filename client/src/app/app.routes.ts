@@ -3,6 +3,9 @@ import { CompanyComponent } from './features/companies/company/company.component
 import { ManageCompanyComponent } from './features/companies/manage-company/manage-company.component';
 import { ManageInvoicesComponent } from './features/invoice/manage-invoices/manage-invoices.component';
 import { ViewInvoiceComponent } from './features/invoice/view-invoice/view-invoice.component';
+import { InvoiceBasicDetailsComponent } from './features/invoice/invoice-basic-details/invoice-basic-details.component';
+import { InvoiceItemsDetailsComponent } from './features/invoice/invoice-items-details/invoice-items-details.component';
+import { InvoiceAmountDetailsComponent } from './features/invoice/invoice-amount-details/invoice-amount-details.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -29,6 +32,18 @@ export const routes: Routes = [
       {
         path: '',
         component: ManageInvoicesComponent,
+      },
+      {
+        path: 'basic-details/:uuid',
+        component: InvoiceBasicDetailsComponent,
+      },
+      {
+        path: 'items-details/:uuid',
+        component: InvoiceItemsDetailsComponent,
+      },
+      {
+        path: 'amount-details/:uuid',
+        component: InvoiceAmountDetailsComponent,
       },
       {
         path: 'invoice/:uuid',
