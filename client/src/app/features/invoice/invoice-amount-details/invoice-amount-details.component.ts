@@ -115,6 +115,22 @@ export class InvoiceAmountDetailsComponent {
     return parseFloat(((amount * rate) / 100).toFixed(2));
   }
 
+  toggleCheckbox(value: string): void {
+    switch (value) {
+      case 'sgst':
+        this.includeSgst = !this.includeSgst;
+        break;
+      case 'cgst':
+        this.includeCgst = !this.includeCgst;
+        break;
+      case 'igst':
+        this.includeIgst = !this.includeIgst;
+        break;
+    }
+
+    this.onTaxToggle();
+  }
+
   onSubmit(): void {
     if (this.invoiceForm.invalid || !this.invoiceItems.length) return;
 

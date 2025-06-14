@@ -55,7 +55,7 @@
   }
 
   form {
-    width: 60%;
+    width: 90%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -78,7 +78,7 @@
       align-items: flex-start;
       justify-content: center;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
       overflow: auto;
 
       &::-webkit-scrollbar {
@@ -113,7 +113,15 @@
           gap: 8px;
 
           .tax-checkbox {
+            padding: 0 4px;
             cursor: pointer;
+          }
+
+          label {
+            min-width: 7%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
 
           .tax-rate {
@@ -132,7 +140,6 @@
         align-items: center;
         justify-content: flex-start;
         flex-direction: column;
-        gap: 8px;
 
         .grand-total-amount,
         .amount-in-words {
@@ -144,19 +151,20 @@
         }
       }
     }
+  }
 
-    .options {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 8px;
+  .options {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 0 16px;
 
-      button {
-        font-size: small;
-        box-shadow: 0 0 12px rgba(211, 211, 211, 0.75);
-        padding: 12px;
-      }
+    button {
+      font-size: small;
+      box-shadow: 0 0 12px rgba(211, 211, 211, 0.75);
+      padding: 12px;
     }
   }
 }

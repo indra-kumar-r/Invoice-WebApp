@@ -9,9 +9,10 @@
 
   <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
     <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
-      <span>{{ invoiceId !== "create" ? "Update" : "Add" }}</span> Basic Details
+      <span>{{ invoiceId !== "create" ? "Edit" : "Add" }}</span> Basic Details
       for Invoice
     </div>
+
     <div class="invoice-basic-details">
       <div class="basic-details-section">
         <section>
@@ -137,12 +138,12 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="options">
-        <button type="submit" class="btn btn-light text-success fw-bold">
-          + Save Basic Details
-        </button>
-      </div>
+    <div *ngIf="invoiceForm.valid" class="options">
+      <button type="submit" class="btn btn-light text-success fw-bold">
+        Save Details
+      </button>
     </div>
   </form>
 </div>
