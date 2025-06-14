@@ -1,0 +1,171 @@
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import {
+  ReactiveFormsModule,
+  FormsModule,
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
+import { InputComponent } from '../../../shared/input/input.component';
+import { Company } from '../../../models/company.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CompanyService } from '../../../core/services/company/company.service';
+import { InvoiceService } from '../../../core/services/invoice/invoice.service';
+
+@Component({
+  selector: 'app-invoice-basic-details',
+  imports: [CommonModule, ReactiveFormsModule, InputComponent, FormsModule],
+  templateUrl: './invoice-basic-details.component.html',
+  styleUrl: './invoice-basic-details.component.scss',
+})
+export class InvoiceBasicDetailsComponent {
+  invoiceId: string = '';
+  invoiceForm!: FormGroup;
+
+  companies: Company[] = [];
+  showCompanyDropdown = false;
+  selectedCompany: Company | null = null;
+
+  dcNos: string[] = [];
+  dcNo: string = '';
+
+  orderNos: string[] = [];
+  orderNo: string = '';
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private invoiceService: InvoiceService,
+    private companyService: CompanyService
+  ) {}
+
+  ngOnInit(): void {
+    this.route.params.subscribe(({ uuid }) => {
+      this.invoiceId = uuid;
+      this.initForm();
+
+      if (this.invoiceId !== 'create') {
+        this.getInvoice();
+      }
+
+      this.getCompanies();
+    });
+  }
+
+  initForm(): void {
+    this.invoiceForm = this.formBuilder.group({
+      invoice_no: ['', Validators.required],
+      company_name: ['', Validators.required],
+      company_address: ['', Validators.required],
+      company_gst_no: ['', Validators.required],
+      date: ['', Validators.required],
+      dc_nos: [[]],
+      order_nos: [[]],
+    });
+  }
+
+  setTodayDate(): void {
+    const today = new Date();
+    const formatted = today.toLocaleDateString('en-GB');
+    this.invoiceForm.patchValue({ date: formatted });
+  }
+
+  toggleCompanyDropdown(): void {
+    this.showCompanyDropdown = !this.showCompanyDropdown;
+  }
+
+  onCompanySelect(company: Company): void {
+    this.selectedCompany = company;
+    this.showCompanyDropdown = !this.showCompanyDropdown;
+
+    this.invoiceForm.patchValue({
+      company_name: company.company_name,
+      company_address: company.company_address,
+      company_gst_no: company.company_gst_no,
+    });
+  }
+
+  addDcNo(): void {
+    if (this.dcNo) {
+      this.dcNos.push(this.dcNo.trim());
+      this.dcNo = '';
+      this.invoiceForm.patchValue({ dc_nos: [...this.dcNos] });
+    }
+  }
+
+  removeDcNo(index: number): void {
+    this.dcNos.splice(index, 1);
+    this.invoiceForm.patchValue({ dc_nos: [...this.dcNos] });
+  }
+
+  addOrderNo(): void {
+    if (this.orderNo) {
+      this.orderNos.push(this.orderNo.trim());
+      this.orderNo = '';
+      this.invoiceForm.patchValue({ order_nos: [...this.orderNos] });
+    }
+  }
+
+  removeOrderNo(index: number): void {
+    this.orderNos.splice(index, 1);
+    this.invoiceForm.patchValue({ order_nos: [...this.orderNos] });
+  }
+
+  getControl(controlName: string): FormControl {
+    return this.invoiceForm.get(controlName) as FormControl;
+  }
+
+  getCompanies(): void {
+    this.companyService.getCompanies().subscribe({
+      next: (res: Company[]) => (this.companies = res),
+      error: (err) => console.error('Company Error: ', err),
+    });
+  }
+
+  getInvoice(): void {
+    this.invoiceService.getInvoice(this.invoiceId).subscribe({
+      next: (res) => {
+        this.dcNos = res.dc_nos || [];
+        this.orderNos = res.order_nos || [];
+
+        this.invoiceForm.patchValue(res);
+      },
+      error: (err) => console.error('Invoice Error: ', err),
+    });
+  }
+
+  onSubmit(): void {
+    if (this.invoiceForm.invalid) {
+      console.error('Invalid form');
+      return;
+    }
+
+    const formValue = {
+      ...this.invoiceForm.getRawValue(),
+      dc_nos: this.dcNos.length ? this.dcNos : null,
+      order_nos: this.orderNos.length ? this.orderNos : null,
+    };
+
+    if (this.invoiceId === 'create') {
+      this.invoiceService.createInvoice(formValue).subscribe({
+        next: (res) => {
+          this.router.navigate(['/invoices/items-details', res.uuid]);
+        },
+        error: (err) => console.error('Create Error: ', err),
+      });
+    } else {
+      this.invoiceService.updateInvoice(this.invoiceId, formValue).subscribe({
+        next: () =>
+          this.router.navigate(['/invoices/items-details', this.invoiceId]),
+        error: (err) => console.error('Update Error: ', err),
+      });
+    }
+  }
+
+  navigateBack(): void {
+    this.router.navigate(['/invoices']);
+  }
+}

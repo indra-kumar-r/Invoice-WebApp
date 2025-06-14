@@ -1,0 +1,148 @@
+<div class="invoice-basic-details-wrapper">
+  <div class="header">
+    <div class="title">
+      <div class="btn btn-light" (click)="navigateBack()">
+        <i class="bi bi-arrow-left-short"></i>
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
+    <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
+      <span>{{ invoiceId !== "create" ? "Update" : "Add" }}</span> Basic Details
+      for Invoice
+    </div>
+    <div class="invoice-basic-details">
+      <div class="basic-details-section">
+        <section>
+          <div class="basic-section">
+            <app-input
+              label="Invoice No"
+              placeholder="Enter invoice no"
+              type="text"
+              [formControl]="getControl('invoice_no')"
+            ></app-input>
+
+            <app-input
+              label="Date"
+              type="text"
+              placeholder="Enter date"
+              [formControl]="getControl('date')"
+            ></app-input>
+          </div>
+
+          <div class="company-section">
+            <div *ngIf="companies?.length" class="form-dropdown">
+              <label>Company <span class="text-danger">*</span></label>
+
+              <div class="company-dropdown">
+                <div
+                  class="company-dropdown-toggle form-control"
+                  (click)="toggleCompanyDropdown()"
+                  [ngClass]="{
+                    inactive: !selectedCompany?.company_name,
+                  }"
+                  tabindex="0"
+                >
+                  {{ selectedCompany?.company_name || "Select a company" }}
+                </div>
+
+                <div class="company-dropdown-menu" *ngIf="showCompanyDropdown">
+                  <div
+                    class="company-dropdown-item"
+                    *ngFor="let comp of companies"
+                    (click)="onCompanySelect(comp)"
+                  >
+                    {{ comp.company_name }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="company-inputs">
+              <app-input
+                label="Company Address"
+                placeholder="Company Address"
+                type="text"
+                [formControl]="getControl('company_address')"
+              ></app-input>
+
+              <app-input
+                label="Company GST No"
+                placeholder="Company GST No"
+                type="text"
+                [formControl]="getControl('company_gst_no')"
+              ></app-input>
+            </div>
+          </div>
+        </section>
+
+        <div class="section-forms">
+          <div class="form-group">
+            <label>DC Nos </label>
+
+            <div class="inputs">
+              <div class="input-control">
+                <input
+                  type="text"
+                  [(ngModel)]="dcNo"
+                  [ngModelOptions]="{ standalone: true }"
+                  placeholder="Enter dc no"
+                  class="form-control"
+                />
+                <button
+                  type="button"
+                  class="btn btn-sm btn-success px-4 py-2"
+                  (click)="addDcNo()"
+                >
+                  Add
+                </button>
+              </div>
+
+              <div class="chip-container">
+                <span class="chip" *ngFor="let dc of dcNos; let i = index">
+                  {{ dc }}
+                  <i class="bi bi-x" (click)="removeDcNo(i)"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Order Nos</label>
+            <div class="inputs">
+              <div class="input-control">
+                <input
+                  type="text"
+                  [(ngModel)]="orderNo"
+                  [ngModelOptions]="{ standalone: true }"
+                  placeholder="Enter order no"
+                  class="form-control"
+                />
+                <button
+                  type="button"
+                  class="btn btn-sm btn-success px-4 py-2"
+                  (click)="addOrderNo()"
+                >
+                  Add
+                </button>
+              </div>
+              <div class="chip-container">
+                <span class="chip" *ngFor="let ord of orderNos; let i = index">
+                  {{ ord }}
+                  <i class="bi bi-x" (click)="removeOrderNo(i)"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="options">
+        <button type="submit" class="btn btn-light text-success fw-bold">
+          + Save Basic Details
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
