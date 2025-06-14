@@ -1,8 +1,22 @@
+import { v4 as uuidv4 } from 'uuid';
 import Invoice from '../models/invoice.model.js';
 
 // Create
 export const createInvoice = async (req: any, res: any) => {
     try {
+        if (Array.isArray(req.body.invoice_items)) {
+            req.body.invoice_items = req.body.invoice_items.map(
+                (item: any) => ({
+                    uuid: uuidv4(),
+                    ...item,
+                })
+            );
+        }
+
+        if (!req.body.uuid) {
+            req.body.uuid = uuidv4();
+        }
+
         const invoice = await Invoice.create(req.body);
         res.status(201).json(invoice);
     } catch (error) {

@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 const GSTItemSchema = new mongoose.Schema(
     {
         uuid: { type: String, default: uuidv4, unique: true },
-        date: { type: Date },
+        date: { type: String },
         company_name: { type: String },
         company_gst_number: { type: String },
         igst_sales: { type: Number },

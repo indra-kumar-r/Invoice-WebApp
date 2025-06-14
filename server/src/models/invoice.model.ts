@@ -6,7 +6,6 @@ const InvoiceItemSchema = new mongoose.Schema(
         uuid: {
             type: String,
             default: uuidv4,
-            unique: true,
         },
         sl_no: String,
         name: String,
@@ -22,7 +21,6 @@ const InvoiceSchema = new mongoose.Schema(
         uuid: {
             type: String,
             default: uuidv4,
-            unique: true,
         },
         invoice_no: {
             type: String,
@@ -31,7 +29,7 @@ const InvoiceSchema = new mongoose.Schema(
         company_name: String,
         company_address: String,
         company_gst_no: String,
-        date: Date,
+        date: String,
         dc_nos: [String],
         order_nos: [String],
         invoice_items: [InvoiceItemSchema],
