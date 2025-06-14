@@ -1,0 +1,162 @@
+.invoice-amount-details-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 32px;
+  padding: 24px 42px;
+
+  label {
+    font-size: small;
+    font-weight: 600;
+    color: #000;
+  }
+
+  input {
+    display: flex;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(211, 211, 211, 0.5);
+    outline: none;
+    color: #000;
+    font-size: small;
+    transition: all 0.3s ease-in-out;
+
+    &:focus {
+      border: 1px solid rgba(211, 211, 211);
+      box-shadow: 0 0 12px rgba(211, 211, 211, 0.5);
+    }
+
+    &::placeholder {
+      color: lightgray;
+    }
+
+    &[type="number"]::-webkit-inner-spin-button,
+    &[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  .header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+  }
+
+  form {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 32px;
+    padding: 32px;
+    border-radius: 8px;
+    background-color: whitesmoke;
+    overflow: hidden;
+
+    .form-header {
+      letter-spacing: 2px;
+    }
+
+    .invoice-amount-details {
+      width: 70%;
+      height: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      overflow: auto;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .total-section {
+        width: 100%;
+
+        .total-amount {
+          width: 100%;
+
+          input {
+            width: 100%;
+          }
+        }
+      }
+
+      .tax-section {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 8px;
+
+        .tax-item {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 8px;
+
+          .tax-checkbox {
+            cursor: pointer;
+          }
+
+          .tax-rate {
+            width: 20%;
+          }
+
+          .tax-value {
+            width: 100%;
+          }
+        }
+      }
+
+      .grand-total-section {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 8px;
+
+        .grand-total-amount,
+        .amount-in-words {
+          width: 100%;
+
+          input {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .options {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+
+      button {
+        font-size: small;
+        box-shadow: 0 0 12px rgba(211, 211, 211, 0.75);
+        padding: 12px;
+      }
+    }
+  }
+}

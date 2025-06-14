@@ -1,0 +1,148 @@
+<div class="invoice-amount-details-wrapper">
+  <div class="header">
+    <div class="title">
+      <div class="btn btn-light" (click)="navigateBack()">
+        <i class="bi bi-arrow-left-short"></i>
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="invoiceForm">
+    <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
+      Amount Details for Invoice
+    </div>
+
+    <div class="invoice-amount-details" [formGroup]="invoiceForm">
+      <div class="total-section">
+        <div class="total-amount">
+          <label>Total</label>
+          <input
+            type="number"
+            formControlName="total"
+            placeholder="Enter total"
+          />
+        </div>
+      </div>
+
+      <div class="tax-section">
+        <div class="tax-item">
+          <input
+            class="tax-checkbox"
+            type="checkbox"
+            id="sgstCheck"
+            [(ngModel)]="includeSgst"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="onTaxToggle()"
+          />
+          <label for="sgstCheck">SGST</label>
+
+          <input
+            *ngIf="includeSgst"
+            class="tax-rate"
+            type="number"
+            [(ngModel)]="sgstRate"
+            [ngModelOptions]="{ standalone: true }"
+            (input)="onTaxToggle()"
+            placeholder="SGST %"
+          />
+          <input
+            *ngIf="includeSgst"
+            class="tax-value"
+            type="number"
+            formControlName="sgst"
+            placeholder="SGST Value"
+          />
+        </div>
+
+        <div class="tax-item">
+          <input
+            class="tax-checkbox"
+            type="checkbox"
+            id="cgstCheck"
+            [(ngModel)]="includeCgst"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="onTaxToggle()"
+          />
+          <label for="cgstCheck">CGST</label>
+
+          <input
+            *ngIf="includeCgst"
+            class="tax-rate"
+            type="number"
+            [(ngModel)]="cgstRate"
+            [ngModelOptions]="{ standalone: true }"
+            (input)="onTaxToggle()"
+            placeholder="CGST %"
+          />
+          <input
+            *ngIf="includeCgst"
+            class="tax-value"
+            type="number"
+            formControlName="cgst"
+            placeholder="CGST Value"
+          />
+        </div>
+
+        <div class="tax-item">
+          <input
+            class="tax-checkbox"
+            type="checkbox"
+            id="igstCheck"
+            [(ngModel)]="includeIgst"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="onTaxToggle()"
+          />
+          <label for="igstCheck">IGST</label>
+
+          <input
+            *ngIf="includeIgst"
+            class="tax-rate"
+            type="number"
+            [(ngModel)]="igstRate"
+            [ngModelOptions]="{ standalone: true }"
+            (input)="onTaxToggle()"
+            placeholder="IGST %"
+          />
+          <input
+            *ngIf="includeIgst"
+            class="tax-value"
+            type="number"
+            formControlName="igst"
+            placeholder="IGST Value"
+          />
+        </div>
+      </div>
+
+      <div class="grand-total-section">
+        <div class="grand-total-amount">
+          <label>Grand Total</label>
+          <input
+            type="number"
+            formControlName="grand_total"
+            placeholder="Enter grand total"
+          />
+        </div>
+
+        <div class="amount-in-words">
+          <label>Amount in Words</label>
+          <input
+            type="text"
+            formControlName="amount_in_words"
+            placeholder="Enter amount in words"
+            class="text-uppercase"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="options mt-4">
+      <button
+        (click)="onSubmit()"
+        type="button"
+        class="btn btn-light text-success fw-bold"
+      >
+        Save Invoice
+      </button>
+    </div>
+  </form>
+</div>
