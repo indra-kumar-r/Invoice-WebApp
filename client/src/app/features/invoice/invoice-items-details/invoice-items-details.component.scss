@@ -1,0 +1,280 @@
+.invoice-items-details-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 32px;
+  padding: 24px 42px;
+
+  label {
+    font-size: small;
+    font-weight: 600;
+    color: #000;
+  }
+
+  input {
+    display: flex;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(211, 211, 211, 0.5);
+    outline: none;
+    color: #000;
+    font-size: small;
+    transition: all 0.3s ease-in-out;
+
+    &:focus {
+      border: 1px solid rgba(211, 211, 211);
+      box-shadow: 0 0 12px rgba(211, 211, 211, 0.5);
+    }
+
+    &::placeholder {
+      color: lightgray;
+    }
+
+    &[type="number"]::-webkit-inner-spin-button,
+    &[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  .header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+  }
+
+  .invoice-items-form {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    padding: 32px;
+    border-radius: 8px;
+    background-color: whitesmoke;
+    overflow: hidden;
+
+    .form-header {
+      letter-spacing: 2px;
+    }
+
+    .invoice-items-details {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-direction: column;
+      padding: 8px;
+      overflow: hidden;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      section {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+
+        .items-details-section {
+          width: 70%;
+          height: 100%;
+          display: flex;
+          align-items: flex-start;
+          justify-content: flex-start;
+          flex-direction: column;
+          gap: 16px;
+          padding: 12px 0;
+          border-radius: 8px;
+          overflow: auto;
+          background-color: white;
+
+          .invoice-items-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            .items-header {
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 8px;
+              padding: 8px 20px;
+              font-size: small;
+              border-bottom: 1px solid lightgray;
+
+              & > div {
+                width: 25%;
+                display: flex;
+                align-items: flex-start;
+                justify-content: center;
+              }
+
+              & > div:nth-child(1) {
+                width: 10%;
+              }
+
+              & > div:nth-child(2) {
+                width: 70%;
+                justify-content: flex-start;
+              }
+            }
+          }
+
+          .invoice-items {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            flex-direction: column;
+            gap: 8px;
+            padding: 0 12px;
+
+            .item {
+              width: 100%;
+              display: flex;
+              align-items: flex-start;
+              justify-content: space-between;
+              gap: 8px;
+              border-radius: 4px;
+              font-size: small;
+              cursor: pointer;
+              overflow: hidden;
+              transition: all 0.3s ease-in-out;
+
+              &:active {
+                cursor: grabbing;
+              }
+
+              &:hover {
+                background-color: plum !important;
+                transform: translateY(-2px);
+              }
+
+              & > div {
+                width: 25%;
+                height: 100%;
+                display: flex;
+                align-items: flex-start;
+                justify-content: center;
+                padding: 8px;
+              }
+
+              & > div:nth-child(1) {
+                width: 10%;
+              }
+
+              & > div:nth-child(2) {
+                width: 70%;
+                justify-content: flex-start;
+                overflow: auto;
+
+                &::-webkit-scrollbar {
+                  display: none;
+                }
+              }
+            }
+          }
+        }
+
+        form {
+          width: 30%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          flex-direction: column;
+          gap: 4px;
+          padding: 42px 12px;
+          border-radius: 8px;
+          background-color: white;
+          overflow: auto;
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+
+          .form-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .basic-section {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+
+            & > div:nth-child(1) {
+              width: 30%;
+            }
+
+            & > div:nth-child(2) {
+              width: 70%;
+            }
+          }
+
+          .amount-section {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+          }
+
+          .form-btn-options {
+            button {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+
+    .options {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+
+      button {
+        font-size: small;
+        box-shadow: 0 0 12px rgba(211, 211, 211, 0.75);
+        padding: 12px;
+      }
+    }
+  }
+}
+
+.cdk-drag-preview {
+  display: none;
+}
+
+.cdk-drag-placeholder {
+  background-color: plum;
+}

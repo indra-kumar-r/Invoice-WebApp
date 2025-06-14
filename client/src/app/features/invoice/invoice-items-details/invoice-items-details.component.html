@@ -1,0 +1,157 @@
+<div class="invoice-items-details-wrapper">
+  <div class="header">
+    <div class="title">
+      <div class="btn btn-light" (click)="navigateBack()">
+        <i class="bi bi-arrow-left-short"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="invoice-items-form" [formGroup]="invoiceForm">
+    <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
+      <span>{{ invoiceItems.length ? "Update" : "Add" }}</span> Details for
+      Invoice
+    </div>
+
+    <div class="invoice-items-details" [formGroup]="invoiceForm">
+      <section>
+        <div class="items-details-section">
+          <div class="invoice-items-header">
+            <div class="d-flex fs-6 fw-bold">Invoice Items</div>
+            <div class="items-header">
+              <div>#</div>
+              <div>Name</div>
+              <div>Quantity</div>
+              <div>Rate</div>
+              <div>Amount</div>
+            </div>
+          </div>
+
+          <div
+            class="invoice-items"
+            cdkDropList
+            [cdkDropListData]="invoiceItems"
+            (cdkDropListDropped)="dropItem($event)"
+          >
+            <div
+              *ngFor="let item of invoiceItems; let i = index"
+              cdkDrag
+              class="item bg-body-tertiary"
+              (click)="onEditItem(i)"
+            >
+              <div>{{ item.sl_no }}</div>
+              <div>
+                {{ item.name }}
+              </div>
+              <div>{{ item.quantity }}</div>
+              <div>{{ item.rate }}</div>
+              <div>{{ item.amount }}</div>
+            </div>
+          </div>
+        </div>
+
+        <form [formGroup]="itemForm">
+          <div class="form-header fw-bold mb-2">
+            {{ isEditing ? "Edit Item" : "Add Item" }}
+          </div>
+
+          <div class="basic-section">
+            <div class="form-group">
+              <label>SL No</label>
+              <input
+                type="number"
+                class="form-control"
+                formControlName="sl_no"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" class="form-control" formControlName="name" />
+            </div>
+          </div>
+
+          <div class="amount-section">
+            <div class="form-group">
+              <label>Quantity</label>
+              <input
+                type="number"
+                class="form-control"
+                formControlName="quantity"
+                (input)="updateAmount()"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Rate</label>
+              <input
+                type="number"
+                class="form-control"
+                formControlName="rate"
+                (input)="updateAmount()"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Amount</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="amount"
+              readonly
+            />
+          </div>
+
+          <div
+            *ngIf="itemForm.valid"
+            class="form-btn-options d-flex gap-2 mt-4"
+          >
+            <button
+              *ngIf="!isEditing"
+              type="submit"
+              class="btn btn-light text-drak fw-bold"
+              (click)="addItem()"
+            >
+              Add Item
+            </button>
+
+            <ng-container *ngIf="isEditing">
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="updateItem()"
+              >
+                Update
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="deleteItem()"
+              >
+                Delete
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="resetItemForm()"
+              >
+                Cancel
+              </button>
+            </ng-container>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div class="options mt-4">
+      <button
+        (click)="onSubmit()"
+        type="button"
+        class="btn btn-light text-success fw-bold"
+      >
+        + Save Details
+      </button>
+    </div>
+  </div>
+</div>
