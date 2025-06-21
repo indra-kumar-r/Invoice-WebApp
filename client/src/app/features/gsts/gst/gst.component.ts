@@ -160,15 +160,10 @@ export class GstComponent {
           invoice_no: invoice.invoice_no || '',
           company_name: invoice.company_name || '',
           company_gst_number: invoice.company_gst_no || '',
-          igst_sales: invoice.igst || 0,
+          igst: invoice.igst || 0,
           cgst: invoice.cgst || 0,
           sgst: invoice.sgst || 0,
-          gross_total: invoice.total || 0,
-          received_amount: invoice.grand_total || 0,
-          received_date: String(new Date()),
-          igst_grand_total: invoice.igst || 0,
-          cgst_grand_total: invoice.cgst || 0,
-          gross_grand_total: invoice.grand_total || 0,
+          total: invoice.grand_total || 0,
         });
       }
     });

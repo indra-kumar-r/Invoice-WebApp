@@ -11,12 +11,7 @@ const GSTItemSchema = new mongoose.Schema(
         igst: { type: Number },
         cgst: { type: Number },
         sgst: { type: Number },
-        gross_total: { type: Number },
-        received_amount: { type: Number },
-        received_date: { type: Date },
-        igst_grand_total: { type: Number },
-        cgst_grand_total: { type: Number },
-        gross_grand_total: { type: Number },
+        total: { type: Number },
     },
     { _id: false }
 );
@@ -26,6 +21,7 @@ const GSTSchema = new mongoose.Schema(
         uuid: { type: String, default: uuidv4, unique: true },
         month_name: { type: String, required: true },
         year: { type: Number, required: true },
+        total: { type: Number },
         gst_items: [GSTItemSchema],
     },
     {

@@ -4,15 +4,10 @@ export interface GSTItem {
   invoice_no?: string;
   company_name?: string;
   company_gst_number?: string;
-  igst_sales?: number;
+  igst?: number;
   cgst?: number;
   sgst?: number;
-  gross_total?: number;
-  received_amount?: number;
-  received_date?: string;
-  igst_grand_total?: number;
-  cgst_grand_total?: number;
-  gross_grand_total?: number;
+  total?: number;
 }
 
 export interface GST {
@@ -28,5 +23,5 @@ export interface GSTRecords {
   uuid?: string;
   month_name?: string;
   year?: number;
-  gross_grand_total?: number;
+  total?: number;
 }

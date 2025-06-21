@@ -44,7 +44,7 @@
           </div>
 
           <div class="text-success">
-            Amount: <span class="fw-bold">{{ gst?.gross_grand_total?.toFixed(0) }} ₹</span>
+            Amount: <span class="fw-bold">{{ gst?.total?.toFixed(0) }} ₹</span>
           </div>
         </div>
 
@@ -121,10 +121,10 @@
               Year: {{ selectedGst?.year }}
             </div>
             <div
-              *ngIf="selectedGst?.gross_grand_total"
+              *ngIf="selectedGst?.total"
               class="gst-amount text-secondary"
             >
-              Amount: {{ selectedGst?.gross_grand_total?.toFixed(0) }} ₹
+              Amount: {{ selectedGst?.total?.toFixed(0) }} ₹
             </div>
           </div>
 

@@ -1,0 +1,130 @@
+<div class="view-gst-wrapper">
+  <div *ngIf="gst?.uuid; else noGst" class="gst-details">
+    <div class="header-section">
+      <div class="company-details">
+        <div class="company-logo">
+          <img src="logo.png" alt="Logo" />
+        </div>
+
+        <section>
+          <div class="company-name text-dark fs-4 fw-bold">
+            YASHASH HAND EMBROIDERY
+          </div>
+          <div class="company-address text-secondary">
+            96/1A , Gopalaiah Building, Muneshwara Nagar, Kammasandra Road,
+            Hebbagodi, Bangalore -560 100
+          </div>
+          <div class="company-gst fs-6 fw-bold">GSTIN: 29BJBPR9780B1ZU</div>
+        </section>
+      </div>
+
+      <div class="gst-title">
+        <span class="text-secondary fs-1 fw-bolder text-uppercase">GST</span>
+
+        <div class="mobile text-secondary">
+          <div>Mob:</div>
+
+          <div class="numbers">
+            <div>9986883599</div>
+            <div>8123474223</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-section">
+      <div class="items-section">
+        <div class="list-header text-secondary text-bg-light fw-bold">
+          <div class="date">Date</div>
+          <div class="company">Company Name/Customer Name</div>
+          <div class="invoice">Invoice Number</div>
+          <div class="gst">GST Number</div>
+          <div class="igst">IGST 5%</div>
+          <div class="sgst">SGST 2.5%</div>
+          <div class="cgst">CGST 2.5%</div>
+          <div class="total">TOTAL</div>
+        </div>
+
+        <div
+          class="list-item"
+          *ngFor="let item of gst.gst_items; let i = index"
+        >
+          <div class="date">{{ item.date }}</div>
+          <div class="company">{{ item.company_name }}</div>
+          <div class="invoice">{{ item.invoice_no }}</div>
+          <div class="gst">{{ item.company_gst_number }}</div>
+          <div class="igst">{{ item.igst?.toFixed(0) }} ₹</div>
+          <div class="sgst">{{ item.cgst?.toFixed(0) }} ₹</div>
+          <div class="cgst">{{ item.sgst?.toFixed(0) }} ₹</div>
+          <div class="total">{{ item.total?.toFixed(0) }} ₹</div>
+        </div>
+      </div>
+
+      <div class="total-section fw-bold text-success">
+        <div *ngIf="igstAmount" class="igst">
+          <span class="text-dark fs-6">IGST: </span
+          >{{ igstAmount.toFixed(0) }} ₹
+        </div>
+
+        <div *ngIf="sgstAmount" class="sgst">
+          <span class="text-dark fs-6">SGST: </span
+          >{{ sgstAmount.toFixed(0) }} ₹
+        </div>
+
+        <div *ngIf="cgstAmount" class="cgst">
+          <span class="text-dark fs-6">CGST: </span
+          >{{ cgstAmount.toFixed(0) }} ₹
+        </div>
+
+        <div class="total fs-5">
+          <span class="text-dark fs-6">Total Amount: </span
+          >{{ totalAmount.toFixed(0) }} ₹
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noGst>
+    <div class="no-gst">
+      <div class="image-container">
+        <img src="result-not-found.jpg" alt="Gst not found!" />
+      </div>
+
+      <div class="title text-secondary fw-bold fs-3 text-uppercase">
+        No Gst found!
+      </div>
+
+      <div class="options d-flex gap-2">
+        <div
+          class="btn btn-light btn-sm py-2 px-4 text-dark fw-bolder"
+          (click)="createGst()"
+        >
+          <i class="bi bi-plus"></i>
+          <span>Create Gst</span>
+        </div>
+
+        <div
+          class="btn btn-light btn-sm py-2 px-4 text-dark fw-bolder"
+          (click)="viewGsts()"
+        >
+          <i class="bi bi-arrow-left-short"></i>
+          <span> View Gsts </span>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <div *ngIf="gst?.uuid" class="print-options">
+    <div
+      class="btn btn-light btn-sm d-flex gap-2 fw-bold text-success"
+      (click)="editGst(gst.uuid!)"
+    >
+      <i class="bi bi-pencil-square"></i>
+      Edit Gst
+    </div>
+
+    <div class="btn btn-light btn-sm d-flex gap-2 fw-bold text-success">
+      <i class="bi bi-download"></i>
+      Download Gst
+    </div>
+  </div>
+</div>

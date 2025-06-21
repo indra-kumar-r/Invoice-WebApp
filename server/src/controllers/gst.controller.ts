@@ -19,20 +19,20 @@ export const getAllGSTs = async (_req: any, res: any) => {
                 uuid: 1,
                 month_name: 1,
                 year: 1,
-                'gst_items.gross_grand_total': 1,
+                'gst_items.total': 1,
             }
         ).sort({ created_at: -1 });
 
         const simplified = summaries.map((gst) => {
-            const grossTotal = gst.gst_items.reduce(
-                (acc: number, item: any) => acc + (item.gross_grand_total || 0),
+            const total = gst.gst_items.reduce(
+                (acc: number, item: any) => acc + (item.total || 0),
                 0
             );
             return {
                 uuid: gst.uuid,
                 month_name: gst.month_name,
                 year: gst.year,
-                gross_grand_total: parseFloat(grossTotal.toFixed(2)),
+                total: parseFloat(total.toFixed(2)),
             };
         });
 
