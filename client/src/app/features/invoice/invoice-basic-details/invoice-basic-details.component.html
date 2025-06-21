@@ -19,7 +19,7 @@
           <div class="basic-section">
             <app-input
               label="Invoice No"
-              placeholder="Enter invoice no"
+              placeholder="Enter invoice no, eg: 202526001"
               type="text"
               [formControl]="getControl('invoice_no')"
             ></app-input>
@@ -27,7 +27,7 @@
             <app-input
               label="Date"
               type="text"
-              placeholder="Enter date"
+              placeholder="Enter date, eg: 01-01-2025"
               [formControl]="getControl('date')"
             ></app-input>
           </div>
@@ -98,7 +98,7 @@
                   type="text"
                   [(ngModel)]="dcNo"
                   [ngModelOptions]="{ standalone: true }"
-                  placeholder="Enter dc no"
+                  placeholder="Enter dc no, eg: 2291"
                   class="form-control"
                 />
                 <button
@@ -127,7 +127,7 @@
                   type="text"
                   [(ngModel)]="orderNo"
                   [ngModelOptions]="{ standalone: true }"
-                  placeholder="Enter order no"
+                  placeholder="Enter order no, eg: 2138"
                   class="form-control"
                 />
                 <button

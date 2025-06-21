@@ -80,22 +80,22 @@ export class GstComponent {
 
         this.sgstAmount =
           gst.gst_items?.reduce(
-            (sum: number, item: any) => sum + (item.sgst || 0),
+            (sum: number, item: GSTItem) => sum + (item.sgst || 0),
             0
           ) || 0;
         this.cgstAmount =
           gst.gst_items?.reduce(
-            (sum: number, item: any) => sum + (item.cgst || 0),
+            (sum: number, item: GSTItem) => sum + (item.cgst || 0),
             0
           ) || 0;
         this.igstAmount =
           gst.gst_items?.reduce(
-            (sum: number, item: any) => sum + (item.igst_sales || 0),
+            (sum: number, item: GSTItem) => sum + (item.igst || 0),
             0
           ) || 0;
         this.totalAmount =
           gst.gst_items?.reduce(
-            (sum: number, item: any) => sum + (item.gross_grand_total || 0),
+            (sum: number, item: GSTItem) => sum + (item.total || 0),
             0
           ) || 0;
 
@@ -180,6 +180,7 @@ export class GstComponent {
     }
 
     const formValue = { ...this.gstForm.getRawValue() };
+    formValue.month_name = String(formValue.month_name).toUpperCase();
 
     if (this.gstId === 'create') {
       this.gstService.createGst(formValue).subscribe({

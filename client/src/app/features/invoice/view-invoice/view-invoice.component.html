@@ -80,7 +80,9 @@
 
       <div class="items-section">
         <div class="items-list">
-          <div class="list-header text-secondary text-bg-light py-2 fw-bold">
+          <div
+            class="list-header text-secondary text-bg-light py-2 px-2 fw-bold"
+          >
             <div class="name">Name</div>
             <div class="quantity">Quantity</div>
             <div class="rate">Rate</div>
@@ -88,7 +90,7 @@
           </div>
 
           <div
-            class="list-item text-bg-light py-2"
+            class="list-item text-bg-light py-2 px-2"
             *ngFor="let item of invoice.invoice_items; let i = index"
           >
             <div class="name fw-bold">{{ item.name }}</div>

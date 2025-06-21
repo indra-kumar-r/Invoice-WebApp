@@ -10,7 +10,7 @@ import { InvoiceApiRoutes } from '../../constants/api-routes-constants';
 export class InvoiceService {
   constructor(private api: HttpService) {}
 
-  createInvoice(invoice: any): Observable<Invoice> {
+  createInvoice(invoice: Invoice): Observable<Invoice> {
     return this.api.post<Invoice>(InvoiceApiRoutes.CREATE, invoice);
   }
 
