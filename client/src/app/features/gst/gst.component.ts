@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-gst',
-  imports: [],
+  standalone: true,
+  imports: [RouterModule],
   templateUrl: './gst.component.html',
-  styleUrl: './gst.component.scss'
+  styleUrl: './gst.component.scss',
 })
-export class GstComponent {
-
-}
+export class GstComponent {}

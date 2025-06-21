@@ -36,7 +36,7 @@
             <div *ngIf="companies?.length" class="form-dropdown">
               <label>Company <span class="text-danger">*</span></label>
 
-              <div class="company-dropdown">
+              <div class="company-dropdown" #companyDropdown>
                 <div
                   class="company-dropdown-toggle form-control"
                   (click)="toggleCompanyDropdown()"
@@ -55,6 +55,16 @@
                     (click)="onCompanySelect(comp)"
                   >
                     {{ comp.company_name }}
+                  </div>
+
+                  <div class="create-company-option">
+                    <div
+                      class="btn btn-light btn-sm py-3 px-4 text-success fw-bolder d-flex gap-6"
+                      (click)="createCompany()"
+                    >
+                      <i class="bi bi-plus"></i>
+                      <span>Add Company</span>
+                    </div>
                   </div>
                 </div>
               </div>

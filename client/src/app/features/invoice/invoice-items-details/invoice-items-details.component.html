@@ -15,7 +15,7 @@
     <div class="invoice-items-details" [formGroup]="invoiceForm">
       <section>
         <div class="items-details-section">
-          <div class="invoice-items-header">
+          <div *ngIf="invoiceItems.length" class="invoice-items-header">
             <div class="d-flex fs-6 fw-bold">Invoice Items</div>
             <div class="items-header">
               <div>#</div>
@@ -27,6 +27,7 @@
           </div>
 
           <div
+            *ngIf="invoiceItems.length; else noItems"
             class="invoice-items"
             cdkDropList
             [cdkDropListData]="invoiceItems"
@@ -47,6 +48,14 @@
               <div>{{ item.amount }}</div>
             </div>
           </div>
+
+          <ng-template #noItems>
+            <div class="no-invoice-items">
+              <div class="text-secondary text-uppercase fs-4 fw-bold">
+                Add Items to see them here!
+              </div>
+            </div>
+          </ng-template>
         </div>
 
         <form [formGroup]="itemForm">

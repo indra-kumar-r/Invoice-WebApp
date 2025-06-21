@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormsModule,
@@ -21,6 +21,9 @@ import { InvoiceService } from '../../../core/services/invoice/invoice.service';
   styleUrl: './invoice-basic-details.component.scss',
 })
 export class InvoiceBasicDetailsComponent {
+  @ViewChild('companyDropdown', { static: false })
+  companyDropdownRef!: ElementRef;
+
   invoiceId: string = '';
   invoiceForm!: FormGroup;
 
@@ -53,6 +56,16 @@ export class InvoiceBasicDetailsComponent {
 
       this.getCompanies();
     });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const clickedInside = this.companyDropdownRef?.nativeElement.contains(
+      event.target
+    );
+    if (!clickedInside) {
+      this.showCompanyDropdown = false;
+    }
   }
 
   initForm(): void {
@@ -163,6 +176,10 @@ export class InvoiceBasicDetailsComponent {
         error: (err) => console.error('Update Error: ', err),
       });
     }
+  }
+
+  createCompany(): void {
+    this.router.navigate(['/companies/company/create']);
   }
 
   navigateBack(): void {

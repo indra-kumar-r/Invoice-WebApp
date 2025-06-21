@@ -20,16 +20,16 @@
     </div>
   </div>
 
-  <div class="companies-details">
+  <div *ngIf="companies?.length; else noCompanies" class="companies-details">
     <div class="options">
       <div class="compnay-count">
         <div class="text-secondary fw-bold fs-6">
-          Companies: {{ companies!.length }}
+          Companies: {{ companies.length }}
         </div>
       </div>
     </div>
 
-    <div *ngIf="companies" class="companies">
+    <div class="companies">
       <div
         class="company"
         *ngFor="let company of companies"
@@ -49,4 +49,20 @@
       </div>
     </div>
   </div>
+
+  <ng-template #noCompanies>
+    <div class="no-companies">
+      <div class="text-secondary fw-bold fs-6">
+        No Companies found, create companies to see them here!
+      </div>
+
+      <div
+        class="btn btn-light btn-sm py-2 px-4 text-success fw-bolder d-flex gap-6"
+        (click)="createCompany()"
+      >
+        <i class="bi bi-plus"></i>
+        <span>Create Company</span>
+      </div>
+    </div>
+  </ng-template>
 </div>
