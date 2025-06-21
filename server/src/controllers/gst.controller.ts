@@ -23,7 +23,6 @@ export const getAllGSTs = async (_req: any, res: any) => {
             }
         ).sort({ created_at: -1 });
 
-        // Aggregate gross_grand_total from each gst_items list
         const simplified = summaries.map((gst) => {
             const grossTotal = gst.gst_items.reduce(
                 (acc: number, item: any) => acc + (item.gross_grand_total || 0),

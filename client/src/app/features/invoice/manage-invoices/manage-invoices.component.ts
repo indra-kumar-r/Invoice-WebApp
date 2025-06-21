@@ -44,7 +44,6 @@ export class ManageInvoicesComponent {
     this.invoiceService.getInvoice(id).subscribe({
       next: (res: Invoice) => {
         this.selectedInvoice = res;
-        console.log(this.selectedInvoice);
       },
       error: (err) => {
         console.error('Error: ', err);

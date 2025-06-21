@@ -17,7 +17,7 @@ export class HomeComponent {
     },
     {
       title: 'GST',
-      path: 'gst',
+      path: 'gsts',
       image: 'gst.jpg',
     },
     {
