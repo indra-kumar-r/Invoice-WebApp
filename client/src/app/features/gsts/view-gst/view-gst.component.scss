@@ -111,10 +111,10 @@
         width: 100%;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: space-between;
         padding: 24px 24px 12px 24px;
         border-bottom: 1px solid rgba(211, 211, 211, 0.2);
-        font-size: small;
+        font-size: 10px;
 
         > .date {
           width: 7%;
@@ -122,10 +122,11 @@
 
         > .company {
           width: 30%;
+          margin: 0 12px;
         }
 
         > .invoice {
-          width: 10%;
+          width: 15%;
         }
 
         > .gst {
@@ -135,7 +136,7 @@
         > .igst,
         > .sgst,
         > .cgst {
-          width: 7.5%;
+          width: 10%;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -145,7 +146,7 @@
           width: 10%;
           display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: flex-end;
         }
       }
 
@@ -204,8 +205,33 @@
   gap: 8px;
   top: 16px;
   right: 16px;
+}
 
-  @media print {
-    display: none;
+@media print {
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    margin: 0;
+  }
+
+  .print-options {
+    display: none !important;
+  }
+
+  .view-gst-wrapper {
+    width: 100% !important;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    overflow: visible !important;
+  }
+
+  .gst-details {
+    width: 100% !important;
+  }
+
+  .header-section,
+  .content-section {
+    page-break-inside: avoid;
   }
 }

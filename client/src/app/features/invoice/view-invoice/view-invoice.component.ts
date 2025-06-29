@@ -59,4 +59,19 @@ export class ViewInvoiceComponent {
   toggleSigned(): void {
     this.isSigned = !this.isSigned;
   }
+
+  printInvoice(): void {
+    const printContent = document.querySelector(
+      '.view-invoice-wrapper'
+    ) as HTMLElement;
+    const originalContent = document.body.innerHTML;
+
+    if (printContent) {
+      const printSection = printContent.innerHTML;
+      document.body.innerHTML = printSection;
+      window.print();
+      document.body.innerHTML = originalContent;
+      window.location.reload();
+    }
+  }
 }

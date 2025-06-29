@@ -73,4 +73,19 @@ export class ViewGstComponent {
   editGst(uuid: string): void {
     this.router.navigate(['/gsts/gst/', uuid]);
   }
+
+  printInvoice(): void {
+    const printContent = document.querySelector(
+      '.view-gst-wrapper'
+    ) as HTMLElement;
+    const originalContent = document.body.innerHTML;
+
+    if (printContent) {
+      const printSection = printContent.innerHTML;
+      document.body.innerHTML = printSection;
+      window.print();
+      document.body.innerHTML = originalContent;
+      window.location.reload();
+    }
+  }
 }

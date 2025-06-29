@@ -276,8 +276,39 @@
   gap: 8px;
   top: 16px;
   right: 16px;
+}
 
-  @media print {
-    display: none;
+@media print {
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    margin: 0;
+  }
+
+  .print-options {
+    display: none !important;
+  }
+
+  .view-invoice-wrapper {
+    width: 100% !important;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    overflow: visible !important;
+  }
+
+  .invoice-details {
+    width: 100% !important;
+  }
+
+  .header-section,
+  .content-section,
+  .footer-section {
+    padding: 12px 12px;
+    page-break-inside: avoid;
+  }
+
+  .invoice-details .footer-section .conditions {
+    font-size: 10px !important;
   }
 }
