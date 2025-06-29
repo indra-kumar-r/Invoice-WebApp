@@ -10,7 +10,7 @@
 }
 
 .gst-details {
-  width: 70%;
+  width: 90%;
   height: 100%;
   display: flex;
   align-items: flex-start;
@@ -106,24 +106,51 @@
       justify-content: flex-start;
       flex-direction: column;
 
-      .list-header {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 24px 24px 12px 24px;
-        border-bottom: 1px solid rgba(211, 211, 211, 0.2);
-        font-size: small;
-      }
-
+      .list-header,
       .list-item {
         width: 100%;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        padding: 12px 24px;
+        justify-content: flex-start;
+        padding: 24px 24px 12px 24px;
         border-bottom: 1px solid rgba(211, 211, 211, 0.2);
         font-size: small;
+
+        > .date {
+          width: 7%;
+        }
+
+        > .company {
+          width: 30%;
+        }
+
+        > .invoice {
+          width: 10%;
+        }
+
+        > .gst {
+          width: 20%;
+        }
+
+        > .igst,
+        > .sgst,
+        > .cgst {
+          width: 7.5%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        > .total {
+          width: 10%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .list-header {
+        padding: 24px 24px 12px 24px;
       }
     }
 

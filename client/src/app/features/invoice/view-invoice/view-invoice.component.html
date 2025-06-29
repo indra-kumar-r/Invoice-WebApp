@@ -203,7 +203,6 @@
       (click)="editInvoice(invoice.uuid)"
     >
       <i class="bi bi-pencil-square"></i>
-      Edit Invoice
     </div>
 
     <div
@@ -215,12 +214,13 @@
         <i *ngIf="isSigned" class="bi bi-check-square-fill text-success"></i>
       </span>
 
-      <span class="text-success">Sign Invoice</span>
+      <span class="text-success">
+        <i class="bi bi-pen"></i>
+      </span>
     </div>
 
     <div class="btn btn-light btn-sm d-flex gap-2 fw-bold text-success">
       <i class="bi bi-download"></i>
-      Download Invoice
     </div>
   </div>
 </div>
