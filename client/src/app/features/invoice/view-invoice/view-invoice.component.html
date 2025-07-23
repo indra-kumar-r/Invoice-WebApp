@@ -63,14 +63,14 @@
       </div>
 
       <div class="extras-section">
-        <div *ngIf="invoice.dc_nos" class="invoice-dc-nos text-secondary">
+        <div *ngIf="invoice.dc_nos" class="invoice-dc-nos text-dark">
           DC Nos:
           <span class="fw-bold">
             {{ invoice.dc_nos.join(" / ") }}
           </span>
         </div>
 
-        <div *ngIf="invoice.order_nos" class="invoice-order-nos text-secondary">
+        <div *ngIf="invoice.order_nos" class="invoice-order-nos text-dark">
           Order Nos:
           <span class="fw-bold">
             {{ invoice.order_nos.join(" / ") }}
@@ -111,11 +111,13 @@
           </div>
 
           <div
-            class="amount-in-words d-flex align-items-center justify-content-start gap-1"
+            class="amount-in-words d-flex align-items-start justify-content-start gap-1"
           >
-            <div>Amount in Words:</div>
-            <div class="fs-6 fw-bold">{{ invoice.amount_in_words }}</div>
-            only.
+            <div class="label">Amount in Words:</div>
+            <div class="fw-bold">
+              {{ invoice.amount_in_words }}
+              only.
+            </div>
           </div>
         </div>
 
@@ -130,9 +132,15 @@
 
           <div class="values-section text-dark fw-bold">
             <div>{{ invoice.total }} ₹</div>
-            <div *ngIf="invoice.sgst">{{ invoice.sgst }} ₹</div>
-            <div *ngIf="invoice.cgst">{{ invoice.cgst }} ₹</div>
-            <div *ngIf="invoice.igst">{{ invoice.igst }} ₹</div>
+            <div *ngIf="invoice.sgst">
+              {{ invoice.sgst | number : "1.0-0" }} ₹
+            </div>
+            <div *ngIf="invoice.cgst">
+              {{ invoice.cgst | number : "1.0-0" }} ₹
+            </div>
+            <div *ngIf="invoice.igst">
+              {{ invoice.igst | number : "1.0-0" }} ₹
+            </div>
             <div>{{ invoice.grand_total }} ₹</div>
           </div>
         </div>

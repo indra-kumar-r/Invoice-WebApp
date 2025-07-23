@@ -164,6 +164,16 @@
       .grand-total-amount-section {
         width: 70%;
         font-size: small;
+
+        .amount-in-words {
+          .label {
+            height: 100%;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            white-space: nowrap;
+          }
+        }
       }
 
       .total-amount-section {
