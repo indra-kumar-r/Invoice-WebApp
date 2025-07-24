@@ -16,7 +16,7 @@
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: column;
-  border: 1px solid lightgray;
+  border: 1px solid darkgray;
   border-radius: 8px;
   overflow: auto;
 
@@ -31,7 +31,7 @@
     justify-content: space-between;
     padding: 24px 42px;
     padding-bottom: 4px;
-    border-bottom: 1px solid lightgray;
+    border-bottom: 1px solid darkgray;
 
     .company-details {
       width: 60%;
@@ -206,7 +206,7 @@
     align-items: flex-end;
     justify-content: space-between;
     padding: 12px 42px;
-    border-top: 1px solid lightgray;
+    border-top: 1px solid darkgray;
 
     .conditions {
       width: 50%;
