@@ -36,14 +36,14 @@
     <div class="gsts-list">
       <div class="gst" *ngFor="let gst of gsts">
         <div class="gst-details">
-          <div class="gst-info-section fs-4 fw-bolder">
+          <div class="gst-info-section fs-3 fw-bolder">
             {{ gst.month_name }}
-            <span class="text-secondary fs-5">
+            <span class="text-secondary fs-3">
               {{ gst.year }}
             </span>
           </div>
 
-          <div class="text-success">
+          <div class="text-success fs-6">
             Amount: <span class="fw-bold">{{ gst?.total?.toFixed(0) }} ₹</span>
           </div>
         </div>
@@ -120,10 +120,7 @@
             <div class="gst-date text-secondary">
               Year: {{ selectedGst?.year }}
             </div>
-            <div
-              *ngIf="selectedGst?.total"
-              class="gst-amount text-secondary"
-            >
+            <div *ngIf="selectedGst?.total" class="gst-amount text-secondary">
               Amount: {{ selectedGst?.total?.toFixed(0) }} ₹
             </div>
           </div>
