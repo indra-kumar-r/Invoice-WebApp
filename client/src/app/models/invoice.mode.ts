@@ -8,6 +8,7 @@ export interface Invoice {
   dc_nos: string[];
   order_nos: string[];
   invoice_items: InvoiceItem[];
+  gst_id?: string;
   total?: number;
   sgst?: number;
   cgst?: number;

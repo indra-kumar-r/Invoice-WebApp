@@ -33,6 +33,7 @@ const InvoiceSchema = new mongoose.Schema(
         dc_nos: [String],
         order_nos: [String],
         invoice_items: [InvoiceItemSchema],
+        gst_id: String,
         total: Number,
         sgst: Number,
         cgst: Number,
