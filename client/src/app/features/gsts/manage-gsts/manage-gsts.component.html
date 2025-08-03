@@ -20,7 +20,11 @@
     </div>
   </div>
 
-  <div *ngIf="gsts.length; else noGsts" class="gsts-details">
+  <div *ngIf="isLoading" class="loader-wrapper">
+    <div class="spinner-border" role="status"></div>
+  </div>
+
+  <div *ngIf="!isLoading && gsts?.length! > 0" class="gsts-details">
     <div class="gsts-header">
       <div class="gsts-count">
         <div class="text-secondary fw-bold fs-6">GSTS: {{ gsts.length }}</div>
@@ -76,7 +80,7 @@
     </div>
   </div>
 
-  <ng-template #noGsts>
+  <ng-container *ngIf="!isLoading && gsts.length === 0">
     <div class="no-gsts">
       <div class="text-secondary fw-bold fs-6">
         No Gsts found, create Gsts to see them here!
@@ -90,7 +94,7 @@
         <span>Create Gst</span>
       </div>
     </div>
-  </ng-template>
+  </ng-container>
 </div>
 
 <ng-container>

@@ -14,6 +14,7 @@ import { GSTRecords } from '../../../models/gst.model';
 export class ManageGstsComponent {
   gsts: GSTRecords[] = [];
   selectedGst: GSTRecords | null = null;
+  isLoading: boolean = false;
 
   constructor(private router: Router, private gstService: GstService) {}
 
@@ -26,12 +27,16 @@ export class ManageGstsComponent {
   }
 
   getGsts(): void {
+    this.isLoading = true;
     this.gstService.getGsts().subscribe({
       next: (res: GSTRecords[]) => {
+        this.isLoading = false;
         this.gsts = res;
       },
       error: (err) => {
         console.error('Error: ', err);
+        this.gsts = [];
+        this.isLoading = false;
       },
     });
   }

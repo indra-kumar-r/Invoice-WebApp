@@ -20,7 +20,11 @@
     </div>
   </div>
 
-  <div *ngIf="invoices.length; else noInvoices" class="invoices-details">
+  <div *ngIf="isLoading" class="loader-wrapper">
+    <div class="spinner-border" role="status"></div>
+  </div>
+
+  <div *ngIf="!isLoading && invoices?.length! > 0" class="invoices-details">
     <div class="invoices-header">
       <div *ngIf="invoices.length" class="invoices-count">
         <div class="text-secondary fw-bold fs-6">
@@ -82,7 +86,7 @@
     </div>
   </div>
 
-  <ng-template #noInvoices>
+  <ng-container *ngIf="!isLoading && invoices.length === 0">
     <div class="no-invoices">
       <div class="text-secondary fw-bold fs-6">
         No Invoices found, create invoices to see them here!
@@ -96,7 +100,7 @@
         <span>Create Invoice</span>
       </div>
     </div>
-  </ng-template>
+  </ng-container>
 </div>
 
 <ng-container>

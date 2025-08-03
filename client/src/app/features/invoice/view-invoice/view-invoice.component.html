@@ -1,5 +1,9 @@
 <div class="view-invoice-wrapper">
-  <div *ngIf="invoice?.uuid; else noInvoice" class="invoice-details">
+  <div *ngIf="isLoading" class="loader-wrapper">
+    <div class="spinner-border" role="status"></div>
+  </div>
+
+  <div *ngIf="!isLoading && invoice" class="invoice-details">
     <div class="header-section">
       <div class="company-details">
         <div class="company-logo">
@@ -175,7 +179,7 @@
     </div>
   </div>
 
-  <ng-template #noInvoice>
+  <ng-container *ngIf="!isLoading && !invoice">
     <div class="no-invoice">
       <div class="image-container">
         <img src="result-not-found.jpg" alt="Invoice not found!" />
@@ -203,9 +207,9 @@
         </div>
       </div>
     </div>
-  </ng-template>
+  </ng-container>
 
-  <div *ngIf="invoice?.uuid" class="print-options">
+  <div *ngIf="!isLoading && invoice" class="print-options">
     <div
       class="edit-invoice btn btn-light btn-sm d-flex gap-2 fw-bold text-success"
       (click)="editInvoice(invoice.uuid)"

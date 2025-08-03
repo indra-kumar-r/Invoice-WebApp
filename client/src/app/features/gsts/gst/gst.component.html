@@ -7,6 +7,10 @@
     </div>
   </div>
 
+  <ng-container
+    *ngIf="this.gstId === 'create' || gst; else noGst"
+  ></ng-container>
+
   <div class="gst-details">
     <div class="invoices-list">
       <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
@@ -158,3 +162,9 @@
     </div>
   </div>
 </div>
+
+<ng-template #noGst>
+  <div class="loader-wrapper">
+    <div class="spinner-border" role="status"></div>
+  </div>
+</ng-template>

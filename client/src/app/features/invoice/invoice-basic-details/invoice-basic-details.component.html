@@ -7,153 +7,167 @@
     </div>
   </div>
 
-  <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
-    <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
-      <span>{{ invoiceId !== "create" ? "Edit" : "Add" }}</span> Basic Details
-      for Invoice
-    </div>
+  <ng-container *ngIf="this.invoiceId === 'create' || invoice; else noInvoice">
+    <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
+      <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
+        <span>{{ invoiceId !== "create" ? "Edit" : "Add" }}</span> Basic Details
+        for Invoice
+      </div>
 
-    <div class="invoice-basic-details">
-      <div class="basic-details-section">
-        <section>
-          <div class="basic-section">
-            <app-input
-              label="Invoice No"
-              placeholder="Enter invoice no, eg: 202526001"
-              type="text"
-              [formControl]="getControl('invoice_no')"
-            ></app-input>
+      <div class="invoice-basic-details">
+        <div class="basic-details-section">
+          <section>
+            <div class="basic-section">
+              <app-input
+                label="Invoice No"
+                placeholder="Enter invoice no, eg: 202526001"
+                type="text"
+                [formControl]="getControl('invoice_no')"
+              ></app-input>
 
-            <app-input
-              label="Date"
-              type="text"
-              placeholder="Enter date, eg: 01-01-2025"
-              [formControl]="getControl('date')"
-            ></app-input>
-          </div>
+              <app-input
+                label="Date"
+                type="text"
+                placeholder="Enter date, eg: 01-01-2025"
+                [formControl]="getControl('date')"
+              ></app-input>
+            </div>
 
-          <div class="company-section">
-            <div *ngIf="companies?.length" class="form-dropdown">
-              <label>Company <span class="text-danger">*</span></label>
+            <div class="company-section">
+              <div *ngIf="companies?.length" class="form-dropdown">
+                <label>Company <span class="text-danger">*</span></label>
 
-              <div class="company-dropdown" #companyDropdown>
-                <div
-                  class="company-dropdown-toggle form-control"
-                  (click)="toggleCompanyDropdown()"
-                  [ngClass]="{
+                <div class="company-dropdown" #companyDropdown>
+                  <div
+                    class="company-dropdown-toggle form-control"
+                    (click)="toggleCompanyDropdown()"
+                    [ngClass]="{
                     inactive: !selectedCompany?.company_name,
                   }"
-                  tabindex="0"
-                >
-                  {{ selectedCompany?.company_name || "Select a company" }}
-                </div>
-
-                <div class="company-dropdown-menu" *ngIf="showCompanyDropdown">
-                  <div
-                    class="company-dropdown-item"
-                    *ngFor="let comp of companies"
-                    (click)="onCompanySelect(comp)"
+                    tabindex="0"
                   >
-                    {{ comp.company_name }}
+                    {{ selectedCompany?.company_name || "Select a company" }}
                   </div>
 
-                  <div class="create-company-option">
+                  <div
+                    class="company-dropdown-menu"
+                    *ngIf="showCompanyDropdown"
+                  >
                     <div
-                      class="btn btn-light btn-sm py-3 px-4 text-success fw-bolder d-flex gap-6"
-                      (click)="createCompany()"
+                      class="company-dropdown-item"
+                      *ngFor="let comp of companies"
+                      (click)="onCompanySelect(comp)"
                     >
-                      <i class="bi bi-plus"></i>
-                      <span>Add Company</span>
+                      {{ comp.company_name }}
+                    </div>
+
+                    <div class="create-company-option">
+                      <div
+                        class="btn btn-light btn-sm py-3 px-4 text-success fw-bolder d-flex gap-6"
+                        (click)="createCompany()"
+                      >
+                        <i class="bi bi-plus"></i>
+                        <span>Add Company</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div class="company-inputs">
-              <app-input
-                label="Company Address"
-                placeholder="Company Address"
-                type="text"
-                [formControl]="getControl('company_address')"
-              ></app-input>
-
-              <app-input
-                label="Company GST No"
-                placeholder="Company GST No"
-                type="text"
-                [formControl]="getControl('company_gst_no')"
-              ></app-input>
-            </div>
-          </div>
-        </section>
-
-        <div class="section-forms">
-          <div class="form-group">
-            <label>DC Nos </label>
-
-            <div class="inputs">
-              <div class="input-control">
-                <input
+              <div class="company-inputs">
+                <app-input
+                  label="Company Address"
+                  placeholder="Company Address"
                   type="text"
-                  [(ngModel)]="dcNo"
-                  [ngModelOptions]="{ standalone: true }"
-                  placeholder="Enter dc no, eg: 2291"
-                  class="form-control"
-                />
-                <button
-                  type="button"
-                  class="btn btn-sm btn-success px-4 py-2"
-                  (click)="addDcNo()"
-                >
-                  Add
-                </button>
-              </div>
+                  [formControl]="getControl('company_address')"
+                ></app-input>
 
-              <div class="chip-container">
-                <span class="chip" *ngFor="let dc of dcNos; let i = index">
-                  {{ dc }}
-                  <i class="bi bi-x" (click)="removeDcNo(i)"></i>
-                </span>
+                <app-input
+                  label="Company GST No"
+                  placeholder="Company GST No"
+                  type="text"
+                  [formControl]="getControl('company_gst_no')"
+                ></app-input>
               </div>
             </div>
-          </div>
+          </section>
 
-          <div class="form-group">
-            <label>Order Nos</label>
-            <div class="inputs">
-              <div class="input-control">
-                <input
-                  type="text"
-                  [(ngModel)]="orderNo"
-                  [ngModelOptions]="{ standalone: true }"
-                  placeholder="Enter order no, eg: 2138"
-                  class="form-control"
-                />
-                <button
-                  type="button"
-                  class="btn btn-sm btn-success px-4 py-2"
-                  (click)="addOrderNo()"
-                >
-                  Add
-                </button>
+          <div class="section-forms">
+            <div class="form-group">
+              <label>DC Nos </label>
+
+              <div class="inputs">
+                <div class="input-control">
+                  <input
+                    type="text"
+                    [(ngModel)]="dcNo"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="Enter dc no, eg: 2291"
+                    class="form-control"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-success px-4 py-2"
+                    (click)="addDcNo()"
+                  >
+                    Add
+                  </button>
+                </div>
+
+                <div class="chip-container">
+                  <span class="chip" *ngFor="let dc of dcNos; let i = index">
+                    {{ dc }}
+                    <i class="bi bi-x" (click)="removeDcNo(i)"></i>
+                  </span>
+                </div>
               </div>
-              <div class="chip-container">
-                <span class="chip" *ngFor="let ord of orderNos; let i = index">
-                  {{ ord }}
-                  <i class="bi bi-x" (click)="removeOrderNo(i)"></i>
-                </span>
+            </div>
+
+            <div class="form-group">
+              <label>Order Nos</label>
+              <div class="inputs">
+                <div class="input-control">
+                  <input
+                    type="text"
+                    [(ngModel)]="orderNo"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="Enter order no, eg: 2138"
+                    class="form-control"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-success px-4 py-2"
+                    (click)="addOrderNo()"
+                  >
+                    Add
+                  </button>
+                </div>
+                <div class="chip-container">
+                  <span
+                    class="chip"
+                    *ngFor="let ord of orderNos; let i = index"
+                  >
+                    {{ ord }}
+                    <i class="bi bi-x" (click)="removeOrderNo(i)"></i>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div *ngIf="invoiceForm.valid" class="options">
-      <button type="submit" class="btn btn-light text-success fw-bold">
-        Save Details
-      </button>
-    </div>
-  </form>
+      <div *ngIf="invoiceForm.valid" class="options">
+        <button type="submit" class="btn btn-light text-success fw-bold">
+          Save Details
+        </button>
+      </div>
+    </form>
+  </ng-container>
 </div>
+
+<ng-template #noInvoice>
+  <div class="loader-wrapper">
+    <div class="spinner-border" role="status"></div>
+  </div>
+</ng-template>

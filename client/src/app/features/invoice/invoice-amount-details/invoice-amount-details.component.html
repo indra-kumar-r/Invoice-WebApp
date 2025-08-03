@@ -7,140 +7,148 @@
     </div>
   </div>
 
-  <form [formGroup]="invoiceForm">
-    <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
-      Amount Details for Invoice
-    </div>
-
-    <div class="invoice-amount-details" [formGroup]="invoiceForm">
-      <div class="total-section">
-        <div class="total-amount">
-          <label>Total</label>
-          <input
-            type="number"
-            formControlName="total"
-            placeholder="Enter total"
-          />
-        </div>
+  <ng-container *ngIf="invoice; else noInvoice">
+    <form [formGroup]="invoiceForm">
+      <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
+        Amount Details for Invoice
       </div>
 
-      <div class="tax-section">
-        <div class="tax-item">
-          <div class="tax-checkbox" (click)="toggleCheckbox('sgst')">
-            <i *ngIf="!includeSgst" class="bi bi-square"></i>
-            <i
+      <div class="invoice-amount-details" [formGroup]="invoiceForm">
+        <div class="total-section">
+          <div class="total-amount">
+            <label>Total</label>
+            <input
+              type="number"
+              formControlName="total"
+              placeholder="Enter total"
+            />
+          </div>
+        </div>
+
+        <div class="tax-section">
+          <div class="tax-item">
+            <div class="tax-checkbox" (click)="toggleCheckbox('sgst')">
+              <i *ngIf="!includeSgst" class="bi bi-square"></i>
+              <i
+                *ngIf="includeSgst"
+                class="bi bi-check-square-fill text-success"
+              ></i>
+            </div>
+
+            <label for="sgstCheck">SGST</label>
+
+            <input
               *ngIf="includeSgst"
-              class="bi bi-check-square-fill text-success"
-            ></i>
+              class="tax-rate"
+              type="number"
+              [(ngModel)]="sgstRate"
+              [ngModelOptions]="{ standalone: true }"
+              (input)="onTaxToggle()"
+              placeholder="SGST %"
+            />
+            <input
+              *ngIf="includeSgst"
+              class="tax-value"
+              type="number"
+              formControlName="sgst"
+              placeholder="SGST Value"
+            />
           </div>
 
-          <label for="sgstCheck">SGST</label>
+          <div class="tax-item">
+            <div class="tax-checkbox" (click)="toggleCheckbox('cgst')">
+              <i *ngIf="!includeCgst" class="bi bi-square"></i>
+              <i
+                *ngIf="includeCgst"
+                class="bi bi-check-square-fill text-success"
+              ></i>
+            </div>
+            <label for="cgstCheck">CGST</label>
 
-          <input
-            *ngIf="includeSgst"
-            class="tax-rate"
-            type="number"
-            [(ngModel)]="sgstRate"
-            [ngModelOptions]="{ standalone: true }"
-            (input)="onTaxToggle()"
-            placeholder="SGST %"
-          />
-          <input
-            *ngIf="includeSgst"
-            class="tax-value"
-            type="number"
-            formControlName="sgst"
-            placeholder="SGST Value"
-          />
-        </div>
-
-        <div class="tax-item">
-          <div class="tax-checkbox" (click)="toggleCheckbox('cgst')">
-            <i *ngIf="!includeCgst" class="bi bi-square"></i>
-            <i
+            <input
               *ngIf="includeCgst"
-              class="bi bi-check-square-fill text-success"
-            ></i>
+              class="tax-rate"
+              type="number"
+              [(ngModel)]="cgstRate"
+              [ngModelOptions]="{ standalone: true }"
+              (input)="onTaxToggle()"
+              placeholder="CGST %"
+            />
+            <input
+              *ngIf="includeCgst"
+              class="tax-value"
+              type="number"
+              formControlName="cgst"
+              placeholder="CGST Value"
+            />
           </div>
-          <label for="cgstCheck">CGST</label>
 
-          <input
-            *ngIf="includeCgst"
-            class="tax-rate"
-            type="number"
-            [(ngModel)]="cgstRate"
-            [ngModelOptions]="{ standalone: true }"
-            (input)="onTaxToggle()"
-            placeholder="CGST %"
-          />
-          <input
-            *ngIf="includeCgst"
-            class="tax-value"
-            type="number"
-            formControlName="cgst"
-            placeholder="CGST Value"
-          />
-        </div>
+          <div class="tax-item">
+            <div class="tax-checkbox" (click)="toggleCheckbox('igst')">
+              <i *ngIf="!includeIgst" class="bi bi-square"></i>
+              <i
+                *ngIf="includeIgst"
+                class="bi bi-check-square-fill text-success"
+              ></i>
+            </div>
+            <label for="igstCheck">IGST</label>
 
-        <div class="tax-item">
-          <div class="tax-checkbox" (click)="toggleCheckbox('igst')">
-            <i *ngIf="!includeIgst" class="bi bi-square"></i>
-            <i
+            <input
               *ngIf="includeIgst"
-              class="bi bi-check-square-fill text-success"
-            ></i>
+              class="tax-rate"
+              type="number"
+              [(ngModel)]="igstRate"
+              [ngModelOptions]="{ standalone: true }"
+              (input)="onTaxToggle()"
+              placeholder="IGST %"
+            />
+            <input
+              *ngIf="includeIgst"
+              class="tax-value"
+              type="number"
+              formControlName="igst"
+              placeholder="IGST Value"
+            />
           </div>
-          <label for="igstCheck">IGST</label>
+        </div>
 
-          <input
-            *ngIf="includeIgst"
-            class="tax-rate"
-            type="number"
-            [(ngModel)]="igstRate"
-            [ngModelOptions]="{ standalone: true }"
-            (input)="onTaxToggle()"
-            placeholder="IGST %"
-          />
-          <input
-            *ngIf="includeIgst"
-            class="tax-value"
-            type="number"
-            formControlName="igst"
-            placeholder="IGST Value"
-          />
+        <div class="grand-total-section">
+          <div class="grand-total-amount">
+            <label>Grand Total</label>
+            <input
+              type="number"
+              formControlName="grand_total"
+              placeholder="Enter grand total"
+            />
+          </div>
+
+          <div class="amount-in-words">
+            <label>Amount in Words</label>
+            <input
+              type="text"
+              formControlName="amount_in_words"
+              placeholder="Enter amount in words"
+              class="text-uppercase"
+            />
+          </div>
         </div>
       </div>
 
-      <div class="grand-total-section">
-        <div class="grand-total-amount">
-          <label>Grand Total</label>
-          <input
-            type="number"
-            formControlName="grand_total"
-            placeholder="Enter grand total"
-          />
-        </div>
-
-        <div class="amount-in-words">
-          <label>Amount in Words</label>
-          <input
-            type="text"
-            formControlName="amount_in_words"
-            placeholder="Enter amount in words"
-            class="text-uppercase"
-          />
-        </div>
+      <div class="options mt-4">
+        <button
+          (click)="onSubmit()"
+          type="button"
+          class="btn btn-light text-success fw-bold"
+        >
+          Save Invoice
+        </button>
       </div>
-    </div>
-
-    <div class="options mt-4">
-      <button
-        (click)="onSubmit()"
-        type="button"
-        class="btn btn-light text-success fw-bold"
-      >
-        Save Invoice
-      </button>
-    </div>
-  </form>
+    </form>
+  </ng-container>
 </div>
+
+<ng-template #noInvoice>
+  <div class="loader-wrapper">
+    <div class="spinner-border" role="status"></div>
+  </div>
+</ng-template>

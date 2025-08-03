@@ -7,166 +7,174 @@
     </div>
   </div>
 
-  <div class="invoice-items-form" [formGroup]="invoiceForm">
-    <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
-      Add Details for Invoice
-    </div>
+  <ng-container *ngIf="invoice; else noInvoice">
+    <div class="invoice-items-form" [formGroup]="invoiceForm">
+      <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
+        Add Details for Invoice
+      </div>
 
-    <div class="invoice-items-details" [formGroup]="invoiceForm">
-      <section>
-        <div class="items-details-section">
-          <div *ngIf="invoiceItems.length" class="invoice-items-header">
-            <div class="d-flex fs-6 fw-bold">Invoice Items</div>
-            <div class="items-header">
-              <div>#</div>
-              <div>Name</div>
-              <div>Quantity</div>
-              <div>Rate</div>
-              <div>Amount</div>
+      <div class="invoice-items-details" [formGroup]="invoiceForm">
+        <section>
+          <div class="items-details-section">
+            <div *ngIf="invoiceItems.length" class="invoice-items-header">
+              <div class="d-flex fs-6 fw-bold">Invoice Items</div>
+              <div class="items-header">
+                <div>#</div>
+                <div>Name</div>
+                <div>Quantity</div>
+                <div>Rate</div>
+                <div>Amount</div>
+              </div>
             </div>
-          </div>
 
-          <div
-            *ngIf="invoiceItems.length; else noItems"
-            class="invoice-items"
-            cdkDropList
-            [cdkDropListData]="invoiceItems"
-            (cdkDropListDropped)="dropItem($event)"
-          >
             <div
-              *ngFor="let item of invoiceItems; let i = index"
-              cdkDrag
-              class="item bg-body-tertiary"
-              (click)="onEditItem(i)"
+              *ngIf="invoiceItems.length; else noItems"
+              class="invoice-items"
+              cdkDropList
+              [cdkDropListData]="invoiceItems"
+              (cdkDropListDropped)="dropItem($event)"
             >
-              <div>{{ item.sl_no }}</div>
-              <div>
-                {{ item.name }}
+              <div
+                *ngFor="let item of invoiceItems; let i = index"
+                cdkDrag
+                class="item bg-body-tertiary"
+                (click)="onEditItem(i)"
+              >
+                <div>{{ item.sl_no }}</div>
+                <div>
+                  {{ item.name }}
+                </div>
+                <div>{{ item.quantity }}</div>
+                <div>{{ item.rate }}</div>
+                <div>{{ item.amount }}</div>
               </div>
-              <div>{{ item.quantity }}</div>
-              <div>{{ item.rate }}</div>
-              <div>{{ item.amount }}</div>
             </div>
+
+            <ng-template #noItems>
+              <div class="no-invoice-items">
+                <div class="text-secondary text fs-6">
+                  Add Items to see them here!
+                </div>
+              </div>
+            </ng-template>
           </div>
 
-          <ng-template #noItems>
-            <div class="no-invoice-items">
-              <div class="text-secondary text fs-6">
-                Add Items to see them here!
+          <form [formGroup]="itemForm">
+            <div class="form-header fw-bold mb-2">
+              {{ isEditing ? "Edit Item" : "Add Item" }}
+            </div>
+
+            <div class="basic-section">
+              <div class="form-group">
+                <label>SL No</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="sl_no"
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="name"
+                  placeholder="Enter name, eg: Napkin"
+                />
               </div>
             </div>
-          </ng-template>
-        </div>
 
-        <form [formGroup]="itemForm">
-          <div class="form-header fw-bold mb-2">
-            {{ isEditing ? "Edit Item" : "Add Item" }}
-          </div>
+            <div class="amount-section">
+              <div class="form-group">
+                <label>Quantity</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="quantity"
+                  placeholder="Enter quantity, eg: 2"
+                  (input)="updateAmount()"
+                />
+              </div>
 
-          <div class="basic-section">
+              <div class="form-group">
+                <label>Rate</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="rate"
+                  placeholder="Enter rate, eg: 10"
+                  (input)="updateAmount()"
+                />
+              </div>
+            </div>
+
             <div class="form-group">
-              <label>SL No</label>
+              <label>Amount</label>
               <input
                 type="number"
                 class="form-control"
-                formControlName="sl_no"
+                formControlName="amount"
+                readonly
               />
             </div>
 
-            <div class="form-group">
-              <label>Name</label>
-              <input
-                type="text"
-                class="form-control"
-                formControlName="name"
-                placeholder="Enter name, eg: Napkin"
-              />
-            </div>
-          </div>
-
-          <div class="amount-section">
-            <div class="form-group">
-              <label>Quantity</label>
-              <input
-                type="number"
-                class="form-control"
-                formControlName="quantity"
-                placeholder="Enter quantity, eg: 2"
-                (input)="updateAmount()"
-              />
-            </div>
-
-            <div class="form-group">
-              <label>Rate</label>
-              <input
-                type="number"
-                class="form-control"
-                formControlName="rate"
-                placeholder="Enter rate, eg: 10"
-                (input)="updateAmount()"
-              />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Amount</label>
-            <input
-              type="number"
-              class="form-control"
-              formControlName="amount"
-              readonly
-            />
-          </div>
-
-          <div
-            *ngIf="itemForm.valid"
-            class="form-btn-options d-flex gap-2 mt-4"
-          >
-            <button
-              *ngIf="!isEditing"
-              type="submit"
-              class="btn btn-light text-drak fw-bold"
-              (click)="addItem()"
+            <div
+              *ngIf="itemForm.valid"
+              class="form-btn-options d-flex gap-2 mt-4"
             >
-              Add Item
-            </button>
-
-            <ng-container *ngIf="isEditing">
               <button
+                *ngIf="!isEditing"
                 type="submit"
-                class="btn btn-success"
-                (click)="updateItem()"
+                class="btn btn-light text-drak fw-bold"
+                (click)="addItem()"
               >
-                Update
+                Add Item
               </button>
-              <button
-                type="button"
-                class="btn btn-danger"
-                (click)="deleteItem()"
-              >
-                Delete
-              </button>
-              <button
-                type="button"
-                class="btn btn-secondary"
-                (click)="resetItemForm()"
-              >
-                Cancel
-              </button>
-            </ng-container>
-          </div>
-        </form>
-      </section>
-    </div>
 
-    <div class="options mt-4">
-      <button
-        (click)="onSubmit()"
-        type="button"
-        class="btn btn-light text-success fw-bold"
-      >
-        Save Details
-      </button>
+              <ng-container *ngIf="isEditing">
+                <button
+                  type="submit"
+                  class="btn btn-success"
+                  (click)="updateItem()"
+                >
+                  Update
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="deleteItem()"
+                >
+                  Delete
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  (click)="resetItemForm()"
+                >
+                  Cancel
+                </button>
+              </ng-container>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <div class="options mt-4">
+        <button
+          (click)="onSubmit()"
+          type="button"
+          class="btn btn-light text-success fw-bold"
+        >
+          Save Details
+        </button>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </div>
+
+<ng-template #noInvoice>
+  <div class="loader-wrapper">
+    <div class="spinner-border" role="status"></div>
+  </div>
+</ng-template>

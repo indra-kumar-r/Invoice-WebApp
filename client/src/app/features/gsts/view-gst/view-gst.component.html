@@ -1,5 +1,9 @@
 <div class="view-gst-wrapper">
-  <div *ngIf="gst?.uuid; else noGst" class="gst-details">
+  <div *ngIf="isLoading" class="loader-wrapper">
+    <div class="spinner-border" role="status"></div>
+  </div>
+
+  <div *ngIf="!isLoading && gst" class="gst-details">
     <div class="header-section">
       <div class="company-details">
         <div class="company-logo">
@@ -31,6 +35,7 @@
         </div>
       </div>
     </div>
+
     <div class="content-section">
       <div class="items-section">
         <div class="list-header text-secondary text-bg-light fw-bold">
@@ -83,7 +88,7 @@
     </div>
   </div>
 
-  <ng-template #noGst>
+  <ng-template *ngIf="!isLoading && !gst">
     <div class="no-gst">
       <div class="image-container">
         <img src="result-not-found.jpg" alt="Gst not found!" />
@@ -113,7 +118,7 @@
     </div>
   </ng-template>
 
-  <div *ngIf="gst?.uuid" class="print-options">
+  <div *ngIf="!isLoading && gst" class="print-options">
     <div
       class="btn btn-light btn-sm d-flex gap-2 fw-bold text-success"
       (click)="editGst(gst.uuid!)"

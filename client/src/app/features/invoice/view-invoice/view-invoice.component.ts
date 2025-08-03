@@ -11,8 +11,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './view-invoice.component.scss',
 })
 export class ViewInvoiceComponent {
-  invoice: Invoice = {} as Invoice;
-  isSigned = false;
+  invoice!: Invoice;
+
+  isSigned: boolean = false;
+  isLoading: boolean = false;
 
   conditions = [
     'Goods once sold cannot be taken back or exchanged.',
@@ -34,12 +36,16 @@ export class ViewInvoiceComponent {
   }
 
   getInvoice(id: string): void {
+    this.isLoading = true;
     this.invoiceService.getInvoice(id).subscribe({
       next: (res: Invoice) => {
         this.invoice = res;
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('Error: ', err);
+        this.isLoading = false;
+        this.invoice = {} as Invoice;
       },
     });
   }

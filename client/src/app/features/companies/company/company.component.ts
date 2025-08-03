@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InputComponent } from '../../../shared/input/input.component';
 import { CommonModule } from '@angular/common';
 import { CompanyService } from '../../../core/services/company/company.service';
+import { Company } from '../../../models/company.model';
 
 @Component({
   selector: 'app-company',
@@ -19,6 +20,7 @@ import { CompanyService } from '../../../core/services/company/company.service';
   styleUrl: './company.component.scss',
 })
 export class CompanyComponent implements OnInit {
+  company!: Company;
   companyId: string = '';
   companyForm!: FormGroup;
 
@@ -51,6 +53,7 @@ export class CompanyComponent implements OnInit {
   getCompany(): void {
     this.companyService.getCompany(this.companyId).subscribe({
       next: (res) => {
+        this.company = res;
         this.companyForm.patchValue(res);
       },
       error: (err) => {

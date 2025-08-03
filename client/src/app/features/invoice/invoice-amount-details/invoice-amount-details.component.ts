@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
-import { InvoiceItem } from '../../../models/invoice.mode';
+import { Invoice, InvoiceItem } from '../../../models/invoice.mode';
 import { toWords } from 'number-to-words';
 
 @Component({
@@ -19,6 +19,7 @@ import { toWords } from 'number-to-words';
   styleUrl: './invoice-amount-details.component.scss',
 })
 export class InvoiceAmountDetailsComponent {
+  invoice!: Invoice;
   invoiceId: string = '';
   invoiceItems: InvoiceItem[] = [];
   invoiceForm!: FormGroup;
@@ -60,6 +61,7 @@ export class InvoiceAmountDetailsComponent {
   getInvoice(): void {
     this.invoiceService.getInvoice(this.invoiceId).subscribe({
       next: (res) => {
+        this.invoice = res;
         this.invoiceItems = res.invoice_items || [];
 
         const total = this.invoiceItems.reduce(

@@ -11,12 +11,14 @@ import { GstService } from '../../../core/services/gst/gst.service';
   styleUrl: './view-gst.component.scss',
 })
 export class ViewGstComponent {
-  gst: GST = {} as GST;
+  gst!: GST;
 
   sgstAmount: number = 0;
   cgstAmount: number = 0;
   igstAmount: number = 0;
   totalAmount: number = 0;
+
+  isLoading: boolean = false;
 
   constructor(
     private router: Router,
@@ -31,6 +33,7 @@ export class ViewGstComponent {
   }
 
   getGst(id: string): void {
+    this.isLoading = true;
     this.gstService.getGst(id).subscribe({
       next: (gst: GST) => {
         this.gst = gst;
@@ -55,9 +58,12 @@ export class ViewGstComponent {
             (sum: number, item: GSTItem) => sum + (item.total || 0),
             0
           ) || 0;
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('Error: ', err);
+        this.gst = {} as GST;
+        this.isLoading = false;
       },
     });
   }

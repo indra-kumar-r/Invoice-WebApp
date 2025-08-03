@@ -13,7 +13,7 @@ import { Invoice } from '../../../models/invoice.mode';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from '../../../shared/input/input.component';
-import { GSTItem } from '../../../models/gst.model';
+import { GST, GSTItem } from '../../../models/gst.model';
 
 @Component({
   selector: 'app-gst',
@@ -23,6 +23,7 @@ import { GSTItem } from '../../../models/gst.model';
   styleUrl: './gst.component.scss',
 })
 export class GstComponent {
+  gst!: GST;
   gstId: string = '';
   gstForm!: FormGroup;
 
@@ -71,36 +72,37 @@ export class GstComponent {
 
   getGst(): void {
     this.gstService.getGst(this.gstId).subscribe({
-      next: (gst) => {
+      next: (res: GST) => {
+        this.gst = res;
         this.gstForm.patchValue({
-          month_name: gst.month_name,
-          year: gst.year,
-          gst_items: gst.gst_items || [],
+          month_name: res.month_name,
+          year: res.year,
+          gst_items: res.gst_items || [],
         });
 
         this.sgstAmount =
-          gst.gst_items?.reduce(
+          res.gst_items?.reduce(
             (sum: number, item: GSTItem) => sum + (item.sgst || 0),
             0
           ) || 0;
         this.cgstAmount =
-          gst.gst_items?.reduce(
+          res.gst_items?.reduce(
             (sum: number, item: GSTItem) => sum + (item.cgst || 0),
             0
           ) || 0;
         this.igstAmount =
-          gst.gst_items?.reduce(
+          res.gst_items?.reduce(
             (sum: number, item: GSTItem) => sum + (item.igst || 0),
             0
           ) || 0;
         this.totalAmount =
-          gst.gst_items?.reduce(
+          res.gst_items?.reduce(
             (sum: number, item: GSTItem) => sum + (item.total || 0),
             0
           ) || 0;
 
         this.selectedInvoices =
-          gst.gst_items?.map((item: any) => item.invoice_no) || [];
+          res.gst_items?.map((item: any) => item.invoice_no) || [];
       },
       error: (err) => {
         console.error('Error fetching GST record:', err);

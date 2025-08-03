@@ -13,6 +13,7 @@ import { CompanyService } from '../../../core/services/company/company.service';
 })
 export class ManageCompanyComponent {
   companies: Company[] = [];
+  isLoading: boolean = false;
 
   constructor(private router: Router, private companyService: CompanyService) {}
 
@@ -25,15 +26,19 @@ export class ManageCompanyComponent {
   }
 
   getCompanies(): void {
+    this.isLoading = true;
     this.companyService.getCompanies().subscribe({
       next: (res: Company[]) => {
         this.companies = res.map((company) => ({
           ...company,
           color: this.getRandomColor(),
         }));
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('Error: ', err);
+        this.companies = [];
+        this.isLoading = false;
       },
     });
   }

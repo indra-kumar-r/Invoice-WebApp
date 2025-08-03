@@ -13,6 +13,7 @@ import { Company } from '../../../models/company.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyService } from '../../../core/services/company/company.service';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
+import { Invoice } from '../../../models/invoice.mode';
 
 @Component({
   selector: 'app-invoice-basic-details',
@@ -24,6 +25,7 @@ export class InvoiceBasicDetailsComponent {
   @ViewChild('companyDropdown', { static: false })
   companyDropdownRef!: ElementRef;
 
+  invoice!: Invoice;
   invoiceId: string = '';
   invoiceForm!: FormGroup;
 
@@ -141,6 +143,7 @@ export class InvoiceBasicDetailsComponent {
   getInvoice(): void {
     this.invoiceService.getInvoice(this.invoiceId).subscribe({
       next: (res) => {
+        this.invoice = res;
         this.dcNos = res.dc_nos || [];
         this.orderNos = res.order_nos || [];
 

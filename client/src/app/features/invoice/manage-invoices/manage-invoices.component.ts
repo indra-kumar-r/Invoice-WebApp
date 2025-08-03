@@ -14,6 +14,7 @@ import { Invoice } from '../../../models/invoice.mode';
 export class ManageInvoicesComponent {
   invoices: Invoice[] = [];
   selectedInvoice: Invoice | null = null;
+  isLoading: boolean = false;
 
   constructor(private router: Router, private invoiceService: InvoiceService) {}
 
@@ -26,12 +27,16 @@ export class ManageInvoicesComponent {
   }
 
   getInvoices(): void {
+    this.isLoading = true;
     this.invoiceService.getInvoices().subscribe({
       next: (res: Invoice[]) => {
         this.invoices = res;
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('Error: ', err);
+        this.invoices = [];
+        this.isLoading = false;
       },
     });
   }

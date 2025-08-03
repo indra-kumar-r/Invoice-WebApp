@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
-import { InvoiceItem } from '../../../models/invoice.mode';
+import { Invoice, InvoiceItem } from '../../../models/invoice.mode';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -23,6 +23,7 @@ import {
   styleUrl: './invoice-items-details.component.scss',
 })
 export class InvoiceItemsDetailsComponent {
+  invoice!: Invoice;
   invoiceId: string = '';
   invoiceItems: InvoiceItem[] = [];
   invoiceForm!: FormGroup;
@@ -43,6 +44,20 @@ export class InvoiceItemsDetailsComponent {
       this.invoiceId = uuid;
       this.initForm();
       this.getInvoice();
+    });
+  }
+
+  getInvoice(): void {
+    this.invoiceService.getInvoice(this.invoiceId).subscribe({
+      next: (res) => {
+        this.invoice = res;
+        this.invoiceForm.patchValue(res);
+        this.invoiceItems = res.invoice_items || [];
+        if (this.invoiceItems.length) {
+          this.resetItemForm();
+        }
+      },
+      error: (err) => console.error('Invoice Error: ', err),
     });
   }
 
@@ -149,18 +164,5 @@ export class InvoiceItemsDetailsComponent {
 
   navigateBack(): void {
     this.router.navigate(['/invoices/basic-details', this.invoiceId]);
-  }
-
-  getInvoice(): void {
-    this.invoiceService.getInvoice(this.invoiceId).subscribe({
-      next: (res) => {
-        this.invoiceForm.patchValue(res);
-        this.invoiceItems = res.invoice_items || [];
-        if (this.invoiceItems.length) {
-          this.resetItemForm();
-        }
-      },
-      error: (err) => console.error('Invoice Error: ', err),
-    });
   }
 }
