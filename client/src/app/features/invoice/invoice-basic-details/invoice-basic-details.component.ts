@@ -51,11 +51,6 @@ export class InvoiceBasicDetailsComponent {
     this.route.params.subscribe(({ uuid }) => {
       this.invoiceId = uuid;
       this.initForm();
-
-      if (this.invoiceId !== 'create') {
-        this.getInvoice();
-      }
-
       this.getCompanies();
     });
   }
@@ -94,12 +89,12 @@ export class InvoiceBasicDetailsComponent {
 
   onCompanySelect(company: Company): void {
     this.selectedCompany = company;
-    this.showCompanyDropdown = !this.showCompanyDropdown;
+    this.showCompanyDropdown = false;
 
     this.invoiceForm.patchValue({
-      company_name: company.company_name,
-      company_address: company.company_address,
-      company_gst_no: company.company_gst_no,
+      company_name: company?.company_name,
+      company_address: company?.company_address,
+      company_gst_no: company?.company_gst_no,
     });
   }
 
@@ -135,7 +130,13 @@ export class InvoiceBasicDetailsComponent {
 
   getCompanies(): void {
     this.companyService.getCompanies().subscribe({
-      next: (res: Company[]) => (this.companies = res),
+      next: (res: Company[]) => {
+        this.companies = res;
+
+        if (this.invoiceId !== 'create') {
+          this.getInvoice();
+        }
+      },
       error: (err) => console.error('Company Error: ', err),
     });
   }
@@ -148,6 +149,11 @@ export class InvoiceBasicDetailsComponent {
         this.orderNos = res.order_nos || [];
 
         this.invoiceForm.patchValue(res);
+
+        const company = this.companies.find(
+          (company) => company?.company_name === res?.company_name
+        );
+        this.onCompanySelect(company as Company);
       },
       error: (err) => console.error('Invoice Error: ', err),
     });
