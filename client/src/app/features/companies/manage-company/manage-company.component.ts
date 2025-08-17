@@ -52,10 +52,6 @@ export class ManageCompanyComponent {
     return color;
   }
 
-  navigateToHome(): void {
-    this.router.navigate(['home']);
-  }
-
   viewCompanyDetails(uuid: string): void {
     this.router.navigate(['/companies/company/', uuid]);
   }

@@ -13,7 +13,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
 
   img {
     width: 100%;
@@ -28,22 +27,9 @@ nav {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 16px;
-  padding: 0 16px;
+  gap: 4px;
 
-  .btns {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 8px;
-    border-radius: 50%;
-    background-color: white;
-    box-shadow: 0 0 3px lightgray;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-
-    &:hover {
-      transform: scale(1.15);
-    }
+  .btn {
+    font-size: small;
   }
 }

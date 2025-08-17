@@ -10,10 +10,6 @@ import { Router } from '@angular/router';
 export class PageNotFoundComponent {
   constructor(private router: Router) {}
 
-  navigateToHome(): void {
-    this.router.navigate(['home']);
-  }
-
   navigateBack(): void {
     window.history.back();
   }

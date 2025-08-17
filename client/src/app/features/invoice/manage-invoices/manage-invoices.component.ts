@@ -70,8 +70,4 @@ export class ManageInvoicesComponent {
   viewInvoice(uuid: string): void {
     window.open(`/invoices/view-invoice/${uuid}`, '_blank');
   }
-
-  navigateToHome(): void {
-    this.router.navigate(['home']);
-  }
 }
