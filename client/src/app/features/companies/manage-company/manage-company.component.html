@@ -21,11 +21,28 @@
     <div class="spinner-border" role="status"></div>
   </div>
 
-  <div *ngIf="!isLoading && companies?.length! > 0" class="companies-details">
+  <div *ngIf="!isLoading" class="companies-details">
     <div class="companies-header">
       <div class="compnay-count">
         <div class="text-secondary fw-bold fs-6">
           Companies: {{ companies.length }}
+        </div>
+      </div>
+
+      <div class="companies-options">
+        <div class="search">
+          <input
+            class="text-secondary fw-bold"
+            type="text"
+            placeholder="Search company"
+            autocomplete="off"
+            [(ngModel)]="searchTerm"
+            (input)="searchCompanies()"
+          />
+
+          <div class="p-2 text-success fw-bolder">
+            <i class="bi bi-search"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -54,7 +71,11 @@
   <ng-container *ngIf="!isLoading && companies.length === 0">
     <div class="no-companies">
       <div class="text-secondary fw-bold fs-6">
-        No Companies found, create companies to see them here!
+        {{
+          searchTerm
+            ? "No companies found for " + searchTerm + "!"
+            : "No companies found, create companies to see them here!"
+        }}
       </div>
 
       <div
