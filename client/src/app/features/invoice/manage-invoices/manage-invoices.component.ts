@@ -68,6 +68,6 @@ export class ManageInvoicesComponent {
   }
 
   viewInvoice(uuid: string): void {
-    window.open(`/invoices/view-invoice/${uuid}`, '_blank');
+    this.router.navigate(['/invoices/view-invoice/', uuid]);
   }
 }

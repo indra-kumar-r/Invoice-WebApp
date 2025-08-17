@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import { Invoice } from '../../../models/invoice.mode';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-view-invoice',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './view-invoice.component.html',
   styleUrl: './view-invoice.component.scss',
 })

@@ -281,6 +281,12 @@
   }
 }
 
+.back-option {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+}
+
 .print-options {
   position: absolute;
   display: flex;
@@ -299,7 +305,8 @@
     margin: 0;
   }
 
-  .print-options {
+  .print-options,
+  .back-option {
     display: none !important;
   }
 
@@ -313,6 +320,7 @@
 
   .invoice-details {
     width: 100% !important;
+    height: 95vh !important;
   }
 
   .header-section,

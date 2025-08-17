@@ -3,6 +3,12 @@
     <div class="spinner-border" role="status"></div>
   </div>
 
+  <div class="back-option">
+    <div class="btn btn-light" [routerLink]="['/invoices']">
+      <i class="bi bi-arrow-left-short"></i>
+    </div>
+  </div>
+
   <div *ngIf="!isLoading && invoice" class="invoice-details">
     <div class="header-section">
       <div class="company-details">
