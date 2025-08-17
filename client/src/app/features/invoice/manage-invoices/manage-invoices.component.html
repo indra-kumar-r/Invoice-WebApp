@@ -49,9 +49,6 @@
             <div class="invoice-company text-secondary fw-bolder">
               {{ invoice.company_name }}
             </div>
-            <div *ngIf="invoice?.gst_id" class="invoice-gst-id fw-bolder">
-              Added to GST
-            </div>
           </div>
 
           <div class="invoice-date text-danger">Date: {{ invoice.date }}</div>
@@ -63,15 +60,6 @@
 
         <div class="invoice-options">
           <div
-            *ngIf="invoice?.gst_id"
-            class="btn btn-light d-flex btn-sm text-success fw-bolder"
-            (click)="viewGst(invoice.gst_id!)"
-          >
-            <i class="bi bi-archive fs-5"></i>
-          </div>
-
-          <div
-            *ngIf="!invoice?.gst_id"
             class="btn btn-light d-flex btn-sm text-success fw-bolder"
             (click)="editInvoice(invoice.uuid)"
           >
@@ -79,7 +67,6 @@
           </div>
 
           <div
-            *ngIf="!invoice?.gst_id"
             class="btn btn-light d-flex btn-sm text-danger fw-bolder"
             data-bs-toggle="modal"
             data-bs-target="#deleteInvoiceModal"

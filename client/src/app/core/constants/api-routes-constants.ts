@@ -13,11 +13,3 @@ export const InvoiceApiRoutes = {
   UPDATE: '/api/invoices/:uuid',
   DELETE: '/api/invoices/:uuid',
 };
-
-export const GstApiRoutes = {
-  CREATE: '/api/gst',
-  GET_ALL: '/api/gst',
-  GET_BY_UUID: '/api/gst/:uuid',
-  UPDATE: '/api/gst/:uuid',
-  DELETE: '/api/gst/:uuid',
-};

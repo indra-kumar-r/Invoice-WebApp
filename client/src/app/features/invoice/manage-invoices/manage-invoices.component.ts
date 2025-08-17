@@ -41,10 +41,6 @@ export class ManageInvoicesComponent {
     });
   }
 
-  viewGst(gstID: string): void {
-    window.open(`/gsts/view-gst/${gstID}`, '_blank');
-  }
-
   editInvoice(uuid: string): void {
     this.router.navigate(['/invoices/basic-details/', uuid]);
   }

@@ -16,11 +16,6 @@ export class HomeComponent {
       image: 'invoices.jpg',
     },
     {
-      title: 'GST',
-      path: 'gsts',
-      image: 'gst.jpg',
-    },
-    {
       title: 'Companies',
       path: 'companies',
       image: 'companies.jpg',
