@@ -35,7 +35,6 @@ export const getAllInvoices = async (_req: any, res: any) => {
                 date: 1,
                 company_name: 1,
                 company_gst_no: 1,
-                gst_id: 1,
                 igst: 1,
                 sgst: 1,
                 cgst: 1,
