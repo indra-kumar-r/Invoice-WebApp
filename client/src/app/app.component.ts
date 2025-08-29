@@ -9,6 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { StorageService } from './core/services/storage/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -28,11 +29,13 @@ export class AppComponent {
   loginForm!: FormGroup;
   loggedIn = true;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private storageService: StorageService
+  ) {}
 
   ngOnInit() {
-    const userlogin = sessionStorage.getItem('userlogin');
-    this.loggedIn = userlogin === 'true';
+    this.loggedIn = !!this.storageService.getAuth();
 
     this.loginForm = this.fb.group({
       password: ['', Validators.required],
@@ -44,10 +47,7 @@ export class AppComponent {
 
     if (input === this.originalPassword) {
       this.loggedIn = true;
-      sessionStorage.setItem('userlogin', 'true');
-    } else {
-      this.loggedIn = false;
-      sessionStorage.removeItem('userlogin');
+      this.storageService.setAuth('true');
     }
   }
 }
