@@ -40,6 +40,8 @@ export class InvoiceBasicDetailsComponent {
   orderNos: string[] = [];
   orderNo: string = '';
 
+  isEditingDisabled: boolean = false;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -95,6 +97,7 @@ export class InvoiceBasicDetailsComponent {
   }
 
   toggleCompanyDropdown(): void {
+    if (this.isEditingDisabled) return;
     this.showCompanyDropdown = !this.showCompanyDropdown;
   }
 
@@ -158,6 +161,7 @@ export class InvoiceBasicDetailsComponent {
   getInvoice(): void {
     this.invoiceService.getInvoice(this.invoiceId).subscribe({
       next: (res) => {
+        this.isEditingDisabled = true;
         this.invoice = res;
         this.dcNos = res.dc_nos || [];
         this.orderNos = res.order_nos || [];

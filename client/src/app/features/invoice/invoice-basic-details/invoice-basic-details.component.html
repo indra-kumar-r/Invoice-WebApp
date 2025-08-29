@@ -23,6 +23,7 @@
                 placeholder="Enter invoice no, eg: 202526001"
                 type="text"
                 [formControl]="getControl('invoice_no')"
+                [readonly]="isEditingDisabled"
               ></app-input>
 
               <app-input
@@ -43,7 +44,7 @@
                     (click)="toggleCompanyDropdown()"
                     [ngClass]="{
                     inactive: !selectedCompany?.company_name,
-                  }"
+                    }"
                     tabindex="0"
                   >
                     {{ selectedCompany?.company_name || "Select a company" }}
@@ -80,6 +81,7 @@
                   placeholder="Company Address"
                   type="text"
                   [formControl]="getControl('company_address')"
+                  [readonly]="isEditingDisabled"
                 ></app-input>
 
                 <app-input
@@ -87,6 +89,7 @@
                   placeholder="Company GST No"
                   type="text"
                   [formControl]="getControl('company_gst_no')"
+                  [readonly]="isEditingDisabled"
                 ></app-input>
               </div>
             </div>
