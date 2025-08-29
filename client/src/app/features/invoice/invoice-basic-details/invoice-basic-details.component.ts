@@ -14,6 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyService } from '../../../core/services/company/company.service';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import { Invoice } from '../../../models/invoice.mode';
+import { StorageService } from '../../../core/services/storage/storage.service';
 
 @Component({
   selector: 'app-invoice-basic-details',
@@ -44,7 +45,8 @@ export class InvoiceBasicDetailsComponent {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private invoiceService: InvoiceService,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private storageService: StorageService
   ) {}
 
   ngOnInit(): void {
@@ -82,6 +84,14 @@ export class InvoiceBasicDetailsComponent {
     const formatted = today.toLocaleDateString('en-GB').split('/').join('-');
 
     this.invoiceForm.patchValue({ date: formatted });
+  }
+
+  setInvoiceID(): void {
+    this.invoiceForm.patchValue({
+      invoice_no: (
+        parseInt(this.storageService.getNewInvoiceID() || '202526000') + 1
+      ).toString(),
+    });
   }
 
   toggleCompanyDropdown(): void {
@@ -137,6 +147,7 @@ export class InvoiceBasicDetailsComponent {
         if (this.invoiceId !== 'create') {
           this.getInvoice();
         } else {
+          this.setInvoiceID();
           this.setTodayDate();
         }
       },

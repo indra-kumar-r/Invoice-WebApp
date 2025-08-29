@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import { Invoice } from '../../../models/invoice.mode';
+import { StorageService } from '../../../core/services/storage/storage.service';
 
 @Component({
   selector: 'app-manage-invoices',
@@ -16,7 +17,11 @@ export class ManageInvoicesComponent {
   selectedInvoice: Invoice | null = null;
   isLoading: boolean = false;
 
-  constructor(private router: Router, private invoiceService: InvoiceService) {}
+  constructor(
+    private router: Router,
+    private invoiceService: InvoiceService,
+    private storageService: StorageService
+  ) {}
 
   ngOnInit(): void {
     this.getInvoices();
@@ -32,6 +37,7 @@ export class ManageInvoicesComponent {
       next: (res: Invoice[]) => {
         this.invoices = res;
         this.isLoading = false;
+        this.storageService.setNewInvoiceID(res[0]?.invoice_no);
       },
       error: (err) => {
         console.error('Error: ', err);

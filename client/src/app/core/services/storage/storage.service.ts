@@ -48,11 +48,19 @@ export class StorageService {
 
   // Auth
 
-  setAuth(data: unknown) {
-    this.setSessionStorageData('auth', data);
+  setAuth(value: string) {
+    this.setSessionStorageData('auth', value);
   }
 
-  getAuth() {
+  getAuth(): string {
     return this.getSessionStorageData('auth');
+  }
+
+  setNewInvoiceID(id: string) {
+    this.setSessionStorageData('newInvoice', id);
+  }
+
+  getNewInvoiceID(): string {
+    return this.getSessionStorageData('newInvoice');
   }
 }
