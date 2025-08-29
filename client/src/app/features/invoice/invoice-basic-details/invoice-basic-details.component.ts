@@ -79,7 +79,8 @@ export class InvoiceBasicDetailsComponent {
 
   setTodayDate(): void {
     const today = new Date();
-    const formatted = today.toLocaleDateString('en-GB');
+    const formatted = today.toLocaleDateString('en-GB').split('/').join('-');
+
     this.invoiceForm.patchValue({ date: formatted });
   }
 
@@ -135,6 +136,8 @@ export class InvoiceBasicDetailsComponent {
 
         if (this.invoiceId !== 'create') {
           this.getInvoice();
+        } else {
+          this.setTodayDate();
         }
       },
       error: (err) => console.error('Company Error: ', err),
