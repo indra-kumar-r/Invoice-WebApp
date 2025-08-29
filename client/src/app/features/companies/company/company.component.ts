@@ -67,8 +67,11 @@ export class CompanyComponent implements OnInit {
     return this.companyForm.get(controlName) as FormControl;
   }
 
-  deleteCompany(): void {
-    this.companyService.deleteCompany(this.companyId).subscribe({
+  createCompany(): void {
+    if (this.companyForm.invalid) return;
+
+    const formValue = this.companyForm.value;
+    this.companyService.createCompany(formValue).subscribe({
       next: () => {
         this.router.navigate(['/companies']);
       },
@@ -78,31 +81,29 @@ export class CompanyComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  updateCompany(): void {
     if (this.companyForm.invalid) return;
 
     const formValue = this.companyForm.value;
+    this.companyService.updateCompany(this.companyId, formValue).subscribe({
+      next: () => {
+        this.router.navigate(['/companies']);
+      },
+      error: (err) => {
+        console.error('Error: ', err);
+      },
+    });
+  }
 
-    if (this.companyId === 'create') {
-      this.companyForm.reset();
-      this.companyService.createCompany(formValue).subscribe({
-        next: () => {
-          this.router.navigate(['/companies']);
-        },
-        error: (err) => {
-          console.error('Error: ', err);
-        },
-      });
-    } else {
-      this.companyService.updateCompany(this.companyId, formValue).subscribe({
-        next: () => {
-          this.router.navigate(['/companies']);
-        },
-        error: (err) => {
-          console.error('Error: ', err);
-        },
-      });
-    }
+  deleteCompany(): void {
+    this.companyService.deleteCompany(this.companyId).subscribe({
+      next: () => {
+        this.router.navigate(['/companies']);
+      },
+      error: (err) => {
+        console.error('Error: ', err);
+      },
+    });
   }
 
   navigateToCompanies(): void {
