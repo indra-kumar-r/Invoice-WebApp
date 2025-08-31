@@ -77,10 +77,6 @@ export class ManageInvoicesComponent {
         this.isLoading = false;
 
         this.pageControl.setValue(this.currentPage, { emitEvent: false });
-
-        if (res.data.length && this.currentPage === 1) {
-          this.storageService.setNewInvoiceID(res.data[0].invoice_no);
-        }
       },
       error: (err) => {
         console.error('Error: ', err);

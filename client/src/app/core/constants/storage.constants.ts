@@ -1,7 +1,5 @@
-export const LocalStorageKeys = {
-  AUTH: 'auth',
-};
+export const LocalStorageKeys = {};
 
 export const SessionStorageKeys = {
-  NEW_INVOICE: 'newInvoice',
+  AUTH: 'auth',
 };

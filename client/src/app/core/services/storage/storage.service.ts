@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SessionStorageKeys } from '../../constants/storage.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -49,18 +50,10 @@ export class StorageService {
   // Auth
 
   setAuth(value: string) {
-    this.setSessionStorageData('auth', value);
+    this.setSessionStorageData(SessionStorageKeys.AUTH, value);
   }
 
   getAuth(): string {
-    return this.getSessionStorageData('auth');
-  }
-
-  setNewInvoiceID(id: string) {
-    this.setSessionStorageData('newInvoice', id);
-  }
-
-  getNewInvoiceID(): string {
-    return this.getSessionStorageData('newInvoice');
+    return this.getSessionStorageData(SessionStorageKeys.AUTH);
   }
 }

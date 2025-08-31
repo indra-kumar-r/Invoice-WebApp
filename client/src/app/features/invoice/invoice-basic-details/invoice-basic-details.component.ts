@@ -47,8 +47,7 @@ export class InvoiceBasicDetailsComponent {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private invoiceService: InvoiceService,
-    private companyService: CompanyService,
-    private storageService: StorageService
+    private companyService: CompanyService
   ) {}
 
   ngOnInit(): void {
@@ -89,10 +88,17 @@ export class InvoiceBasicDetailsComponent {
   }
 
   setInvoiceID(): void {
-    this.invoiceForm.patchValue({
-      invoice_no: (
-        parseInt(this.storageService.getNewInvoiceID() || '202526000') + 1
-      ).toString(),
+    this.invoiceService.getInvoices({ page: 1 }).subscribe({
+      next: ({ data }) => {
+        this.invoiceForm.patchValue({
+          invoice_no: (
+            parseInt(data[0].invoice_no || '202526000') + 1
+          ).toString(),
+        });
+      },
+      error: (err) => {
+        console.error('Error: ', err);
+      },
     });
   }
 
