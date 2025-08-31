@@ -26,12 +26,18 @@
       </div>
 
       <div class="invoices-options">
-        <div class="search">
+        <div class="search bg-body-light">
           <input
+            class="text-secondary fw-bold"
             type="search"
             placeholder="Search by invoice or company"
             [formControl]="searchControl"
+            autocomplete="off"
           />
+
+          <div class="p-2 text-success fw-bolder">
+            <i class="bi bi-search"></i>
+          </div>
         </div>
       </div>
     </div>

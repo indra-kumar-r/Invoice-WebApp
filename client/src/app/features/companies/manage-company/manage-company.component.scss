@@ -42,7 +42,7 @@
 
       .companies-options {
         .search {
-          width: 200px;
+          width: 65px;
           display: flex;
           align-items: center;
           justify-content: flex-end;
@@ -51,6 +51,7 @@
           border-radius: 32px;
           transition: all 0.3s ease-in-out;
           padding: 0 16px;
+          cursor: pointer;
 
           input {
             width: 100%;
