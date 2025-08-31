@@ -25,8 +25,12 @@ const InvoiceSchema = new mongoose.Schema(
         invoice_no: {
             type: String,
             required: true,
+            index: true,
         },
-        company_name: String,
+        company_name: {
+            type: String,
+            index: true,
+        },
         company_address: String,
         company_gst_no: String,
         date: String,
@@ -44,5 +48,7 @@ const InvoiceSchema = new mongoose.Schema(
         timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
     }
 );
+
+InvoiceSchema.index({ invoice_no: 1, company_name: 1 });
 
 export default mongoose.model('Invoice', InvoiceSchema);

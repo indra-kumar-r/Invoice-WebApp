@@ -17,87 +17,135 @@
     </div>
   </div>
 
-  <div *ngIf="isLoading" class="loader-wrapper">
-    <div class="spinner-border" role="status"></div>
-  </div>
-
-  <div *ngIf="!isLoading && invoices?.length! > 0" class="invoices-details">
+  <div class="invoices-details">
     <div class="invoices-header">
-      <div *ngIf="invoices.length" class="invoices-count">
+      <div class="invoices-count">
         <div class="text-secondary fw-bold fs-6">
-          Invoices: {{ invoices.length }}
+          Invoices: {{ totalInvoices }}
         </div>
       </div>
 
       <div class="invoices-options">
-        <div class="filter"></div>
-
-        <div class="search"></div>
-      </div>
-    </div>
-
-    <div class="invoices-list">
-      <div class="invoice" *ngFor="let invoice of invoices">
-        <div class="invoice-details">
-          <div class="section">
-            <div class="invoice-number fs-4 fw-bolder">
-              {{ invoice.invoice_no }}
-            </div>
-            <div class="invoice-company text-secondary fw-bolder">
-              {{ invoice.company_name }}
-            </div>
-          </div>
-
-          <div class="invoice-date text-danger">Date: {{ invoice.date }}</div>
-
-          <div *ngIf="invoice.grand_total" class="invoice-amount text-success">
-            Amount: {{ invoice.grand_total }} ₹
-          </div>
-        </div>
-
-        <div class="invoice-options">
-          <div
-            class="btn btn-light d-flex btn-sm text-success fw-bolder"
-            (click)="editInvoice(invoice.uuid)"
-          >
-            <i class="bi bi-box-arrow-in-up-right fs-5"></i>
-          </div>
-
-          <div
-            class="btn btn-light d-flex btn-sm text-danger fw-bolder"
-            data-bs-toggle="modal"
-            data-bs-target="#deleteInvoiceModal"
-            (click)="selectInvoice(invoice.uuid, invoice.invoice_no)"
-          >
-            <i class="bi bi-trash fs-5"></i>
-          </div>
-
-          <div
-            class="btn btn-light d-flex btn-sm text-dark fw-bolder"
-            (click)="viewInvoice(invoice.uuid)"
-          >
-            <i class="bi bi-printer fs-5"></i>
-          </div>
+        <div class="search">
+          <input
+            type="search"
+            placeholder="Search by invoice or company"
+            [formControl]="searchControl"
+          />
         </div>
       </div>
     </div>
+
+    <ng-container
+      *ngIf="!isLoading && totalInvoices > 0; else loadingContainer"
+    >
+      <div class="invoices-list">
+        <div class="invoices">
+          <div class="invoice" *ngFor="let invoice of invoices">
+            <div class="invoice-details">
+              <div class="section">
+                <div class="invoice-number fs-4 fw-bolder">
+                  {{ invoice.invoice_no }}
+                </div>
+                <div class="invoice-company text-secondary fw-bolder">
+                  {{ invoice.company_name }}
+                </div>
+              </div>
+
+              <div class="invoice-date text-danger">
+                Date: {{ invoice.date }}
+              </div>
+
+              <div
+                *ngIf="invoice.grand_total"
+                class="invoice-amount text-success"
+              >
+                Amount: {{ invoice.grand_total }} ₹
+              </div>
+            </div>
+
+            <div class="invoice-options">
+              <div
+                class="btn btn-light d-flex btn-sm text-success fw-bolder"
+                (click)="editInvoice(invoice.uuid)"
+              >
+                <i class="bi bi-box-arrow-in-up-right fs-5"></i>
+              </div>
+
+              <div
+                class="btn btn-light d-flex btn-sm text-danger fw-bolder"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteInvoiceModal"
+                (click)="selectInvoice(invoice.uuid, invoice.invoice_no)"
+              >
+                <i class="bi bi-trash fs-5"></i>
+              </div>
+
+              <div
+                class="btn btn-light d-flex btn-sm text-dark fw-bolder"
+                (click)="viewInvoice(invoice.uuid)"
+              >
+                <i class="bi bi-printer fs-5"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="totalPages > 1">
+          <div class="pagination">
+            <button
+              *ngIf="currentPage !== 1"
+              class="btn btn-sm btn-light"
+              (click)="changePage(currentPage - 1)"
+            >
+              Previous
+            </button>
+
+            <button
+              *ngIf="currentPage !== totalPages"
+              class="btn btn-sm btn-light"
+              (click)="changePage(currentPage + 1)"
+            >
+              Next
+            </button>
+
+            <div class="page-control">
+              <input
+                type="number"
+                [formControl]="pageControl"
+                [min]="1"
+                [max]="totalPages"
+              />
+
+              <span>/ {{ totalPages }}</span>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <ng-template #loadingContainer>
+      <div *ngIf="isLoading" class="loader-wrapper">
+        <div class="spinner-border" role="status"></div>
+      </div>
+    </ng-template>
+
+    <ng-container *ngIf="!isLoading && totalInvoices === 0">
+      <div class="no-invoices">
+        <div class="text-secondary fw-bold fs-6">
+          No Invoices found, create invoices to see them here!
+        </div>
+
+        <div
+          class="btn btn-light btn-sm py-2 px-4 text-success fw-bolder d-flex gap-6"
+          (click)="createInvoice()"
+        >
+          <i class="bi bi-plus"></i>
+          <span>Create Invoice</span>
+        </div>
+      </div>
+    </ng-container>
   </div>
-
-  <ng-container *ngIf="!isLoading && invoices.length === 0">
-    <div class="no-invoices">
-      <div class="text-secondary fw-bold fs-6">
-        No Invoices found, create invoices to see them here!
-      </div>
-
-      <div
-        class="btn btn-light btn-sm py-2 px-4 text-success fw-bolder d-flex gap-6"
-        (click)="createInvoice()"
-      >
-        <i class="bi bi-plus"></i>
-        <span>Create Invoice</span>
-      </div>
-    </div>
-  </ng-container>
 </div>
 
 <ng-container>

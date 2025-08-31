@@ -27,22 +27,43 @@ export const createInvoice = async (req: any, res: any) => {
 // Get All (summary only)
 export const getAllInvoices = async (_req: any, res: any) => {
     try {
-        const invoices = await Invoice.find(
-            {},
-            {
-                uuid: 1,
-                invoice_no: 1,
-                date: 1,
-                company_name: 1,
-                company_gst_no: 1,
-                igst: 1,
-                sgst: 1,
-                cgst: 1,
-                grand_total: 1,
-            }
-        ).sort({ created_at: -1 });
+        const { search, page = 1 } = _req.query;
 
-        res.json(invoices);
+        const query: any = {};
+
+        if (search) {
+            query.$or = [
+                { invoice_no: { $regex: search, $options: 'i' } },
+                { company_name: { $regex: search, $options: 'i' } },
+            ];
+        }
+
+        const limit = 10;
+        const skip = (parseInt(page) - 1) * limit;
+
+        const invoices = await Invoice.find(query, {
+            uuid: 1,
+            invoice_no: 1,
+            date: 1,
+            company_name: 1,
+            company_gst_no: 1,
+            igst: 1,
+            sgst: 1,
+            cgst: 1,
+            grand_total: 1,
+        })
+            .sort({ created_at: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        const total = await Invoice.countDocuments(query);
+
+        res.json({
+            data: invoices,
+            total,
+            page: parseInt(page),
+            totalPages: Math.ceil(total / limit),
+        });
     } catch (error) {
         res.status(500).json({ message: 'Error fetching invoices', error });
     }

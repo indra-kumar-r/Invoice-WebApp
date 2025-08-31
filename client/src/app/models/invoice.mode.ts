@@ -26,3 +26,15 @@ export interface InvoiceItem {
   rate: number;
   amount: number;
 }
+
+export interface InvoiceQuery {
+  search?: string;
+  page?: number;
+}
+
+export interface InvoiceResponse {
+  data: Invoice[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
