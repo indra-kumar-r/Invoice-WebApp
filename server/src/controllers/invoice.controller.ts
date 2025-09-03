@@ -52,7 +52,7 @@ export const getAllInvoices = async (_req: any, res: any) => {
             cgst: 1,
             grand_total: 1,
         })
-            .sort({ created_at: -1 })
+            .sort({ invoice_no: -1 })
             .skip(skip)
             .limit(limit);
 
