@@ -24,6 +24,15 @@ export class InvoiceService {
       search: query?.search ?? '',
     };
 
+    if (query.fromDate && query.toDate) {
+      params.fromDate = query.fromDate;
+      params.toDate = query.toDate;
+    }
+
+    if (query.company) {
+      params.company = query.company;
+    }
+
     const url = Object.entries(params)
       .map(([key, value]) => `${key}=${value}`)
       .join('&');

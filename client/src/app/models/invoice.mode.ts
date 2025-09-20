@@ -28,6 +28,9 @@ export interface InvoiceItem {
 }
 
 export interface InvoiceQuery {
+  fromDate?: string;
+  toDate?: string;
+  company?: string;
   search?: string;
   page?: number;
 }
@@ -37,4 +40,10 @@ export interface InvoiceResponse {
   total: number;
   page: number;
   totalPages: number;
+}
+
+export interface InvoiceFilters {
+  fromDate: string;
+  toDate: string;
+  company: string;
 }
