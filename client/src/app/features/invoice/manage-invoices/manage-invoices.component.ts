@@ -4,12 +4,14 @@ import { Router, RouterModule } from '@angular/router';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import {
   Invoice,
+  InvoiceFilters,
   InvoiceQuery,
   InvoiceResponse,
 } from '../../../models/invoice.mode';
-import { StorageService } from '../../../core/services/storage/storage.service';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
+import { Company } from '../../../models/company.model';
+import { CompanyService } from '../../../core/services/company/company.service';
 
 @Component({
   selector: 'app-manage-invoices',
@@ -24,6 +26,9 @@ export class ManageInvoicesComponent {
   isLoading: boolean = false;
 
   invoiceQuery: InvoiceQuery = {
+    fromDate: '',
+    toDate: '',
+    company: '',
     search: '',
     page: 1,
   };
@@ -35,15 +40,27 @@ export class ManageInvoicesComponent {
   pageControl = new FormControl(1, { nonNullable: true });
   searchControl = new FormControl('', { nonNullable: true });
 
+  companies: Company[] = [];
+
+  filters: InvoiceFilters = {
+    fromDate: '',
+    toDate: '',
+    company: '',
+  };
+
+  isFiltersCanvasOpen: boolean = false;
+  showCompanyDropdown: boolean = false;
+
   constructor(
     private router: Router,
     private invoiceService: InvoiceService,
-    private storageService: StorageService
+    private companyService: CompanyService
   ) {}
 
   ngOnInit(): void {
     this.getInvoices();
     this.controllers();
+    this.getCompanies();
   }
 
   controllers(): void {
@@ -86,6 +103,18 @@ export class ManageInvoicesComponent {
     });
   }
 
+  getCompanies(): void {
+    this.companyService.getCompanies().subscribe({
+      next: (res: Company[]) => {
+        this.companies = res;
+      },
+      error: (err) => {
+        console.error('Error: ', err);
+        this.companies = [];
+      },
+    });
+  }
+
   changePage(page: number): void {
     if (page < 1 || page > this.totalPages) {
       this.pageControl.setValue(this.currentPage, { emitEvent: false });
@@ -124,5 +153,36 @@ export class ManageInvoicesComponent {
 
   viewInvoice(uuid: string): void {
     this.router.navigate(['/invoices/view-invoice/', uuid]);
+  }
+
+  applyFilters(): void {
+    if (this.filters.fromDate && this.filters.toDate) {
+      this.invoiceQuery.fromDate = this.formatDate(this.filters.fromDate);
+      this.invoiceQuery.toDate = this.formatDate(this.filters.toDate);
+    } else {
+      delete this.invoiceQuery.fromDate;
+      delete this.invoiceQuery.toDate;
+    }
+
+    if (this.filters.company) {
+      this.invoiceQuery.company = this.filters.company;
+    } else {
+      delete this.invoiceQuery.company;
+    }
+
+    this.invoiceQuery.page = 1;
+    this.getInvoices();
+  }
+
+  resetFilters(): void {
+    this.filters = { fromDate: '', toDate: '', company: '' };
+    this.invoiceQuery = { search: this.invoiceQuery.search || '', page: 1 };
+    this.getInvoices();
+  }
+
+  private formatDate(dateStr: string): string {
+    if (!dateStr) return '';
+    const [year, month, day] = dateStr.split('-');
+    return `${day}-${month}-${year}`;
   }
 }

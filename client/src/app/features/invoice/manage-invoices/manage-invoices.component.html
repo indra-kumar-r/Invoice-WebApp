@@ -17,7 +17,12 @@
     </div>
   </div>
 
-  <div class="invoices-details">
+  <div
+    class="invoices-details"
+    [ngClass]="{
+      responsive: isFiltersCanvasOpen
+    }"
+  >
     <div class="invoices-header">
       <div class="invoices-count">
         <div class="text-secondary fw-bold fs-6">
@@ -26,6 +31,17 @@
       </div>
 
       <div class="invoices-options">
+        <button
+          class="btn btn-light fw-bolder text-success filter"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasFilters"
+          aria-controls="offcanvasFilters"
+          (click)="isFiltersCanvasOpen = !isFiltersCanvasOpen"
+        >
+          Filters
+        </button>
+
         <div class="search bg-body-light">
           <input
             class="text-secondary fw-bold"
@@ -217,6 +233,97 @@
             Delete Invoice
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container>
+  <div
+    class="offcanvas offcanvas-end"
+    tabindex="-1"
+    id="offcanvasFilters"
+    data-bs-scroll="true"
+    data-bs-backdrop="false"
+    aria-labelledby="offcanvasFiltersLabel"
+  >
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasFiltersLabel">Filters</h5>
+
+      <div
+        type="button"
+        class="btn-close fs-6"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+        (click)="isFiltersCanvasOpen = false"
+      ></div>
+    </div>
+
+    <div class="offcanvas-body">
+      <div class="date-filters">
+        <div>
+          <label for="fromDate" class="form-label fw-bold">From Date</label>
+          <input
+            type="date"
+            class="form-control"
+            id="fromDate"
+            name="fromDate"
+          />
+        </div>
+
+        <div>
+          <label for="toDate" class="form-label fw-bold">To Date</label>
+          <input type="date" class="form-control" id="toDate" name="toDate" />
+        </div>
+      </div>
+
+      <div class="companies-dropdown">
+        <div class="filter-label fw-bold">Company</div>
+
+        <div
+          class="select-company fw-bold"
+          (click)="showCompanyDropdown = !showCompanyDropdown"
+        >
+          <span>
+            {{ filters.company || "Select a company" }}
+          </span>
+
+          <div class="icon">
+            <i
+              class="bi"
+              [ngClass]="showCompanyDropdown ? 'bi-caret-up' : 'bi-caret-down'"
+            ></i>
+          </div>
+        </div>
+
+        <div *ngIf="showCompanyDropdown" class="companies-dropdown-list">
+          <div
+            class="company"
+            *ngFor="let company of companies"
+            (click)="
+              filters.company = company?.company_name ?? '';
+              showCompanyDropdown = false
+            "
+          >
+            {{ company?.company_name }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="offcanvas-footer">
+      <div
+        class="btn btn-light btn-sm py-2 px-4 text-success fw-bolder"
+        (click)="resetFilters()"
+      >
+        Reset Filters
+      </div>
+
+      <div
+        class="btn btn-light btn-sm py-2 px-4 text-success fw-bolder"
+        (click)="applyFilters()"
+      >
+        Apply Filters
       </div>
     </div>
   </div>
