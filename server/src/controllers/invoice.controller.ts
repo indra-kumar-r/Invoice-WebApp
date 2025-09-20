@@ -27,7 +27,7 @@ export const createInvoice = async (req: any, res: any) => {
 // Get All (summary only)
 export const getAllInvoices = async (_req: any, res: any) => {
     try {
-        const { search, page = 1 } = _req.query;
+        const { search, page = 1, fromDate, toDate, company } = _req.query;
 
         const query: any = {};
 
@@ -36,6 +36,42 @@ export const getAllInvoices = async (_req: any, res: any) => {
                 { invoice_no: { $regex: search, $options: 'i' } },
                 { company_name: { $regex: search, $options: 'i' } },
             ];
+        }
+
+        if (company) {
+            query.company_name = company;
+        }
+
+        if (fromDate && toDate) {
+            const from = parseDateString(fromDate);
+            const to = parseDateString(toDate);
+
+            query.$expr = {
+                $and: [
+                    {
+                        $gte: [
+                            {
+                                $dateFromString: {
+                                    dateString: '$date',
+                                    format: '%d-%m-%Y',
+                                },
+                            },
+                            from,
+                        ],
+                    },
+                    {
+                        $lte: [
+                            {
+                                $dateFromString: {
+                                    dateString: '$date',
+                                    format: '%d-%m-%Y',
+                                },
+                            },
+                            to,
+                        ],
+                    },
+                ],
+            };
         }
 
         const limit = 10;
@@ -109,4 +145,10 @@ export const deleteInvoice = async (req: any, res: any) => {
     } catch (error) {
         res.status(500).json({ message: 'Error deleting invoice', error });
     }
+};
+
+// Helper functions
+const parseDateString = (dateStr: string): Date => {
+    const [day, month, year] = dateStr.split('-');
+    return new Date(`${year}-${month}-${day}T00:00:00.000Z`);
 };
