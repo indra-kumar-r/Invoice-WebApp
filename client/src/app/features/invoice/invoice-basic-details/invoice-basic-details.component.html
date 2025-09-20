@@ -8,7 +8,7 @@
   </div>
 
   <ng-container *ngIf="this.invoiceId === 'create' || invoice; else noInvoice">
-    <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="invoiceForm">
       <div class="text-secondary fw-bold fs-6 text-uppercase form-header">
         <span>{{ invoiceId !== "create" ? "Edit" : "Add" }}</span> Basic Details
         for Invoice
@@ -161,7 +161,11 @@
       </div>
 
       <div *ngIf="invoiceForm.valid" class="options">
-        <button type="submit" class="btn btn-light text-success fw-bold">
+        <button
+          type="button"
+          class="btn btn-light text-success fw-bold"
+          (click)="onSubmit()"
+        >
           Save Details
         </button>
       </div>

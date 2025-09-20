@@ -14,7 +14,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyService } from '../../../core/services/company/company.service';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import { Invoice } from '../../../models/invoice.mode';
-import { StorageService } from '../../../core/services/storage/storage.service';
 
 @Component({
   selector: 'app-invoice-basic-details',
