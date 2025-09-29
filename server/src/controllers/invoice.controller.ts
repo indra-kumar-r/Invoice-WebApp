@@ -42,36 +42,15 @@ export const getAllInvoices = async (_req: any, res: any) => {
             query.company_name = company;
         }
 
-        if (fromDate && toDate) {
-            const from = parseDateString(fromDate);
-            const to = parseDateString(toDate);
-
-            query.$expr = {
-                $and: [
-                    {
-                        $gte: [
-                            {
-                                $dateFromString: {
-                                    dateString: '$date',
-                                    format: '%d-%m-%Y',
-                                },
-                            },
-                            from,
-                        ],
-                    },
-                    {
-                        $lte: [
-                            {
-                                $dateFromString: {
-                                    dateString: '$date',
-                                    format: '%d-%m-%Y',
-                                },
-                            },
-                            to,
-                        ],
-                    },
-                ],
-            };
+        if (fromDate || toDate) {
+            const dateFilter: any = {};
+            if (fromDate) dateFilter.$gte = new Date(fromDate);
+            if (toDate) {
+                const to = new Date(toDate);
+                to.setHours(23, 59, 59, 999);
+                dateFilter.$lte = to;
+            }
+            query.date = dateFilter;
         }
 
         const limit = 10;
@@ -145,10 +124,4 @@ export const deleteInvoice = async (req: any, res: any) => {
     } catch (error) {
         res.status(500).json({ message: 'Error deleting invoice', error });
     }
-};
-
-// Helper functions
-const parseDateString = (dateStr: string): Date => {
-    const [day, month, year] = dateStr.split('-');
-    return new Date(`${year}-${month}-${day}T00:00:00.000Z`);
 };

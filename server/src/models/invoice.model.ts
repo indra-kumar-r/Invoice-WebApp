@@ -33,7 +33,10 @@ const InvoiceSchema = new mongoose.Schema(
         },
         company_address: String,
         company_gst_no: String,
-        date: String,
+        date: {
+            type: Date,
+            required: true,
+        },
         dc_nos: [String],
         order_nos: [String],
         invoice_items: [InvoiceItemSchema],
