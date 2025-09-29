@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import {
@@ -9,7 +9,15 @@ import {
   InvoiceResponse,
 } from '../../../models/invoice.mode';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  finalize,
+  of,
+  Subject,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { Company } from '../../../models/company.model';
 import { CompanyService } from '../../../core/services/company/company.service';
 
@@ -20,7 +28,9 @@ import { CompanyService } from '../../../core/services/company/company.service';
   templateUrl: './manage-invoices.component.html',
   styleUrl: './manage-invoices.component.scss',
 })
-export class ManageInvoicesComponent {
+export class ManageInvoicesComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
   invoices: Invoice[] = [];
   selectedInvoice: Invoice | null = null;
   isLoading: boolean = false;
@@ -59,18 +69,24 @@ export class ManageInvoicesComponent {
 
   ngOnInit(): void {
     this.getInvoices();
-    this.controllers();
+    this.setupControllers();
     this.getCompanies();
   }
 
-  controllers(): void {
-    this.pageControl.valueChanges.pipe(debounceTime(300)).subscribe((page) => {
-      if (!page) return;
-      this.changePage(page);
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  setupControllers(): void {
+    this.pageControl.valueChanges
+      .pipe(debounceTime(300), takeUntil(this.destroy$))
+      .subscribe((page) => {
+        if (page) this.changePage(page);
+      });
 
     this.searchControl.valueChanges
-      .pipe(debounceTime(500))
+      .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe((term) => {
         this.invoiceQuery.search = term;
         this.invoiceQuery.page = 1;
@@ -85,34 +101,46 @@ export class ManageInvoicesComponent {
   getInvoices(): void {
     this.isLoading = true;
 
-    this.invoiceService.getInvoices(this.invoiceQuery).subscribe({
-      next: (res: InvoiceResponse) => {
-        this.invoices = res.data;
-        this.totalInvoices = res.total;
-        this.currentPage = res.page;
-        this.totalPages = res.totalPages;
-        this.isLoading = false;
+    this.invoiceService
+      .getInvoices(this.invoiceQuery)
+      .pipe(
+        tap((res: InvoiceResponse) => {
+          this.invoices = res.data;
+          this.totalInvoices = res.total;
+          this.currentPage = res.page;
+          this.totalPages = res.totalPages;
 
-        this.pageControl.setValue(this.currentPage, { emitEvent: false });
-      },
-      error: (err) => {
-        console.error('Error: ', err);
-        this.invoices = [];
-        this.isLoading = false;
-      },
-    });
+          this.pageControl.setValue(this.currentPage, { emitEvent: false });
+        }),
+        catchError((err) => {
+          console.error('Error fetching invoices: ', err);
+          this.invoices = [];
+          return of({
+            data: [],
+            total: 0,
+            page: 1,
+            totalPages: 1,
+          } as InvoiceResponse);
+        }),
+        takeUntil(this.destroy$),
+        finalize(() => (this.isLoading = false))
+      )
+      .subscribe();
   }
 
   getCompanies(): void {
-    this.companyService.getCompanies().subscribe({
-      next: (res: Company[]) => {
-        this.companies = res;
-      },
-      error: (err) => {
-        console.error('Error: ', err);
-        this.companies = [];
-      },
-    });
+    this.companyService
+      .getCompanies()
+      .pipe(
+        tap((res: Company[]) => (this.companies = res)),
+        catchError((err) => {
+          console.error('Error fetching companies: ', err);
+          this.companies = [];
+          return of([]);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   changePage(page: number): void {
@@ -129,26 +157,32 @@ export class ManageInvoicesComponent {
     this.router.navigate(['/invoices/basic-details/', uuid]);
   }
 
-  selectInvoice(id: string, invoiceNumber: string): void {
-    this.invoiceService.getInvoice(id).subscribe({
-      next: (res: Invoice) => {
-        this.selectedInvoice = res;
-      },
-      error: (err) => {
-        console.error('Error: ', err);
-      },
-    });
+  selectInvoice(id: string): void {
+    this.invoiceService
+      .getInvoice(id)
+      .pipe(
+        tap((res: Invoice) => (this.selectedInvoice = res)),
+        catchError((err) => {
+          console.error('Error fetching invoice: ', err);
+          return of(null);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   deleteInvoice(uuid: string): void {
-    this.invoiceService.deleteInvoice(uuid).subscribe({
-      next: () => {
-        this.getInvoices();
-      },
-      error: (err) => {
-        console.error('Error: ', err);
-      },
-    });
+    this.invoiceService
+      .deleteInvoice(uuid)
+      .pipe(
+        tap(() => this.getInvoices()),
+        catchError((err) => {
+          console.error('Error deleting invoice: ', err);
+          return of(null);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   viewInvoice(uuid: string): void {
