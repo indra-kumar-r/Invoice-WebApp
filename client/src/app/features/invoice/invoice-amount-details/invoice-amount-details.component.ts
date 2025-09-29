@@ -24,10 +24,6 @@ export class InvoiceAmountDetailsComponent {
   invoiceItems: InvoiceItem[] = [];
   invoiceForm!: FormGroup;
 
-  includeSgst = true;
-  includeCgst = true;
-  includeIgst = false;
-
   sgstRate: number = 2.5;
   cgstRate: number = 2.5;
   igstRate: number = 5;
@@ -53,6 +49,9 @@ export class InvoiceAmountDetailsComponent {
       sgst: [null],
       cgst: [null],
       igst: [null],
+      include_sgst: [true],
+      include_cgst: [true],
+      include_igst: [false],
       grand_total: [0, Validators.required],
       amount_in_words: [''],
     });
@@ -69,20 +68,17 @@ export class InvoiceAmountDetailsComponent {
           0
         );
 
-        this.invoiceForm.patchValue({ total });
-
-        this.setDefaultTaxOptions();
+        this.invoiceForm.patchValue({
+          total,
+          include_sgst: res.include_sgst ?? true,
+          include_cgst: res.include_cgst ?? true,
+          include_igst: res.include_igst ?? false,
+        });
 
         this.calculateTaxValues(total);
       },
       error: (err) => console.error('Invoice Error: ', err),
     });
-  }
-
-  setDefaultTaxOptions(): void {
-    this.includeSgst = true;
-    this.includeCgst = true;
-    this.includeIgst = false;
   }
 
   onTaxToggle(): void {
@@ -91,15 +87,13 @@ export class InvoiceAmountDetailsComponent {
   }
 
   calculateTaxValues(total: number): void {
-    const sgst = this.includeSgst
-      ? this.calculateTax(total, this.sgstRate)
-      : null;
-    const cgst = this.includeCgst
-      ? this.calculateTax(total, this.cgstRate)
-      : null;
-    const igst = this.includeIgst
-      ? this.calculateTax(total, this.igstRate)
-      : null;
+    const includeSgst = this.invoiceForm.get('include_sgst')?.value;
+    const includeCgst = this.invoiceForm.get('include_cgst')?.value;
+    const includeIgst = this.invoiceForm.get('include_igst')?.value;
+
+    const sgst = includeSgst ? this.calculateTax(total, this.sgstRate) : null;
+    const cgst = includeCgst ? this.calculateTax(total, this.cgstRate) : null;
+    const igst = includeIgst ? this.calculateTax(total, this.igstRate) : null;
 
     const grandTotal = total + (sgst || 0) + (cgst || 0) + (igst || 0);
     const amountInWords = toWords(grandTotal.toFixed(0)).toUpperCase();
@@ -108,7 +102,7 @@ export class InvoiceAmountDetailsComponent {
       sgst,
       cgst,
       igst,
-      grand_total: grandTotal.toFixed(0),
+      grand_total: Math.round(grandTotal),
       amount_in_words: amountInWords,
     });
   }
@@ -117,18 +111,10 @@ export class InvoiceAmountDetailsComponent {
     return parseFloat(((amount * rate) / 100).toFixed(2));
   }
 
-  toggleCheckbox(value: string): void {
-    switch (value) {
-      case 'sgst':
-        this.includeSgst = !this.includeSgst;
-        break;
-      case 'cgst':
-        this.includeCgst = !this.includeCgst;
-        break;
-      case 'igst':
-        this.includeIgst = !this.includeIgst;
-        break;
-    }
+  toggleCheckbox(tax: 'sgst' | 'cgst' | 'igst'): void {
+    const controlName = `include_${tax}`;
+    const currentValue = this.invoiceForm.get(controlName)?.value;
+    this.invoiceForm.patchValue({ [controlName]: !currentValue });
 
     this.onTaxToggle();
   }
@@ -140,9 +126,9 @@ export class InvoiceAmountDetailsComponent {
 
     const payload = {
       ...formValues,
-      sgst: this.includeSgst ? formValues.sgst : null,
-      cgst: this.includeCgst ? formValues.cgst : null,
-      igst: this.includeIgst ? formValues.igst : null,
+      sgst: formValues.include_sgst ? formValues.sgst : null,
+      cgst: formValues.include_cgst ? formValues.cgst : null,
+      igst: formValues.include_igst ? formValues.igst : null,
     };
 
     this.invoiceService.updateInvoice(this.invoiceId, payload).subscribe({
