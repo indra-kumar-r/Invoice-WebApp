@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  ViewChild,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {
   ReactiveFormsModule,
   FormsModule,
@@ -14,6 +21,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyService } from '../../../core/services/company/company.service';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import { Invoice } from '../../../models/invoice.mode';
+import { Subject, of } from 'rxjs';
+import { takeUntil, tap, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-invoice-basic-details',
@@ -21,8 +30,10 @@ import { Invoice } from '../../../models/invoice.mode';
   templateUrl: './invoice-basic-details.component.html',
   styleUrl: './invoice-basic-details.component.scss',
 })
-export class InvoiceBasicDetailsComponent {
+export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
   @ViewChild('companyDropdown', { static: false })
+  private destroy$ = new Subject<void>();
+
   companyDropdownRef!: ElementRef;
 
   invoice!: Invoice;
@@ -50,11 +61,17 @@ export class InvoiceBasicDetailsComponent {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(({ uuid }) => {
+    this.initForm();
+
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(({ uuid }) => {
       this.invoiceId = uuid;
-      this.initForm();
       this.getCompanies();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   @HostListener('document:click', ['$event'])
@@ -62,9 +79,7 @@ export class InvoiceBasicDetailsComponent {
     const clickedInside = this.companyDropdownRef?.nativeElement.contains(
       event.target
     );
-    if (!clickedInside) {
-      this.showCompanyDropdown = false;
-    }
+    if (!clickedInside) this.showCompanyDropdown = false;
   }
 
   initForm(): void {
@@ -80,18 +95,23 @@ export class InvoiceBasicDetailsComponent {
   }
 
   setInvoiceID(): void {
-    this.invoiceService.getInvoices({ page: 1 }).subscribe({
-      next: ({ data }) => {
-        this.invoiceForm.patchValue({
-          invoice_no: (
-            parseInt(data[0].invoice_no || '202526000') + 1
-          ).toString(),
-        });
-      },
-      error: (err) => {
-        console.error('Error: ', err);
-      },
-    });
+    this.invoiceService
+      .getInvoices({ page: 1 })
+      .pipe(
+        tap(({ data }) => {
+          this.invoiceForm.patchValue({
+            invoice_no: (
+              parseInt(data[0].invoice_no || '202526000') + 1
+            ).toString(),
+          });
+        }),
+        catchError((err) => {
+          console.error('Error: ', err);
+          return of(null);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   toggleCompanyDropdown(): void {
@@ -141,40 +161,54 @@ export class InvoiceBasicDetailsComponent {
   }
 
   getCompanies(): void {
-    this.companyService.getCompanies().subscribe({
-      next: (res: Company[]) => {
-        this.companies = res;
+    this.companyService
+      .getCompanies()
+      .pipe(
+        tap((res: Company[]) => {
+          this.companies = res;
 
-        if (this.invoiceId !== 'create') {
-          this.getInvoice();
-        } else {
-          this.setInvoiceID();
-        }
-      },
-      error: (err) => console.error('Company Error: ', err),
-    });
+          if (this.invoiceId !== 'create') {
+            this.getInvoice();
+          } else {
+            this.setInvoiceID();
+          }
+        }),
+        catchError((err) => {
+          console.error('Company Error: ', err);
+          return of([]);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   getInvoice(): void {
-    this.invoiceService.getInvoice(this.invoiceId).subscribe({
-      next: (res) => {
-        this.isEditingDisabled = true;
-        this.invoice = res;
-        this.dcNos = res.dc_nos || [];
-        this.orderNos = res.order_nos || [];
+    this.invoiceService
+      .getInvoice(this.invoiceId)
+      .pipe(
+        tap((res) => {
+          this.isEditingDisabled = true;
+          this.invoice = res;
+          this.dcNos = res.dc_nos || [];
+          this.orderNos = res.order_nos || [];
 
-        this.invoiceForm.patchValue({
-          ...res,
-          date: res.date ? new Date(res.date) : new Date(),
-        });
+          this.invoiceForm.patchValue({
+            ...res,
+            date: res.date ? new Date(res.date) : new Date(),
+          });
 
-        const company = this.companies.find(
-          (company) => company?.company_name === res?.company_name
-        );
-        this.onCompanySelect(company as Company);
-      },
-      error: (err) => console.error('Invoice Error: ', err),
-    });
+          const company = this.companies.find(
+            (c) => c?.company_name === res?.company_name
+          );
+          if (company) this.onCompanySelect(company);
+        }),
+        catchError((err) => {
+          console.error('Invoice Error: ', err);
+          return of(null);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   onSubmit(): void {
@@ -189,20 +223,27 @@ export class InvoiceBasicDetailsComponent {
       order_nos: this.orderNos.length ? this.orderNos : null,
     };
 
-    if (this.invoiceId === 'create') {
-      this.invoiceService.createInvoice(formValue).subscribe({
-        next: (res) => {
-          this.router.navigate(['/invoices/items-details', res.uuid]);
-        },
-        error: (err) => console.error('Create Error: ', err),
-      });
-    } else {
-      this.invoiceService.updateInvoice(this.invoiceId, formValue).subscribe({
-        next: () =>
-          this.router.navigate(['/invoices/items-details', this.invoiceId]),
-        error: (err) => console.error('Update Error: ', err),
-      });
-    }
+    const request$ =
+      this.invoiceId === 'create'
+        ? this.invoiceService.createInvoice(formValue)
+        : this.invoiceService.updateInvoice(this.invoiceId, formValue);
+
+    request$
+      .pipe(
+        tap((res: any) => {
+          const uuid = this.invoiceId === 'create' ? res.uuid : this.invoiceId;
+          this.router.navigate(['/invoices/items-details', uuid]);
+        }),
+        catchError((err) => {
+          console.error(
+            this.invoiceId === 'create' ? 'Create Error: ' : 'Update Error: ',
+            err
+          );
+          return of(null);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   createCompany(): void {
