@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Company } from '../../../models/company.model';
 import { CompanyService } from '../../../core/services/company/company.service';
 import { FormsModule } from '@angular/forms';
+import { catchError, finalize, of, Subject, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-manage-company',
@@ -12,8 +13,10 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './manage-company.component.html',
   styleUrl: './manage-company.component.scss',
 })
-export class ManageCompanyComponent {
-  toalCompanies: Company[] = [];
+export class ManageCompanyComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
+  totalCompanies: Company[] = [];
   companies: Company[] = [];
   isLoading: boolean = false;
 
@@ -25,27 +28,37 @@ export class ManageCompanyComponent {
     this.getCompanies();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   createCompany(): void {
     this.router.navigate(['/companies/company/create']);
   }
 
   getCompanies(): void {
     this.isLoading = true;
-    this.companyService.getCompanies().subscribe({
-      next: (res: Company[]) => {
-        this.toalCompanies = res.map((company) => ({
-          ...company,
-          color: this.getRandomColor(),
-        }));
-        this.companies = this.toalCompanies;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error: ', err);
-        this.companies = [];
-        this.isLoading = false;
-      },
-    });
+
+    this.companyService
+      .getCompanies()
+      .pipe(
+        tap((res: Company[]) => {
+          this.totalCompanies = res.map((company) => ({
+            ...company,
+            color: this.getRandomColor(),
+          }));
+          this.companies = this.totalCompanies;
+        }),
+        catchError((err) => {
+          console.error('Error: ', err);
+          this.companies = [];
+          return of([]);
+        }),
+        takeUntil(this.destroy$),
+        finalize(() => (this.isLoading = false))
+      )
+      .subscribe();
   }
 
   getRandomColor(): string {
@@ -63,11 +76,11 @@ export class ManageCompanyComponent {
 
   searchCompanies(): void {
     if (!this.searchTerm) {
-      this.companies = this.toalCompanies;
+      this.companies = this.totalCompanies;
       return;
     }
 
-    this.companies = this.toalCompanies.filter((company) =>
+    this.companies = this.totalCompanies.filter((company) =>
       company.company_name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
