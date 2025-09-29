@@ -24,10 +24,6 @@ export class InvoiceAmountDetailsComponent {
   invoiceItems: InvoiceItem[] = [];
   invoiceForm!: FormGroup;
 
-  sgstRate: number = 2.5;
-  cgstRate: number = 2.5;
-  igstRate: number = 5;
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -52,6 +48,9 @@ export class InvoiceAmountDetailsComponent {
       include_sgst: [true],
       include_cgst: [true],
       include_igst: [false],
+      sgst_rate: [2.5],
+      cgst_rate: [2.5],
+      igst_rate: [5],
       grand_total: [0, Validators.required],
       amount_in_words: [''],
     });
@@ -73,6 +72,9 @@ export class InvoiceAmountDetailsComponent {
           include_sgst: res.include_sgst ?? true,
           include_cgst: res.include_cgst ?? true,
           include_igst: res.include_igst ?? false,
+          sgst_rate: res.sgst_rate ?? 2.5,
+          cgst_rate: res.cgst_rate ?? 2.5,
+          igst_rate: res.igst_rate ?? 5,
         });
 
         this.calculateTaxValues(total);
@@ -91,9 +93,13 @@ export class InvoiceAmountDetailsComponent {
     const includeCgst = this.invoiceForm.get('include_cgst')?.value;
     const includeIgst = this.invoiceForm.get('include_igst')?.value;
 
-    const sgst = includeSgst ? this.calculateTax(total, this.sgstRate) : null;
-    const cgst = includeCgst ? this.calculateTax(total, this.cgstRate) : null;
-    const igst = includeIgst ? this.calculateTax(total, this.igstRate) : null;
+    const sgstRate = this.invoiceForm.get('sgst_rate')?.value || 0;
+    const cgstRate = this.invoiceForm.get('cgst_rate')?.value || 0;
+    const igstRate = this.invoiceForm.get('igst_rate')?.value || 0;
+
+    const sgst = includeSgst ? this.calculateTax(total, sgstRate) : null;
+    const cgst = includeCgst ? this.calculateTax(total, cgstRate) : null;
+    const igst = includeIgst ? this.calculateTax(total, igstRate) : null;
 
     const grandTotal = total + (sgst || 0) + (cgst || 0) + (igst || 0);
     const amountInWords = toWords(grandTotal.toFixed(0)).toUpperCase();
@@ -129,6 +135,9 @@ export class InvoiceAmountDetailsComponent {
       sgst: formValues.include_sgst ? formValues.sgst : null,
       cgst: formValues.include_cgst ? formValues.cgst : null,
       igst: formValues.include_igst ? formValues.igst : null,
+      sgst_rate: formValues.include_sgst ? formValues.sgst_rate : null,
+      cgst_rate: formValues.include_cgst ? formValues.cgst_rate : null,
+      igst_rate: formValues.include_igst ? formValues.igst_rate : null,
     };
 
     this.invoiceService.updateInvoice(this.invoiceId, payload).subscribe({

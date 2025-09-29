@@ -44,8 +44,7 @@
               *ngIf="invoiceForm.get('include_sgst')?.value"
               class="tax-rate"
               type="number"
-              [(ngModel)]="sgstRate"
-              [ngModelOptions]="{ standalone: true }"
+              formControlName="sgst_rate"
               (input)="onTaxToggle()"
               placeholder="SGST %"
             />
@@ -75,8 +74,7 @@
               *ngIf="invoiceForm.get('include_cgst')?.value"
               class="tax-rate"
               type="number"
-              [(ngModel)]="cgstRate"
-              [ngModelOptions]="{ standalone: true }"
+              formControlName="cgst_rate"
               (input)="onTaxToggle()"
               placeholder="CGST %"
             />
@@ -106,8 +104,7 @@
               *ngIf="invoiceForm.get('include_igst')?.value"
               class="tax-rate"
               type="number"
-              [(ngModel)]="igstRate"
-              [ngModelOptions]="{ standalone: true }"
+              formControlName="igst_rate"
               (input)="onTaxToggle()"
               placeholder="IGST %"
             />

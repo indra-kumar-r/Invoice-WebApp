@@ -16,6 +16,9 @@ export interface Invoice {
   include_cgst?: boolean;
   include_igst?: boolean;
   grand_total?: number;
+  sgst_rate?: number;
+  cgst_rate?: number;
+  igst_rate?: number;
   amount_in_words?: string;
   created_at?: string;
   updated_at?: string;
