@@ -40,10 +40,35 @@ const InvoiceSchema = new mongoose.Schema(
         dc_nos: [String],
         order_nos: [String],
         invoice_items: [InvoiceItemSchema],
-        total: Number,
+
+        include_sgst: {
+            type: Boolean,
+            default: true,
+        },
+        include_cgst: {
+            type: Boolean,
+            default: true,
+        },
+        include_igst: {
+            type: Boolean,
+            default: false,
+        },
+        sgst_rate: {
+            type: Number,
+            default: 2.5,
+        },
+        cgst_rate: {
+            type: Number,
+            default: 2.5,
+        },
+        igst_rate: {
+            type: Number,
+            default: 5,
+        },
         sgst: Number,
         cgst: Number,
         igst: Number,
+        total: Number,
         grand_total: Number,
         amount_in_words: String,
     },
