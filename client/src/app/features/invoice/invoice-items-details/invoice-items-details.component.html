@@ -52,7 +52,11 @@
 
             <ng-template #noItems>
               <div class="no-invoice-items">
-                <div class="text-secondary text fs-6">
+                <div class="image">
+                  <img src="no-items.jpg" type="image/*" alt="delete-details" />
+                </div>
+
+                <div class="text-secondary fs-6 fw-bolder">
                   Add Items to see them here!
                 </div>
               </div>
@@ -160,7 +164,7 @@
         </section>
       </div>
 
-      <div class="options mt-4">
+      <div *ngIf="invoiceItems.length > 0" class="options mt-4">
         <button
           (click)="onSubmit()"
           type="button"
