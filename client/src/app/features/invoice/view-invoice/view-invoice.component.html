@@ -135,9 +135,9 @@
         <div class="total-amount-section">
           <div class="label-section text-secondary fw-bold">
             <div>Total</div>
-            <div *ngIf="invoice.sgst">SGST 2.5%</div>
-            <div *ngIf="invoice.cgst">CGST 2.5%</div>
-            <div *ngIf="invoice.igst">IGST 5%</div>
+            <div *ngIf="invoice.sgst">SGST {{ invoice.sgst_rate }}%</div>
+            <div *ngIf="invoice.cgst">CGST {{ invoice.cgst_rate }}%</div>
+            <div *ngIf="invoice.igst">IGST {{ invoice.igst_rate }}%</div>
             <div>Grand Total</div>
           </div>
 
