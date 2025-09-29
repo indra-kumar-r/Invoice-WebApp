@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ElementRef,
+  HostListener,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
@@ -29,6 +36,9 @@ import {
   styleUrl: './manage-invoices.component.scss',
 })
 export class ManageInvoicesComponent implements OnInit, OnDestroy {
+  @ViewChild('companyDropdown', { static: false })
+  companyDropdownRef!: ElementRef;
+
   private destroy$ = new Subject<void>();
 
   invoices: Invoice[] = [];
@@ -71,6 +81,14 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const clickedInside = this.companyDropdownRef?.nativeElement.contains(
+      event.target
+    );
+    if (!clickedInside) this.showCompanyDropdown = false;
   }
 
   setupControllers(): void {
