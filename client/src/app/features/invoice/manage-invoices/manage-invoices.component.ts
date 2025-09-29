@@ -157,8 +157,10 @@ export class ManageInvoicesComponent {
 
   applyFilters(): void {
     if (this.filters.fromDate && this.filters.toDate) {
-      this.invoiceQuery.fromDate = this.formatDate(this.filters.fromDate);
-      this.invoiceQuery.toDate = this.formatDate(this.filters.toDate);
+      this.invoiceQuery.fromDate = this.formatDateForQuery(
+        this.filters.fromDate
+      );
+      this.invoiceQuery.toDate = this.formatDateForQuery(this.filters.toDate);
     } else {
       delete this.invoiceQuery.fromDate;
       delete this.invoiceQuery.toDate;
@@ -180,9 +182,17 @@ export class ManageInvoicesComponent {
     this.getInvoices();
   }
 
-  private formatDate(dateStr: string): string {
+  private formatDateForQuery(dateStr: string): string {
     if (!dateStr) return '';
-    const [year, month, day] = dateStr.split('-');
+    return new Date(dateStr).toISOString();
+  }
+
+  formatDisplayDate(date?: Date): string {
+    if (!date) return '';
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
     return `${day}-${month}-${year}`;
   }
 }

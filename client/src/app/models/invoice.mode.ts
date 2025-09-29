@@ -4,7 +4,7 @@ export interface Invoice {
   company_name?: string;
   company_address?: string;
   company_gst_no?: string;
-  date?: string;
+  date?: Date;
   dc_nos: string[];
   order_nos: string[];
   invoice_items: InvoiceItem[];

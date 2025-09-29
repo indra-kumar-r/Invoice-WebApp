@@ -75,7 +75,7 @@
               </div>
 
               <div class="invoice-date text-danger">
-                Date: {{ invoice.date }}
+                Date: {{ formatDisplayDate(invoice.date) }}
               </div>
 
               <div
@@ -197,9 +197,11 @@
             <div class="invoice-company text-secondary fs-6 fw-bolder">
               Company: {{ selectedInvoice?.company_name }}
             </div>
+
             <div class="invoice-date text-dark fs-6 fw-bolder">
-              Date: {{ selectedInvoice?.date }}
+              Date: {{ formatDisplayDate(selectedInvoice?.date) }}
             </div>
+
             <div
               *ngIf="selectedInvoice?.grand_total"
               class="invoice-amount text-success fs-6 fw-bolder"
@@ -272,12 +274,19 @@
             class="form-control"
             id="fromDate"
             name="fromDate"
+            [(ngModel)]="filters.fromDate"
           />
         </div>
 
         <div>
           <label for="toDate" class="form-label fw-bold">To Date</label>
-          <input type="date" class="form-control" id="toDate" name="toDate" />
+          <input
+            type="date"
+            class="form-control"
+            id="toDate"
+            name="toDate"
+            [(ngModel)]="filters.toDate"
+          />
         </div>
       </div>
 
