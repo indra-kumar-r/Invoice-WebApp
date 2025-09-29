@@ -1,5 +1,5 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import {
@@ -9,17 +9,17 @@ import {
   InvoiceResponse,
 } from '../../../models/invoice.mode';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  catchError,
-  debounceTime,
-  finalize,
-  of,
-  Subject,
-  takeUntil,
-  tap,
-} from 'rxjs';
 import { Company } from '../../../models/company.model';
 import { CompanyService } from '../../../core/services/company/company.service';
+import {
+  Subject,
+  debounceTime,
+  takeUntil,
+  tap,
+  catchError,
+  of,
+  finalize,
+} from 'rxjs';
 
 @Component({
   selector: 'app-manage-invoices',
@@ -51,12 +51,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
   searchControl = new FormControl('', { nonNullable: true });
 
   companies: Company[] = [];
-
-  filters: InvoiceFilters = {
-    fromDate: '',
-    toDate: '',
-    company: '',
-  };
+  filters: InvoiceFilters = { fromDate: '', toDate: '', company: '' };
 
   isFiltersCanvasOpen: boolean = false;
   showCompanyDropdown: boolean = false;
@@ -200,11 +195,8 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
       delete this.invoiceQuery.toDate;
     }
 
-    if (this.filters.company) {
-      this.invoiceQuery.company = this.filters.company;
-    } else {
-      delete this.invoiceQuery.company;
-    }
+    if (this.filters.company) this.invoiceQuery.company = this.filters.company;
+    else delete this.invoiceQuery.company;
 
     this.invoiceQuery.page = 1;
     this.getInvoices();
@@ -217,8 +209,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
   }
 
   private formatDateForQuery(dateStr: string): string {
-    if (!dateStr) return '';
-    return new Date(dateStr).toISOString();
+    return dateStr ? new Date(dateStr).toISOString() : '';
   }
 
   formatDisplayDate(date?: Date): string {

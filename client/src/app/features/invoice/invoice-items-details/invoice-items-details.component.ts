@@ -15,8 +15,7 @@ import {
   moveItemInArray,
   DragDropModule,
 } from '@angular/cdk/drag-drop';
-import { Subject, of } from 'rxjs';
-import { takeUntil, tap, catchError } from 'rxjs/operators';
+import { Subject, takeUntil, tap, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-invoice-items-details',

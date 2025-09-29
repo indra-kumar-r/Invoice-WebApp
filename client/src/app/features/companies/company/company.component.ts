@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -11,7 +11,7 @@ import { InputComponent } from '../../../shared/input/input.component';
 import { CommonModule } from '@angular/common';
 import { CompanyService } from '../../../core/services/company/company.service';
 import { Company } from '../../../models/company.model';
-import { catchError, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { Subject, tap, switchMap, catchError, of, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-company',

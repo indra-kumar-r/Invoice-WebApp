@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Company } from '../../../models/company.model';
 import { CompanyService } from '../../../core/services/company/company.service';
 import { FormsModule } from '@angular/forms';
-import { catchError, finalize, of, Subject, takeUntil, tap } from 'rxjs';
+import { Subject, tap, catchError, of, takeUntil, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-manage-company',

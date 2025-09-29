@@ -11,8 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import { Invoice, InvoiceItem } from '../../../models/invoice.mode';
 import { toWords } from 'number-to-words';
-import { Subject, of } from 'rxjs';
-import { takeUntil, tap, catchError } from 'rxjs/operators';
+import { Subject, takeUntil, tap, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-invoice-amount-details',
