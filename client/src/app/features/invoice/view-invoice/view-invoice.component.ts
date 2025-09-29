@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import { Invoice } from '../../../models/invoice.mode';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { catchError, finalize, of, Subject, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-view-invoice',
@@ -10,9 +11,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './view-invoice.component.html',
   styleUrl: './view-invoice.component.scss',
 })
-export class ViewInvoiceComponent {
-  invoice!: Invoice;
+export class ViewInvoiceComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
+  invoice!: Invoice;
   isSigned: boolean = false;
   isLoading: boolean = false;
 
@@ -30,24 +32,34 @@ export class ViewInvoiceComponent {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(({ uuid }) => {
-      this.getInvoice(uuid);
-    });
+    this.route.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ uuid }) => this.getInvoice(uuid));
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getInvoice(id: string): void {
     this.isLoading = true;
-    this.invoiceService.getInvoice(id).subscribe({
-      next: (res: Invoice) => {
-        this.invoice = res;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error: ', err);
-        this.isLoading = false;
-        this.invoice = {} as Invoice;
-      },
-    });
+
+    this.invoiceService
+      .getInvoice(id)
+      .pipe(
+        tap((res: Invoice) => {
+          this.invoice = res;
+        }),
+        catchError((err) => {
+          console.error('Error fetching invoice: ', err);
+          this.invoice = {} as Invoice;
+          return of({} as Invoice);
+        }),
+        takeUntil(this.destroy$),
+        finalize(() => (this.isLoading = false))
+      )
+      .subscribe();
   }
 
   createInvoice(): void {
