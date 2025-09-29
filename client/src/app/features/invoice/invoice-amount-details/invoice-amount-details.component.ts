@@ -138,6 +138,7 @@ export class InvoiceAmountDetailsComponent {
       sgst_rate: formValues.include_sgst ? formValues.sgst_rate : null,
       cgst_rate: formValues.include_cgst ? formValues.cgst_rate : null,
       igst_rate: formValues.include_igst ? formValues.igst_rate : null,
+      amount_in_words: formValues.amount_in_words.toUpperCase(),
     };
 
     this.invoiceService.updateInvoice(this.invoiceId, payload).subscribe({
