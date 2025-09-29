@@ -73,17 +73,10 @@ export class InvoiceBasicDetailsComponent {
       company_name: ['', Validators.required],
       company_address: ['', Validators.required],
       company_gst_no: ['', Validators.required],
-      date: ['', Validators.required],
+      date: [new Date(), Validators.required],
       dc_nos: [[]],
       order_nos: [[]],
     });
-  }
-
-  setTodayDate(): void {
-    const today = new Date();
-    const formatted = today.toLocaleDateString('en-GB').split('/').join('-');
-
-    this.invoiceForm.patchValue({ date: formatted });
   }
 
   setInvoiceID(): void {
@@ -156,7 +149,6 @@ export class InvoiceBasicDetailsComponent {
           this.getInvoice();
         } else {
           this.setInvoiceID();
-          this.setTodayDate();
         }
       },
       error: (err) => console.error('Company Error: ', err),
@@ -171,7 +163,10 @@ export class InvoiceBasicDetailsComponent {
         this.dcNos = res.dc_nos || [];
         this.orderNos = res.order_nos || [];
 
-        this.invoiceForm.patchValue(res);
+        this.invoiceForm.patchValue({
+          ...res,
+          date: res.date ? new Date(res.date) : new Date(),
+        });
 
         const company = this.companies.find(
           (company) => company?.company_name === res?.company_name
@@ -216,5 +211,14 @@ export class InvoiceBasicDetailsComponent {
 
   navigateBack(): void {
     this.router.navigate(['/invoices']);
+  }
+
+  formatDisplayDate(date?: Date | string): string {
+    if (!date) return '';
+    const d = typeof date === 'string' ? new Date(date) : date;
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
   }
 }

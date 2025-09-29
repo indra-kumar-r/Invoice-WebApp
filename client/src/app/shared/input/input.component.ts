@@ -23,13 +23,20 @@ export class InputComponent implements ControlValueAccessor {
   @Input() readonly: boolean = false;
   @Input() errorMsg: string = '';
 
-  value: string = '';
+  value: any = '';
 
   private onChange = (value: any) => {};
   private onTouched = () => {};
 
-  writeValue(value: string): void {
-    this.value = value;
+  writeValue(value: any): void {
+    if (this.type === 'date' && value) {
+      const d = new Date(value);
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      this.value = `${d.getFullYear()}-${month}-${day}`;
+    } else {
+      this.value = value ?? '';
+    }
   }
 
   registerOnChange(fn: any): void {
@@ -41,8 +48,13 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   onInputChange(value: string) {
-    this.value = value;
-    this.onChange(value);
+    if (this.type === 'date') {
+      this.onChange(value ? new Date(value) : null);
+      this.value = value;
+    } else {
+      this.value = value;
+      this.onChange(value);
+    }
     this.onTouched();
   }
 
