@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormsModule,
@@ -15,6 +15,8 @@ import {
   moveItemInArray,
   DragDropModule,
 } from '@angular/cdk/drag-drop';
+import { Subject, of } from 'rxjs';
+import { takeUntil, tap, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-invoice-items-details',
@@ -22,7 +24,9 @@ import {
   templateUrl: './invoice-items-details.component.html',
   styleUrl: './invoice-items-details.component.scss',
 })
-export class InvoiceItemsDetailsComponent {
+export class InvoiceItemsDetailsComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
   invoice!: Invoice;
   invoiceId: string = '';
   invoiceItems: InvoiceItem[] = [];
@@ -40,25 +44,36 @@ export class InvoiceItemsDetailsComponent {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(({ uuid }) => {
+    this.initForm();
+
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(({ uuid }) => {
       this.invoiceId = uuid;
-      this.initForm();
       this.getInvoice();
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   getInvoice(): void {
-    this.invoiceService.getInvoice(this.invoiceId).subscribe({
-      next: (res) => {
-        this.invoice = res;
-        this.invoiceForm.patchValue(res);
-        this.invoiceItems = res.invoice_items || [];
-        if (this.invoiceItems.length) {
-          this.resetItemForm();
-        }
-      },
-      error: (err) => console.error('Invoice Error: ', err),
-    });
+    this.invoiceService
+      .getInvoice(this.invoiceId)
+      .pipe(
+        tap((res) => {
+          this.invoice = res;
+          this.invoiceForm.patchValue(res);
+          this.invoiceItems = res.invoice_items || [];
+          if (this.invoiceItems.length) this.resetItemForm();
+        }),
+        catchError((err) => {
+          console.error('Invoice Error: ', err);
+          return of(null);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   initForm(): void {
@@ -79,8 +94,7 @@ export class InvoiceItemsDetailsComponent {
   updateAmount(): void {
     const qty = this.itemForm.get('quantity')?.value || 0;
     const rate = this.itemForm.get('rate')?.value || 0;
-    const amount = qty * rate;
-    this.itemForm.get('amount')?.setValue(amount);
+    this.itemForm.get('amount')?.setValue(qty * rate);
   }
 
   addItem(): void {
@@ -139,7 +153,6 @@ export class InvoiceItemsDetailsComponent {
 
   dropItem(event: CdkDragDrop<InvoiceItem[]>): void {
     moveItemInArray(this.invoiceItems, event.previousIndex, event.currentIndex);
-
     this.invoiceItems = this.invoiceItems.map((item, index) => ({
       ...item,
       sl_no: (index + 1).toString(),
@@ -150,16 +163,21 @@ export class InvoiceItemsDetailsComponent {
     if (this.invoiceForm.invalid || !this.invoiceItems.length) return;
 
     const formValues = this.invoiceForm.getRawValue();
-    const payload = {
-      ...formValues,
-      invoice_items: this.invoiceItems,
-    };
+    const payload = { ...formValues, invoice_items: this.invoiceItems };
 
-    this.invoiceService.updateInvoice(this.invoiceId, payload).subscribe({
-      next: () =>
-        this.router.navigate(['/invoices/amount-details', this.invoiceId]),
-      error: (err) => console.error('Update Error: ', err),
-    });
+    this.invoiceService
+      .updateInvoice(this.invoiceId, payload)
+      .pipe(
+        tap(() =>
+          this.router.navigate(['/invoices/amount-details', this.invoiceId])
+        ),
+        catchError((err) => {
+          console.error('Update Error: ', err);
+          return of(null);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   navigateBack(): void {
