@@ -1,54 +1,74 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { SessionStorageKeys } from '../../constants/storage.constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StorageService {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
+  private isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
+
   // Local Storage
   private setLocalStorageData(key: string, value: unknown) {
-    localStorage.setItem(key, JSON.stringify(value));
+    if (this.isBrowser()) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
   }
 
   private getLocalStorageData<T>(key: string): T {
-    const item = localStorage.getItem(key);
-    if (item === null || item === 'undefined') {
-      return '' as string as T;
+    if (this.isBrowser()) {
+      const item = localStorage.getItem(key);
+      if (item === null || item === 'undefined') {
+        return '' as string as T;
+      }
+      return JSON.parse(item as string) as T;
     }
-    return JSON.parse(item as string) as T;
+    return '' as string as T;
   }
 
   // Session Storage
-
   private setSessionStorageData(key: string, value: unknown) {
-    sessionStorage.setItem(key, JSON.stringify(value));
+    if (this.isBrowser()) {
+      sessionStorage.setItem(key, JSON.stringify(value));
+    }
   }
 
   private getSessionStorageData<T>(key: string): T {
-    const item = sessionStorage.getItem(key);
-    if (item === null || item === 'undefined') {
-      return '' as string as T;
+    if (this.isBrowser()) {
+      const item = sessionStorage.getItem(key);
+      if (item === null || item === 'undefined') {
+        return '' as string as T;
+      }
+      return JSON.parse(item as string) as T;
     }
-    return JSON.parse(item as string) as T;
+    return '' as string as T;
   }
 
   // Common storage methods
-
   removeLocalStorageData(key: string) {
-    localStorage.removeItem(key);
+    if (this.isBrowser()) {
+      localStorage.removeItem(key);
+    }
   }
 
   removeSessionStorageData(key: string) {
-    sessionStorage.removeItem(key);
+    if (this.isBrowser()) {
+      sessionStorage.removeItem(key);
+    }
   }
 
   clearAll() {
-    localStorage.clear();
-    sessionStorage.clear();
+    if (this.isBrowser()) {
+      localStorage.clear();
+      sessionStorage.clear();
+    }
   }
 
   // Auth
-
   setAuth(value: string) {
     this.setSessionStorageData(SessionStorageKeys.AUTH, value);
   }
