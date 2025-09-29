@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormsModule,
@@ -11,6 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import { Invoice, InvoiceItem } from '../../../models/invoice.mode';
 import { toWords } from 'number-to-words';
+import { Subject, of } from 'rxjs';
+import { takeUntil, tap, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-invoice-amount-details',
@@ -18,7 +20,9 @@ import { toWords } from 'number-to-words';
   templateUrl: './invoice-amount-details.component.html',
   styleUrl: './invoice-amount-details.component.scss',
 })
-export class InvoiceAmountDetailsComponent {
+export class InvoiceAmountDetailsComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
   invoice!: Invoice;
   invoiceId: string = '';
   invoiceItems: InvoiceItem[] = [];
@@ -32,11 +36,17 @@ export class InvoiceAmountDetailsComponent {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(({ uuid }) => {
+    this.initForm();
+
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(({ uuid }) => {
       this.invoiceId = uuid;
-      this.initForm();
       this.getInvoice();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   initForm(): void {
@@ -57,30 +67,37 @@ export class InvoiceAmountDetailsComponent {
   }
 
   getInvoice(): void {
-    this.invoiceService.getInvoice(this.invoiceId).subscribe({
-      next: (res) => {
-        this.invoice = res;
-        this.invoiceItems = res.invoice_items || [];
+    this.invoiceService
+      .getInvoice(this.invoiceId)
+      .pipe(
+        tap((res) => {
+          this.invoice = res;
+          this.invoiceItems = res.invoice_items || [];
 
-        const total = this.invoiceItems.reduce(
-          (sum, item) => sum + (item.amount || 0),
-          0
-        );
+          const total = this.invoiceItems.reduce(
+            (sum, item) => sum + (item.amount || 0),
+            0
+          );
 
-        this.invoiceForm.patchValue({
-          total,
-          include_sgst: res.include_sgst ?? true,
-          include_cgst: res.include_cgst ?? true,
-          include_igst: res.include_igst ?? false,
-          sgst_rate: res.sgst_rate ?? 2.5,
-          cgst_rate: res.cgst_rate ?? 2.5,
-          igst_rate: res.igst_rate ?? 5,
-        });
+          this.invoiceForm.patchValue({
+            total,
+            include_sgst: res.include_sgst ?? true,
+            include_cgst: res.include_cgst ?? true,
+            include_igst: res.include_igst ?? false,
+            sgst_rate: res.sgst_rate ?? 2.5,
+            cgst_rate: res.cgst_rate ?? 2.5,
+            igst_rate: res.igst_rate ?? 5,
+          });
 
-        this.calculateTaxValues(total);
-      },
-      error: (err) => console.error('Invoice Error: ', err),
-    });
+          this.calculateTaxValues(total);
+        }),
+        catchError((err) => {
+          console.error('Invoice Error: ', err);
+          return of(null);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   onTaxToggle(): void {
@@ -141,10 +158,17 @@ export class InvoiceAmountDetailsComponent {
       amount_in_words: formValues.amount_in_words.toUpperCase(),
     };
 
-    this.invoiceService.updateInvoice(this.invoiceId, payload).subscribe({
-      next: () => this.router.navigate(['/invoices']),
-      error: (err) => console.error('Update Error: ', err),
-    });
+    this.invoiceService
+      .updateInvoice(this.invoiceId, payload)
+      .pipe(
+        tap(() => this.router.navigate(['/invoices'])),
+        catchError((err) => {
+          console.error('Update Error: ', err);
+          return of(null);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   navigateBack(): void {
