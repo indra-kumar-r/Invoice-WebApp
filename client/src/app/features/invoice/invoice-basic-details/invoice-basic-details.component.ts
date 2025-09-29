@@ -31,9 +31,9 @@ import { Subject, takeUntil, tap, catchError, of } from 'rxjs';
 })
 export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
   @ViewChild('companyDropdown', { static: false })
-  private destroy$ = new Subject<void>();
-
   companyDropdownRef!: ElementRef;
+
+  private destroy$ = new Subject<void>();
 
   invoice!: Invoice;
   invoiceId: string = '';
