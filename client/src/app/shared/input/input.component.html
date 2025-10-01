@@ -1,5 +1,7 @@
 <div class="input-wrapper">
-  <label *ngIf="label">{{ label }} <span>*</span></label>
+  <ng-container *ngIf="label">
+    <label>{{ label }} <span>*</span></label>
+  </ng-container>
 
   <input
     [type]="type"
@@ -9,5 +11,7 @@
     (input)="onInput($event)"
   />
 
-  <div *ngIf="errorMsg" class="input-error">{{ errorMsg }}</div>
+  <ng-container *ngIf="errorMsg">
+    <div class="input-error">{{ errorMsg }}</div>
+  </ng-container>
 </div>
