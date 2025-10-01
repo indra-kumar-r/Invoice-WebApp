@@ -29,92 +29,97 @@
           <div class="tax-item">
             <div class="tax-checkbox" (click)="toggleCheckbox('sgst')">
               <i
-                *ngIf="!invoiceForm.get('include_sgst')?.value"
-                class="bi bi-square"
-              ></i>
-              <i
-                *ngIf="invoiceForm.get('include_sgst')?.value"
-                class="bi bi-check-square-fill text-success"
+                [class]="
+                  invoiceForm.get('include_sgst')?.value
+                    ? 'bi bi-check-square-fill text-success'
+                    : 'bi bi-square'
+                "
               ></i>
             </div>
-
             <label for="sgstCheck">SGST</label>
 
-            <input
-              *ngIf="invoiceForm.get('include_sgst')?.value"
-              class="tax-rate"
-              type="number"
-              formControlName="sgst_rate"
-              (input)="onTaxToggle()"
-              placeholder="SGST %"
-            />
-            <input
-              *ngIf="invoiceForm.get('include_sgst')?.value"
-              class="tax-value"
-              type="number"
-              formControlName="sgst"
-              placeholder="SGST Value"
-            />
+            <ng-container *ngIf="invoiceForm.get('include_sgst')?.value">
+              <input
+                class="tax-rate"
+                type="number"
+                formControlName="sgst_rate"
+                (input)="onTaxToggle()"
+                placeholder="SGST %"
+              />
+            </ng-container>
+
+            <ng-container *ngIf="invoiceForm.get('include_sgst')?.value">
+              <input
+                class="tax-value"
+                type="number"
+                formControlName="sgst"
+                placeholder="SGST Value"
+              />
+            </ng-container>
           </div>
 
           <div class="tax-item">
             <div class="tax-checkbox" (click)="toggleCheckbox('cgst')">
               <i
-                *ngIf="!invoiceForm.get('include_cgst')?.value"
-                class="bi bi-square"
-              ></i>
-              <i
-                *ngIf="invoiceForm.get('include_cgst')?.value"
-                class="bi bi-check-square-fill text-success"
+                [class]="
+                  invoiceForm.get('include_cgst')?.value
+                    ? 'bi bi-check-square-fill text-success'
+                    : 'bi bi-square'
+                "
               ></i>
             </div>
             <label for="cgstCheck">CGST</label>
 
-            <input
-              *ngIf="invoiceForm.get('include_cgst')?.value"
-              class="tax-rate"
-              type="number"
-              formControlName="cgst_rate"
-              (input)="onTaxToggle()"
-              placeholder="CGST %"
-            />
-            <input
-              *ngIf="invoiceForm.get('include_cgst')?.value"
-              class="tax-value"
-              type="number"
-              formControlName="cgst"
-              placeholder="CGST Value"
-            />
+            <ng-container *ngIf="invoiceForm.get('include_cgst')?.value">
+              <input
+                class="tax-rate"
+                type="number"
+                formControlName="cgst_rate"
+                (input)="onTaxToggle()"
+                placeholder="CGST %"
+              />
+            </ng-container>
+
+            <ng-container *ngIf="invoiceForm.get('include_cgst')?.value">
+              <input
+                class="tax-value"
+                type="number"
+                formControlName="cgst"
+                placeholder="CGST Value"
+              />
+            </ng-container>
           </div>
 
           <div class="tax-item">
             <div class="tax-checkbox" (click)="toggleCheckbox('igst')">
               <i
-                *ngIf="!invoiceForm.get('include_igst')?.value"
-                class="bi bi-square"
-              ></i>
-              <i
-                *ngIf="invoiceForm.get('include_igst')?.value"
-                class="bi bi-check-square-fill text-success"
+                [class]="
+                  invoiceForm.get('include_igst')?.value
+                    ? 'bi bi-check-square-fill text-success'
+                    : 'bi bi-square'
+                "
               ></i>
             </div>
             <label for="igstCheck">IGST</label>
 
-            <input
-              *ngIf="invoiceForm.get('include_igst')?.value"
-              class="tax-rate"
-              type="number"
-              formControlName="igst_rate"
-              (input)="onTaxToggle()"
-              placeholder="IGST %"
-            />
-            <input
-              *ngIf="invoiceForm.get('include_igst')?.value"
-              class="tax-value"
-              type="number"
-              formControlName="igst"
-              placeholder="IGST Value"
-            />
+            <ng-container *ngIf="invoiceForm.get('include_igst')?.value">
+              <input
+                class="tax-rate"
+                type="number"
+                formControlName="igst_rate"
+                (input)="onTaxToggle()"
+                placeholder="IGST %"
+              />
+            </ng-container>
+
+            <ng-container *ngIf="invoiceForm.get('include_igst')?.value">
+              <input
+                class="tax-value"
+                type="number"
+                formControlName="igst"
+                placeholder="IGST Value"
+              />
+            </ng-container>
           </div>
         </div>
 
