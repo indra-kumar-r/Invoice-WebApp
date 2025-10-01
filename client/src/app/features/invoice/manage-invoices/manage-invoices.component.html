@@ -78,12 +78,11 @@
                 Date: {{ formatDisplayDate(invoice.date) }}
               </div>
 
-              <div
-                *ngIf="invoice.grand_total"
-                class="invoice-amount text-success"
-              >
-                Amount: {{ invoice.grand_total }} ₹
-              </div>
+              <ng-container *ngIf="invoice.grand_total">
+                <div class="invoice-amount text-success">
+                  Amount: {{ invoice.grand_total }} ₹
+                </div>
+              </ng-container>
             </div>
 
             <div class="invoice-options">
@@ -115,21 +114,23 @@
 
         <ng-container *ngIf="totalPages > 1">
           <div class="pagination">
-            <button
-              *ngIf="currentPage !== 1"
-              class="btn btn-sm btn-light"
-              (click)="changePage(currentPage - 1)"
-            >
-              Previous
-            </button>
+            <ng-container *ngIf="currentPage !== 1">
+              <button
+                class="btn btn-sm btn-light"
+                (click)="changePage(currentPage - 1)"
+              >
+                Previous
+              </button>
+            </ng-container>
 
-            <button
-              *ngIf="currentPage !== totalPages"
-              class="btn btn-sm btn-light"
-              (click)="changePage(currentPage + 1)"
-            >
-              Next
-            </button>
+            <ng-container *ngIf="currentPage !== totalPages">
+              <button
+                class="btn btn-sm btn-light"
+                (click)="changePage(currentPage + 1)"
+              >
+                Next
+              </button>
+            </ng-container>
 
             <div class="page-control">
               <input
@@ -147,7 +148,7 @@
     </ng-container>
 
     <ng-template #loadingContainer>
-      <div *ngIf="isLoading" class="loader-wrapper">
+      <div class="loader-wrapper">
         <div class="spinner-border" role="status"></div>
       </div>
     </ng-template>
@@ -202,12 +203,11 @@
               Date: {{ formatDisplayDate(selectedInvoice?.date) }}
             </div>
 
-            <div
-              *ngIf="selectedInvoice?.grand_total"
-              class="invoice-amount text-success fs-6 fw-bolder"
-            >
-              Amount: {{ selectedInvoice?.grand_total }} ₹
-            </div>
+            <ng-container *ngIf="selectedInvoice?.grand_total">
+              <div class="invoice-amount text-success fs-6 fw-bolder">
+                Amount: {{ selectedInvoice?.grand_total }} ₹
+              </div>
+            </ng-container>
           </div>
 
           <div class="text-danger text-center mt-3 fw-bold">
@@ -308,18 +308,20 @@
           </span>
         </div>
 
-        <div *ngIf="showCompanyDropdown" class="companies-dropdown-list">
-          <div
-            class="company"
-            *ngFor="let company of companies"
-            (click)="
-              filters.company = company?.company_name ?? '';
-              showCompanyDropdown = false
-            "
-          >
-            {{ company?.company_name }}
+        <ng-container *ngIf="showCompanyDropdown">
+          <div class="companies-dropdown-list">
+            <div
+              class="company"
+              *ngFor="let company of companies"
+              (click)="
+                filters.company = company?.company_name ?? '';
+                showCompanyDropdown = false
+              "
+            >
+              {{ company?.company_name }}
+            </div>
           </div>
-        </div>
+        </ng-container>
       </div>
     </div>
 
