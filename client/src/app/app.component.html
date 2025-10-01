@@ -7,27 +7,29 @@
   </div>
 </div>
 
-<div *ngIf="!loggedIn" class="form-wrapper">
-  <div class="form-container">
-    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-      <h1 class="title">Login</h1>
-      <div class="subtitle">Welcome Indra, please enter your password!</div>
+<ng-container *ngIf="!loggedIn">
+  <div class="form-wrapper">
+    <div class="form-container">
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <h1 class="title">Login</h1>
+        <div class="subtitle">Welcome Indra, please enter your password!</div>
 
-      <section>
-        <input
-          type="password"
-          placeholder="Enter password"
-          formControlName="password"
-          autofocus
-        />
-      </section>
+        <section>
+          <input
+            type="password"
+            placeholder="Enter password"
+            formControlName="password"
+            autofocus
+          />
+        </section>
 
-      <button
-        type="submit"
-        [disabled]="loginForm.get('password')?.value !== originalPassword"
-      >
-        Login
-      </button>
-    </form>
+        <button
+          type="submit"
+          [disabled]="loginForm.get('password')?.value !== originalPassword"
+        >
+          Login
+        </button>
+      </form>
+    </div>
   </div>
-</div>
+</ng-container>
