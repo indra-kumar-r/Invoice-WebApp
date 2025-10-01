@@ -16,39 +16,42 @@
       <div class="invoice-items-details" [formGroup]="invoiceForm">
         <section>
           <div class="items-details-section">
-            <div *ngIf="invoiceItems.length" class="invoice-items-header">
-              <div class="d-flex fs-6 fw-bold">Invoice Items</div>
-              <div class="items-header">
-                <div>#</div>
-                <div>Name</div>
-                <div>Quantity</div>
-                <div>Rate</div>
-                <div>Amount</div>
-              </div>
-            </div>
-
-            <div
-              *ngIf="invoiceItems.length; else noItems"
-              class="invoice-items"
-              cdkDropList
-              [cdkDropListData]="invoiceItems"
-              (cdkDropListDropped)="dropItem($event)"
-            >
-              <div
-                *ngFor="let item of invoiceItems; let i = index"
-                cdkDrag
-                class="item bg-body-tertiary"
-                (click)="onEditItem(i)"
-              >
-                <div>{{ item.sl_no }}</div>
-                <div>
-                  {{ item.name }}
+            <ng-container *ngIf="invoiceItems?.length">
+              <div class="invoice-items-header">
+                <div class="d-flex fs-6 fw-bold">Invoice Items</div>
+                <div class="items-header">
+                  <div>#</div>
+                  <div>Name</div>
+                  <div>Quantity</div>
+                  <div>Rate</div>
+                  <div>Amount</div>
                 </div>
-                <div>{{ item.quantity }}</div>
-                <div>{{ item.rate }}</div>
-                <div>{{ item.amount }}</div>
               </div>
-            </div>
+            </ng-container>
+
+            <ng-container *ngIf="invoiceItems?.length; else noItems">
+              <div
+                class="invoice-items"
+                cdkDropList
+                [cdkDropListData]="invoiceItems"
+                (cdkDropListDropped)="dropItem($event)"
+              >
+                <div
+                  *ngFor="let item of invoiceItems; let i = index"
+                  cdkDrag
+                  class="item bg-body-tertiary"
+                  (click)="onEditItem(i)"
+                >
+                  <div>{{ item.sl_no }}</div>
+                  <div>
+                    {{ item.name }}
+                  </div>
+                  <div>{{ item.quantity }}</div>
+                  <div>{{ item.rate }}</div>
+                  <div>{{ item.amount }}</div>
+                </div>
+              </div>
+            </ng-container>
 
             <ng-template #noItems>
               <div class="no-invoice-items">
@@ -123,56 +126,58 @@
               />
             </div>
 
-            <div
-              *ngIf="itemForm.valid"
-              class="form-btn-options d-flex gap-2 mt-4"
-            >
-              <button
-                *ngIf="!isEditing"
-                type="submit"
-                class="btn btn-light text-drak fw-bold"
-                (click)="addItem()"
-              >
-                Add Item
-              </button>
+            <ng-container *ngIf="itemForm.valid">
+              <div class="form-btn-options d-flex gap-2 mt-4">
+                <ng-container *ngIf="!isEditing">
+                  <button
+                    type="submit"
+                    class="btn btn-light text-drak fw-bold"
+                    (click)="addItem()"
+                  >
+                    Add Item
+                  </button>
+                </ng-container>
 
-              <ng-container *ngIf="isEditing">
-                <button
-                  type="submit"
-                  class="btn btn-success"
-                  (click)="updateItem()"
-                >
-                  Update
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  (click)="deleteItem()"
-                >
-                  Delete
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  (click)="resetItemForm()"
-                >
-                  Cancel
-                </button>
-              </ng-container>
-            </div>
+                <ng-container *ngIf="isEditing">
+                  <button
+                    type="submit"
+                    class="btn btn-success"
+                    (click)="updateItem()"
+                  >
+                    Update
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    (click)="deleteItem()"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    (click)="resetItemForm()"
+                  >
+                    Cancel
+                  </button>
+                </ng-container>
+              </div>
+            </ng-container>
           </form>
         </section>
       </div>
 
-      <div *ngIf="invoiceItems.length > 0" class="options mt-4">
-        <button
-          (click)="onSubmit()"
-          type="button"
-          class="btn btn-light text-success fw-bold"
-        >
-          Save Details
-        </button>
-      </div>
+      <ng-container *ngIf="invoiceItems.length > 0">
+        <div class="options mt-4">
+          <button
+            (click)="onSubmit()"
+            type="button"
+            class="btn btn-light text-success fw-bold"
+          >
+            Save Details
+          </button>
+        </div>
+      </ng-container>
     </div>
   </ng-container>
 </div>
