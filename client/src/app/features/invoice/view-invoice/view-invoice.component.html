@@ -77,19 +77,23 @@
         </div>
 
         <div class="extras-section">
-          <div *ngIf="invoice.dc_nos" class="invoice-dc-nos text-dark">
-            DC Nos:
-            <span class="fw-bold">
-              {{ invoice.dc_nos.join(" / ") }}
-            </span>
-          </div>
+          <ng-container *ngIf="invoice.dc_nos">
+            <div class="invoice-dc-nos text-dark">
+              DC Nos:
+              <span class="fw-bold">
+                {{ invoice.dc_nos.join(" / ") }}
+              </span>
+            </div>
+          </ng-container>
 
-          <div *ngIf="invoice.order_nos" class="invoice-order-nos text-dark">
-            Order Nos:
-            <span class="fw-bold">
-              {{ invoice.order_nos.join(" / ") }}
-            </span>
-          </div>
+          <ng-container *ngIf="invoice.order_nos">
+            <div class="invoice-order-nos text-dark">
+              Order Nos:
+              <span class="fw-bold">
+                {{ invoice.order_nos.join(" / ") }}
+              </span>
+            </div>
+          </ng-container>
         </div>
 
         <div class="items-section">
@@ -138,23 +142,36 @@
           <div class="total-amount-section">
             <div class="label-section text-secondary fw-bold">
               <div>Total</div>
-              <div *ngIf="invoice.sgst">SGST {{ invoice.sgst_rate }}%</div>
-              <div *ngIf="invoice.cgst">CGST {{ invoice.cgst_rate }}%</div>
-              <div *ngIf="invoice.igst">IGST {{ invoice.igst_rate }}%</div>
+              <ng-container *ngIf="invoice.sgst">
+                <div>SGST {{ invoice.sgst_rate }}%</div>
+              </ng-container>
+
+              <ng-container *ngIf="invoice.cgst">
+                <div>CGST {{ invoice.cgst_rate }}%</div>
+              </ng-container>
+
+              <ng-container *ngIf="invoice.igst">
+                <div>IGST {{ invoice.igst_rate }}%</div>
+              </ng-container>
+
               <div>Grand Total</div>
             </div>
 
             <div class="values-section text-dark fw-bold">
               <div>{{ invoice.total }} ₹</div>
-              <div *ngIf="invoice.sgst">
-                {{ invoice.sgst | number : "1.0-0" }} ₹
-              </div>
-              <div *ngIf="invoice.cgst">
-                {{ invoice.cgst | number : "1.0-0" }} ₹
-              </div>
-              <div *ngIf="invoice.igst">
-                {{ invoice.igst | number : "1.0-0" }} ₹
-              </div>
+
+              <ng-container *ngIf="invoice.sgst">
+                <div>{{ invoice.sgst | number : "1.0-0" }} ₹</div>
+              </ng-container>
+
+              <ng-container *ngIf="invoice.cgst">
+                <div>{{ invoice.cgst | number : "1.0-0" }} ₹</div>
+              </ng-container>
+
+              <ng-container *ngIf="invoice.igst">
+                <div>{{ invoice.igst | number : "1.0-0" }} ₹</div>
+              </ng-container>
+
               <div>{{ invoice.grand_total }} ₹</div>
             </div>
           </div>
@@ -234,8 +251,11 @@
         (click)="toggleSigned()"
       >
         <span class="tax-checkbox text-success">
-          <i *ngIf="!isSigned" class="bi bi-square"></i>
-          <i *ngIf="isSigned" class="bi bi-check-square-fill text-success"></i>
+          <i
+            [class]="
+              isSigned ? 'bi bi-check-square-fill text-success' : 'bi bi-square'
+            "
+          ></i>
         </span>
 
         <span class="text-success">
