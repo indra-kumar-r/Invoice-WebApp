@@ -39,37 +39,40 @@
         </div>
 
         <div class="btns">
-          <button
-            *ngIf="companyId !== 'create'"
-            type="button"
-            class="btn btn-danger"
-            [disabled]="companyForm.invalid"
-            data-bs-toggle="modal"
-            data-bs-target="#deleteCompanyModal"
-          >
-            Delete Company
-          </button>
+          <ng-container *ngIf="companyId !== 'create'">
+            <button
+              type="button"
+              class="btn btn-danger"
+              [disabled]="companyForm.invalid"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteCompanyModal"
+            >
+              Delete Company
+            </button>
+          </ng-container>
 
-          <button
-            *ngIf="companyId !== 'create'"
-            type="button"
-            class="btn btn-success"
-            [disabled]="companyForm.invalid"
-            data-bs-toggle="modal"
-            data-bs-target="#updateCompanyModal"
-          >
-            Update Company
-          </button>
+          <ng-container *ngIf="companyId !== 'create'">
+            <button
+              type="button"
+              class="btn btn-success"
+              [disabled]="companyForm.invalid"
+              data-bs-toggle="modal"
+              data-bs-target="#updateCompanyModal"
+            >
+              Update Company
+            </button>
+          </ng-container>
 
-          <button
-            *ngIf="companyId === 'create'"
-            type="button"
-            class="btn btn-success"
-            [disabled]="companyForm.invalid"
-            (click)="createCompany()"
-          >
-            Create Company
-          </button>
+          <ng-container *ngIf="companyId === 'create'">
+            <button
+              type="button"
+              class="btn btn-success"
+              [disabled]="companyForm.invalid"
+              (click)="createCompany()"
+            >
+              Create Company
+            </button>
+          </ng-container>
         </div>
       </form>
     </div>

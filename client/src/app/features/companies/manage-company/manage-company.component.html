@@ -17,56 +17,60 @@
     </div>
   </div>
 
-  <div *ngIf="isLoading" class="loader-wrapper">
-    <div class="spinner-border" role="status"></div>
-  </div>
+  <ng-container *ngIf="isLoading">
+    <div class="loader-wrapper">
+      <div class="spinner-border" role="status"></div>
+    </div>
+  </ng-container>
 
-  <div *ngIf="!isLoading" class="companies-details">
-    <div class="companies-header">
-      <div class="compnay-count">
-        <div class="text-secondary fw-bold fs-6">
-          Companies: {{ companies.length }}
+  <ng-container *ngIf="!isLoading">
+    <div class="companies-details">
+      <div class="companies-header">
+        <div class="compnay-count">
+          <div class="text-secondary fw-bold fs-6">
+            Companies: {{ companies.length }}
+          </div>
+        </div>
+
+        <div class="companies-options">
+          <div class="search bg-body-light">
+            <input
+              class="text-secondary fw-bold"
+              type="search"
+              placeholder="Search company"
+              autocomplete="off"
+              [(ngModel)]="searchTerm"
+              (input)="searchCompanies()"
+            />
+
+            <div class="p-2 text-success fw-bolder">
+              <i class="bi bi-search"></i>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="companies-options">
-        <div class="search bg-body-light">
-          <input
-            class="text-secondary fw-bold"
-            type="search"
-            placeholder="Search company"
-            autocomplete="off"
-            [(ngModel)]="searchTerm"
-            (input)="searchCompanies()"
-          />
+      <div class="companies">
+        <div
+          class="company"
+          *ngFor="let company of companies"
+          (click)="viewCompanyDetails(company.uuid)"
+        >
+          <div class="company-icon" [ngStyle]="{ color: company?.color }">
+            {{ company.company_name[0] }}
+          </div>
+          <div class="company-name">{{ company.company_name }}</div>
 
-          <div class="p-2 text-success fw-bolder">
-            <i class="bi bi-search"></i>
+          <div class="notify">
+            <span [ngStyle]="{ color: company?.color }"
+              >Click to view details</span
+            >
+            <i class="bi bi-box-arrow-in-up-right" style="font-size: 48px"></i>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="companies">
-      <div
-        class="company"
-        *ngFor="let company of companies"
-        (click)="viewCompanyDetails(company.uuid)"
-      >
-        <div class="company-icon" [ngStyle]="{ color: company?.color }">
-          {{ company.company_name[0] }}
-        </div>
-        <div class="company-name">{{ company.company_name }}</div>
-
-        <div class="notify">
-          <span [ngStyle]="{ color: company?.color }"
-            >Click to view details</span
-          >
-          <i class="bi bi-box-arrow-in-up-right" style="font-size: 48px"></i>
-        </div>
-      </div>
-    </div>
-  </div>
+  </ng-container>
 
   <ng-container *ngIf="!isLoading && companies.length === 0">
     <div class="no-companies">
