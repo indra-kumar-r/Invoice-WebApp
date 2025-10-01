@@ -1,7 +1,9 @@
 <div class="view-invoice-wrapper">
-  <div *ngIf="isLoading" class="loader-wrapper">
-    <div class="spinner-border" role="status"></div>
-  </div>
+  <ng-container *ngIf="isLoading">
+    <div class="loader-wrapper">
+      <div class="spinner-border" role="status"></div>
+    </div>
+  </ng-container>
 
   <div class="back-option">
     <div class="btn btn-light" [routerLink]="['/invoices']">
@@ -9,182 +11,184 @@
     </div>
   </div>
 
-  <div *ngIf="!isLoading && invoice" class="invoice-details">
-    <div class="header-section">
-      <div class="company-details">
-        <div class="company-logo">
-          <img src="logo.png" alt="Logo" />
+  <ng-container *ngIf="!isLoading && invoice">
+    <div class="invoice-details">
+      <div class="header-section">
+        <div class="company-details">
+          <div class="company-logo">
+            <img src="logo.png" alt="Logo" />
+          </div>
+
+          <section>
+            <div class="company-name text-dark fs-4 fw-bold">
+              YASHASH HAND EMBROIDERY
+            </div>
+            <div class="company-address text-secondary">
+              96/1A , Gopalaiah Building, Muneshwara Nagar, Kammasandra Road,
+              Hebbagodi, Bangalore -560 100
+            </div>
+            <div class="company-gst fs-6 fw-bold">GSTIN: 29BJBPR9780B1ZU</div>
+          </section>
         </div>
 
-        <section>
-          <div class="company-name text-dark fs-4 fw-bold">
-            YASHASH HAND EMBROIDERY
-          </div>
-          <div class="company-address text-secondary">
-            96/1A , Gopalaiah Building, Muneshwara Nagar, Kammasandra Road,
-            Hebbagodi, Bangalore -560 100
-          </div>
-          <div class="company-gst fs-6 fw-bold">GSTIN: 29BJBPR9780B1ZU</div>
-        </section>
-      </div>
-
-      <div class="tax-invoice-title">
-        <span class="text-secondary fs-1 fw-bolder text-uppercase"
-          >Tax Invoice</span
-        >
-
-        <div class="mobile text-secondary">
-          <div>Mob:</div>
-
-          <div class="numbers">
-            <div>9986883599</div>
-            <div>8123474223</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="content-section">
-      <div class="info-section text-dark">
-        <div class="receiver-info-section">
-          <div class="receiver-company-name">{{ invoice.company_name }}</div>
-
-          <div class="receiver-address">{{ invoice.company_address }}</div>
-
-          <div class="receiver-gst fw-bold">
-            Party GSTIN No: {{ invoice.company_gst_no }}
-          </div>
-        </div>
-
-        <div class="invoice-info-section">
-          <div
-            class="invoice-no d-flex align-items-center justify-content-center gap-1"
+        <div class="tax-invoice-title">
+          <span class="text-secondary fs-1 fw-bolder text-uppercase"
+            >Tax Invoice</span
           >
-            <span>Invoice No:</span>
-            <span class="text-dark fw-bold fs-5">
-              {{ invoice.invoice_no }}
+
+          <div class="mobile text-secondary">
+            <div>Mob:</div>
+
+            <div class="numbers">
+              <div>9986883599</div>
+              <div>8123474223</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <div class="info-section text-dark">
+          <div class="receiver-info-section">
+            <div class="receiver-company-name">{{ invoice.company_name }}</div>
+
+            <div class="receiver-address">{{ invoice.company_address }}</div>
+
+            <div class="receiver-gst fw-bold">
+              Party GSTIN No: {{ invoice.company_gst_no }}
+            </div>
+          </div>
+
+          <div class="invoice-info-section">
+            <div
+              class="invoice-no d-flex align-items-center justify-content-center gap-1"
+            >
+              <span>Invoice No:</span>
+              <span class="text-dark fw-bold fs-5">
+                {{ invoice.invoice_no }}
+              </span>
+            </div>
+
+            <div class="invoice-date">
+              Date:
+              <span class="fw-bold">{{ formatDisplayDate(invoice.date) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="extras-section">
+          <div *ngIf="invoice.dc_nos" class="invoice-dc-nos text-dark">
+            DC Nos:
+            <span class="fw-bold">
+              {{ invoice.dc_nos.join(" / ") }}
             </span>
           </div>
 
-          <div class="invoice-date">
-            Date:
-            <span class="fw-bold">{{ formatDisplayDate(invoice.date) }}</span>
+          <div *ngIf="invoice.order_nos" class="invoice-order-nos text-dark">
+            Order Nos:
+            <span class="fw-bold">
+              {{ invoice.order_nos.join(" / ") }}
+            </span>
+          </div>
+        </div>
+
+        <div class="items-section">
+          <div class="items-list">
+            <div
+              class="list-header text-secondary text-bg-light py-2 px-2 fw-bold"
+            >
+              <div class="name">Name</div>
+              <div class="quantity">Quantity</div>
+              <div class="rate">Rate</div>
+              <div class="amount">Amount</div>
+            </div>
+
+            <div
+              class="list-item text-bg-light py-2 px-2"
+              *ngFor="let item of invoice.invoice_items; let i = index"
+            >
+              <div class="name fw-bold">{{ item.name }}</div>
+              <div class="quantity">{{ item.quantity }}</div>
+              <div class="rate">{{ item.rate }} ₹</div>
+              <div class="amount">{{ item.amount }} ₹</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="amount-section">
+          <div class="grand-total-amount-section">
+            <div
+              class="grand-total-amount d-flex align-items-center justify-content-start gap-1"
+            >
+              <div>Grand Total:</div>
+              <div class="fs-3 fw-bold">{{ invoice.grand_total }} ₹</div>
+            </div>
+
+            <div
+              class="amount-in-words d-flex align-items-start justify-content-start gap-1"
+            >
+              <div class="label">Amount in Words:</div>
+              <div class="fw-bold">
+                {{ invoice.amount_in_words }}
+                only.
+              </div>
+            </div>
+          </div>
+
+          <div class="total-amount-section">
+            <div class="label-section text-secondary fw-bold">
+              <div>Total</div>
+              <div *ngIf="invoice.sgst">SGST {{ invoice.sgst_rate }}%</div>
+              <div *ngIf="invoice.cgst">CGST {{ invoice.cgst_rate }}%</div>
+              <div *ngIf="invoice.igst">IGST {{ invoice.igst_rate }}%</div>
+              <div>Grand Total</div>
+            </div>
+
+            <div class="values-section text-dark fw-bold">
+              <div>{{ invoice.total }} ₹</div>
+              <div *ngIf="invoice.sgst">
+                {{ invoice.sgst | number : "1.0-0" }} ₹
+              </div>
+              <div *ngIf="invoice.cgst">
+                {{ invoice.cgst | number : "1.0-0" }} ₹
+              </div>
+              <div *ngIf="invoice.igst">
+                {{ invoice.igst | number : "1.0-0" }} ₹
+              </div>
+              <div>{{ invoice.grand_total }} ₹</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="extras-section">
-        <div *ngIf="invoice.dc_nos" class="invoice-dc-nos text-dark">
-          DC Nos:
-          <span class="fw-bold">
-            {{ invoice.dc_nos.join(" / ") }}
-          </span>
-        </div>
-
-        <div *ngIf="invoice.order_nos" class="invoice-order-nos text-dark">
-          Order Nos:
-          <span class="fw-bold">
-            {{ invoice.order_nos.join(" / ") }}
-          </span>
-        </div>
-      </div>
-
-      <div class="items-section">
-        <div class="items-list">
+      <div class="footer-section">
+        <div class="conditions">
           <div
-            class="list-header text-secondary text-bg-light py-2 px-2 fw-bold"
+            class="text-secondary"
+            *ngFor="let condition of conditions; let i = index"
           >
-            <div class="name">Name</div>
-            <div class="quantity">Quantity</div>
-            <div class="rate">Rate</div>
-            <div class="amount">Amount</div>
-          </div>
-
-          <div
-            class="list-item text-bg-light py-2 px-2"
-            *ngFor="let item of invoice.invoice_items; let i = index"
-          >
-            <div class="name fw-bold">{{ item.name }}</div>
-            <div class="quantity">{{ item.quantity }}</div>
-            <div class="rate">{{ item.rate }} ₹</div>
-            <div class="amount">{{ item.amount }} ₹</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="amount-section">
-        <div class="grand-total-amount-section">
-          <div
-            class="grand-total-amount d-flex align-items-center justify-content-start gap-1"
-          >
-            <div>Grand Total:</div>
-            <div class="fs-3 fw-bold">{{ invoice.grand_total }} ₹</div>
-          </div>
-
-          <div
-            class="amount-in-words d-flex align-items-start justify-content-start gap-1"
-          >
-            <div class="label">Amount in Words:</div>
-            <div class="fw-bold">
-              {{ invoice.amount_in_words }}
-              only.
-            </div>
+            {{ i + 1 }}. {{ condition }}
           </div>
         </div>
 
-        <div class="total-amount-section">
-          <div class="label-section text-secondary fw-bold">
-            <div>Total</div>
-            <div *ngIf="invoice.sgst">SGST {{ invoice.sgst_rate }}%</div>
-            <div *ngIf="invoice.cgst">CGST {{ invoice.cgst_rate }}%</div>
-            <div *ngIf="invoice.igst">IGST {{ invoice.igst_rate }}%</div>
-            <div>Grand Total</div>
+        <div class="signatures text-secondary fw-bold">
+          <div class="signature-section">
+            <div class="signature-area"></div>
+            <div class="label">Receiver's Signature</div>
           </div>
 
-          <div class="values-section text-dark fw-bold">
-            <div>{{ invoice.total }} ₹</div>
-            <div *ngIf="invoice.sgst">
-              {{ invoice.sgst | number : "1.0-0" }} ₹
+          <div class="signature-section">
+            <div class="signature-area">
+              <ng-container *ngIf="isSigned">
+                <img src="renuka_signature.png" alt="Signature" />
+              </ng-container>
             </div>
-            <div *ngIf="invoice.cgst">
-              {{ invoice.cgst | number : "1.0-0" }} ₹
-            </div>
-            <div *ngIf="invoice.igst">
-              {{ invoice.igst | number : "1.0-0" }} ₹
-            </div>
-            <div>{{ invoice.grand_total }} ₹</div>
+            <div class="label">Authorised Signature</div>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="footer-section">
-      <div class="conditions">
-        <div
-          class="text-secondary"
-          *ngFor="let condition of conditions; let i = index"
-        >
-          {{ i + 1 }}. {{ condition }}
-        </div>
-      </div>
-
-      <div class="signatures text-secondary fw-bold">
-        <div class="signature-section">
-          <div class="signature-area"></div>
-          <div class="label">Receiver's Signature</div>
-        </div>
-
-        <div class="signature-section">
-          <div class="signature-area">
-            <ng-container *ngIf="isSigned">
-              <img src="renuka_signature.png" alt="Signature" />
-            </ng-container>
-          </div>
-          <div class="label">Authorised Signature</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  </ng-container>
 
   <ng-container *ngIf="!isLoading && !invoice">
     <div class="no-invoice">
@@ -216,33 +220,35 @@
     </div>
   </ng-container>
 
-  <div *ngIf="!isLoading && invoice" class="print-options">
-    <div
-      class="edit-invoice btn btn-light btn-sm d-flex gap-2 fw-bold text-success"
-      (click)="editInvoice(invoice.uuid)"
-    >
-      <i class="bi bi-pencil-square"></i>
-    </div>
+  <ng-container *ngIf="!isLoading && invoice">
+    <div class="print-options">
+      <div
+        class="edit-invoice btn btn-light btn-sm d-flex gap-2 fw-bold text-success"
+        (click)="editInvoice(invoice.uuid)"
+      >
+        <i class="bi bi-pencil-square"></i>
+      </div>
 
-    <div
-      class="sign-invoice btn btn-light btn-sm fw-bold d-flex gap-2"
-      (click)="toggleSigned()"
-    >
-      <span class="tax-checkbox text-success">
-        <i *ngIf="!isSigned" class="bi bi-square"></i>
-        <i *ngIf="isSigned" class="bi bi-check-square-fill text-success"></i>
-      </span>
+      <div
+        class="sign-invoice btn btn-light btn-sm fw-bold d-flex gap-2"
+        (click)="toggleSigned()"
+      >
+        <span class="tax-checkbox text-success">
+          <i *ngIf="!isSigned" class="bi bi-square"></i>
+          <i *ngIf="isSigned" class="bi bi-check-square-fill text-success"></i>
+        </span>
 
-      <span class="text-success">
-        <i class="bi bi-pen"></i>
-      </span>
-    </div>
+        <span class="text-success">
+          <i class="bi bi-pen"></i>
+        </span>
+      </div>
 
-    <div
-      class="btn btn-light btn-sm d-flex gap-2 fw-bold text-success"
-      (click)="printInvoice()"
-    >
-      <i class="bi bi-download"></i>
+      <div
+        class="btn btn-light btn-sm d-flex gap-2 fw-bold text-success"
+        (click)="printInvoice()"
+      >
+        <i class="bi bi-download"></i>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </div>
