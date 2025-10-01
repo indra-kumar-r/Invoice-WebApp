@@ -34,45 +34,46 @@
             </div>
 
             <div class="company-section">
-              <div *ngIf="companies?.length" class="form-dropdown">
-                <label>Company <span class="text-danger">*</span></label>
+              <ng-container *ngIf="companies?.length">
+                <div class="form-dropdown">
+                  <label>Company <span class="text-danger">*</span></label>
 
-                <div class="company-dropdown" #companyDropdown>
-                  <div
-                    class="company-dropdown-toggle form-control"
-                    (click)="toggleCompanyDropdown()"
-                    [ngClass]="{
+                  <div class="company-dropdown" #companyDropdown>
+                    <div
+                      class="company-dropdown-toggle form-control"
+                      (click)="toggleCompanyDropdown()"
+                      [ngClass]="{
                     inactive: !selectedCompany?.company_name,
                     }"
-                    tabindex="0"
-                  >
-                    {{ selectedCompany?.company_name || "Select a company" }}
-                  </div>
-
-                  <div
-                    class="company-dropdown-menu"
-                    *ngIf="showCompanyDropdown"
-                  >
-                    <div
-                      class="company-dropdown-item"
-                      *ngFor="let comp of companies"
-                      (click)="onCompanySelect(comp)"
+                      tabindex="0"
                     >
-                      {{ comp.company_name }}
+                      {{ selectedCompany?.company_name || "Select a company" }}
                     </div>
 
-                    <div class="create-company-option">
-                      <div
-                        class="btn btn-light btn-sm py-3 px-4 text-success fw-bolder d-flex gap-6"
-                        (click)="createCompany()"
-                      >
-                        <i class="bi bi-plus"></i>
-                        <span>Add Company</span>
+                    <ng-container *ngIf="showCompanyDropdown">
+                      <div class="company-dropdown-menu">
+                        <div
+                          class="company-dropdown-item"
+                          *ngFor="let comp of companies"
+                          (click)="onCompanySelect(comp)"
+                        >
+                          {{ comp.company_name }}
+                        </div>
+
+                        <div class="create-company-option">
+                          <div
+                            class="btn btn-light btn-sm py-3 px-4 text-success fw-bolder d-flex gap-6"
+                            (click)="createCompany()"
+                          >
+                            <i class="bi bi-plus"></i>
+                            <span>Add Company</span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </ng-container>
                   </div>
                 </div>
-              </div>
+              </ng-container>
 
               <div class="company-inputs">
                 <app-input
@@ -159,15 +160,17 @@
         </div>
       </div>
 
-      <div *ngIf="invoiceForm.valid" class="options">
-        <button
-          type="button"
-          class="btn btn-light text-success fw-bold"
-          (click)="onSubmit()"
-        >
-          Save Details
-        </button>
-      </div>
+      <ng-container *ngIf="invoiceForm.valid">
+        <div class="options">
+          <button
+            type="button"
+            class="btn btn-light text-success fw-bold"
+            (click)="onSubmit()"
+          >
+            Save Details
+          </button>
+        </div>
+      </ng-container>
     </form>
   </ng-container>
 </div>
