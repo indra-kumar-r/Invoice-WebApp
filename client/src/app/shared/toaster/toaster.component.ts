@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Toast } from '../../models/shared.model';
 import { ToasterService } from '../../core/services/toaster/toaster.service';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
 
@@ -30,14 +30,16 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 export class ToasterComponent implements OnInit, OnDestroy {
   toasts: Toast[] = [];
-  private subscription?: Subscription;
+  private destroy$ = new Subject<void>();
 
   constructor(private toasterService: ToasterService) {}
 
   ngOnInit() {
-    this.subscription = this.toasterService.toasts$.subscribe((toasts) => {
-      this.toasts = toasts;
-    });
+    this.toasterService.toasts$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((toasts) => {
+        this.toasts = toasts;
+      });
   }
 
   dismiss(id: number) {
@@ -45,6 +47,7 @@ export class ToasterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription?.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
