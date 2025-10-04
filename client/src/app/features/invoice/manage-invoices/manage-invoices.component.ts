@@ -28,6 +28,7 @@ import {
   finalize,
 } from 'rxjs';
 import { FormatDatePipe } from '../../../core/pipes/format-date.pipe';
+import { ToasterService } from '../../../core/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-manage-invoices',
@@ -76,7 +77,8 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private invoiceService: InvoiceService,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private toasterService: ToasterService
   ) {}
 
   ngOnInit(): void {
@@ -134,6 +136,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
         }),
         catchError((err) => {
           console.error('Error fetching invoices: ', err);
+          this.toasterService.toast('Error fetching invoices.');
           this.invoices = [];
           return of({
             data: [],
@@ -155,6 +158,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
         tap((res: Company[]) => (this.companies = res)),
         catchError((err) => {
           console.error('Error fetching companies: ', err);
+          this.toasterService.toast('Error fetching companies.');
           this.companies = [];
           return of([]);
         }),
@@ -195,9 +199,13 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
     this.invoiceService
       .deleteInvoice(uuid)
       .pipe(
-        tap(() => this.getInvoices()),
+        tap(() => {
+          this.getInvoices();
+          this.toasterService.toast('Invoice deleted successfully.');
+        }),
         catchError((err) => {
           console.error('Error deleting invoice: ', err);
+          this.toasterService.toast('Error deleting invoice.');
           return of(null);
         }),
         takeUntil(this.destroy$)
