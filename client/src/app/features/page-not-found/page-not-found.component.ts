@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-page-not-found',
@@ -8,9 +8,9 @@ import { Router } from '@angular/router';
   styleUrl: './page-not-found.component.scss',
 })
 export class PageNotFoundComponent {
-  constructor(private router: Router) {}
+  constructor(private location: Location) {}
 
   navigateBack(): void {
-    window.history.back();
+    this.location.back();
   }
 }
