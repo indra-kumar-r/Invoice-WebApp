@@ -63,24 +63,30 @@
     >
       <div class="invoices-list">
         <div class="invoices">
-          <div class="invoice" *ngFor="let invoice of invoices">
+          <div
+            class="invoice"
+            *ngFor="let invoice of invoices"
+            [ngClass]="{
+              incomplete: !invoice?.grand_total
+            }"
+          >
             <div class="invoice-details">
               <div class="section">
                 <div class="invoice-number fs-4 fw-bolder">
-                  {{ invoice.invoice_no }}
+                  {{ invoice?.invoice_no }}
                 </div>
                 <div class="invoice-company text-secondary fw-bolder">
-                  {{ invoice.company_name }}
+                  {{ invoice?.company_name }}
                 </div>
               </div>
 
               <div class="invoice-date text-danger">
-                Date: {{ invoice.date | formatDate }}
+                Date: {{ invoice?.date | formatDate }}
               </div>
 
-              <ng-container *ngIf="invoice.grand_total">
+              <ng-container *ngIf="invoice?.grand_total">
                 <div class="invoice-amount text-success">
-                  Amount: {{ invoice.grand_total }} ₹
+                  Amount: {{ invoice?.grand_total }} ₹
                 </div>
               </ng-container>
             </div>
@@ -102,12 +108,14 @@
                 <i class="bi bi-trash fs-5"></i>
               </div>
 
-              <div
-                class="btn btn-light d-flex btn-sm text-dark fw-bolder"
-                (click)="viewInvoice(invoice.uuid)"
-              >
-                <i class="bi bi-printer fs-5"></i>
-              </div>
+              <ng-container *ngIf="invoice?.grand_total">
+                <div
+                  class="btn btn-light d-flex btn-sm text-dark fw-bolder"
+                  (click)="viewInvoice(invoice.uuid)"
+                >
+                  <i class="bi bi-printer fs-5"></i>
+                </div>
+              </ng-container>
             </div>
           </div>
         </div>
