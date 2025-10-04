@@ -95,6 +95,8 @@ export class InvoiceAmountDetailsComponent implements OnInit, OnDestroy {
         catchError((err) => {
           console.error('Invoice Error: ', err);
           this.toasterService.toast('Error fetching invoice.');
+          this.router.navigate(['/invoices']);
+
           return of(null);
         }),
         takeUntil(this.destroy$)
