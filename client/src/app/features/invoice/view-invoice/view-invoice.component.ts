@@ -4,7 +4,7 @@ import { Invoice } from '../../../models/invoice.mode';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil, tap, catchError, of, finalize } from 'rxjs';
-import { FormatDatePipe } from "../../../core/pipes/format-date.pipe";
+import { FormatDatePipe } from '../../../core/pipes/format-date.pipe';
 
 @Component({
   selector: 'app-view-invoice',
@@ -73,10 +73,6 @@ export class ViewInvoiceComponent implements OnInit, OnDestroy {
 
   editInvoice(uuid: string): void {
     this.router.navigate(['/invoices/basic-details/', uuid]);
-  }
-
-  toggleSigned(): void {
-    this.isSigned = !this.isSigned;
   }
 
   printInvoice(): void {
