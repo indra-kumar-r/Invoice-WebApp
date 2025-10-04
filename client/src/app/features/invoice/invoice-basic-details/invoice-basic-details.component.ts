@@ -238,6 +238,11 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
       .pipe(
         tap((res: any) => {
           const uuid = this.invoiceId === 'create' ? res.uuid : this.invoiceId;
+          this.toasterService.toast(
+            this.invoiceId === 'create'
+              ? 'Invoice created successfully.'
+              : 'Invoice updated successfully.'
+          );
           this.router.navigate(['/invoices/items-details', uuid]);
         }),
         catchError((err) => {
