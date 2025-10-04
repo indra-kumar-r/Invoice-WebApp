@@ -11,6 +11,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { StorageService } from './core/services/storage/storage.service';
 import { ToasterComponent } from './shared/toaster/toaster.component';
+import { ToasterService } from './core/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +34,8 @@ export class AppComponent {
 
   constructor(
     private fb: FormBuilder,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private toasterService: ToasterService
   ) {}
 
   ngOnInit() {
@@ -50,6 +52,7 @@ export class AppComponent {
     if (input === this.originalPassword) {
       this.loggedIn = true;
       this.storageService.setAuth('true');
+      this.toasterService.toast('Login successful');
     }
   }
 }
