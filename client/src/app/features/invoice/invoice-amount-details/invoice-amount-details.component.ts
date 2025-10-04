@@ -12,6 +12,7 @@ import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import { Invoice, InvoiceItem } from '../../../models/invoice.mode';
 import { toWords } from 'number-to-words';
 import { Subject, takeUntil, tap, catchError, of } from 'rxjs';
+import { ToasterService } from '../../../core/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-invoice-amount-details',
@@ -31,7 +32,8 @@ export class InvoiceAmountDetailsComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private toasterService: ToasterService
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +94,7 @@ export class InvoiceAmountDetailsComponent implements OnInit, OnDestroy {
         }),
         catchError((err) => {
           console.error('Invoice Error: ', err);
+          this.toasterService.toast('Error fetching invoice.');
           return of(null);
         }),
         takeUntil(this.destroy$)
@@ -160,9 +163,13 @@ export class InvoiceAmountDetailsComponent implements OnInit, OnDestroy {
     this.invoiceService
       .updateInvoice(this.invoiceId, payload)
       .pipe(
-        tap(() => this.router.navigate(['/invoices'])),
+        tap(() => {
+          this.router.navigate(['/invoices']);
+          this.toasterService.toast('Invoice updated successfully.');
+        }),
         catchError((err) => {
           console.error('Update Error: ', err);
+          this.toasterService.toast('Error updating invoice.');
           return of(null);
         }),
         takeUntil(this.destroy$)

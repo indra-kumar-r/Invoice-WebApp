@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil, tap, catchError, of, finalize } from 'rxjs';
 import { FormatDatePipe } from '../../../core/pipes/format-date.pipe';
+import { ToasterService } from '../../../core/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-view-invoice',
@@ -29,7 +30,8 @@ export class ViewInvoiceComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private toasterService: ToasterService
   ) {}
 
   ngOnInit(): void {
@@ -54,6 +56,7 @@ export class ViewInvoiceComponent implements OnInit, OnDestroy {
         }),
         catchError((err) => {
           console.error('Error fetching invoice: ', err);
+          this.toasterService.toast('Error fetching invoice.');
           this.invoice = {} as Invoice;
           return of({} as Invoice);
         }),

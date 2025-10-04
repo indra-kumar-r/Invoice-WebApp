@@ -16,6 +16,7 @@ import {
   DragDropModule,
 } from '@angular/cdk/drag-drop';
 import { Subject, takeUntil, tap, catchError, of } from 'rxjs';
+import { ToasterService } from '../../../core/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-invoice-items-details',
@@ -39,7 +40,8 @@ export class InvoiceItemsDetailsComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private toasterService: ToasterService
   ) {}
 
   ngOnInit(): void {
@@ -68,6 +70,7 @@ export class InvoiceItemsDetailsComponent implements OnInit, OnDestroy {
         }),
         catchError((err) => {
           console.error('Invoice Error: ', err);
+          this.toasterService.toast('Error fetching invoice.');
           return of(null);
         }),
         takeUntil(this.destroy$)
@@ -172,6 +175,7 @@ export class InvoiceItemsDetailsComponent implements OnInit, OnDestroy {
         ),
         catchError((err) => {
           console.error('Update Error: ', err);
+          this.toasterService.toast('Error updating invoice.');
           return of(null);
         }),
         takeUntil(this.destroy$)

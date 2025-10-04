@@ -22,6 +22,7 @@ import { CompanyService } from '../../../core/services/company/company.service';
 import { InvoiceService } from '../../../core/services/invoice/invoice.service';
 import { Invoice } from '../../../models/invoice.mode';
 import { Subject, takeUntil, tap, catchError, of } from 'rxjs';
+import { ToasterService } from '../../../core/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-invoice-basic-details',
@@ -56,7 +57,8 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private invoiceService: InvoiceService,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private toasterService: ToasterService
   ) {}
 
   ngOnInit(): void {
@@ -93,6 +95,29 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  getCompanies(): void {
+    this.companyService
+      .getCompanies()
+      .pipe(
+        tap((res: Company[]) => {
+          this.companies = res;
+
+          if (this.invoiceId !== 'create') {
+            this.getInvoice();
+          } else {
+            this.setInvoiceID();
+          }
+        }),
+        catchError((err) => {
+          console.error('Company Error: ', err);
+          this.toasterService.toast('Error fetching companies.');
+          return of([]);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+  }
+
   setInvoiceID(): void {
     this.invoiceService
       .getInvoices({ page: 1 })
@@ -106,6 +131,37 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
         }),
         catchError((err) => {
           console.error('Error: ', err);
+          this.toasterService.toast('Error setting invoice ID.');
+          return of(null);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+  }
+
+  getInvoice(): void {
+    this.invoiceService
+      .getInvoice(this.invoiceId)
+      .pipe(
+        tap((res) => {
+          this.isEditingDisabled = true;
+          this.invoice = res;
+          this.dcNos = res.dc_nos || [];
+          this.orderNos = res.order_nos || [];
+
+          this.invoiceForm.patchValue({
+            ...res,
+            date: res.date ? new Date(res.date) : new Date(),
+          });
+
+          const company = this.companies.find(
+            (c) => c?.company_name === res?.company_name
+          );
+          if (company) this.onCompanySelect(company);
+        }),
+        catchError((err) => {
+          console.error('Invoice Error: ', err);
+          this.toasterService.toast('Error fetching invoice.');
           return of(null);
         }),
         takeUntil(this.destroy$)
@@ -159,57 +215,6 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
     return this.invoiceForm.get(controlName) as FormControl;
   }
 
-  getCompanies(): void {
-    this.companyService
-      .getCompanies()
-      .pipe(
-        tap((res: Company[]) => {
-          this.companies = res;
-
-          if (this.invoiceId !== 'create') {
-            this.getInvoice();
-          } else {
-            this.setInvoiceID();
-          }
-        }),
-        catchError((err) => {
-          console.error('Company Error: ', err);
-          return of([]);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
-  }
-
-  getInvoice(): void {
-    this.invoiceService
-      .getInvoice(this.invoiceId)
-      .pipe(
-        tap((res) => {
-          this.isEditingDisabled = true;
-          this.invoice = res;
-          this.dcNos = res.dc_nos || [];
-          this.orderNos = res.order_nos || [];
-
-          this.invoiceForm.patchValue({
-            ...res,
-            date: res.date ? new Date(res.date) : new Date(),
-          });
-
-          const company = this.companies.find(
-            (c) => c?.company_name === res?.company_name
-          );
-          if (company) this.onCompanySelect(company);
-        }),
-        catchError((err) => {
-          console.error('Invoice Error: ', err);
-          return of(null);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
-  }
-
   onSubmit(): void {
     if (this.invoiceForm.invalid) {
       console.error('Invalid form');
@@ -237,6 +242,11 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
           console.error(
             this.invoiceId === 'create' ? 'Create Error: ' : 'Update Error: ',
             err
+          );
+          this.toasterService.toast(
+            this.invoiceId === 'create'
+              ? 'Error creating invoice.'
+              : 'Error updating invoice.'
           );
           return of(null);
         }),
