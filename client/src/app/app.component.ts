@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StorageService } from './core/services/storage/storage.service';
+import { ToasterComponent } from './shared/toaster/toaster.component';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ import { StorageService } from './core/services/storage/storage.service';
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
+    ToasterComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
