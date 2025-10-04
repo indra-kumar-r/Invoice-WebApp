@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { CompanyService } from '../../../core/services/company/company.service';
 import { Company } from '../../../models/company.model';
 import { Subject, tap, switchMap, catchError, of, takeUntil } from 'rxjs';
+import { ToasterService } from '../../../core/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-company',
@@ -31,7 +32,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private toasterService: ToasterService
   ) {}
 
   ngOnInit(): void {
@@ -49,6 +51,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
               }),
               catchError((err) => {
                 console.error('Error: ', err);
+                this.toasterService.toast('Error fetching company.');
                 this.router.navigate(['/companies']);
                 return of(null);
               })
@@ -84,9 +87,13 @@ export class CompanyComponent implements OnInit, OnDestroy {
     this.companyService
       .createCompany(this.companyForm.value)
       .pipe(
-        tap(() => this.router.navigate(['/companies'])),
+        tap(() => {
+          this.router.navigate(['/companies']);
+          this.toasterService.toast('Company created successfully.');
+        }),
         catchError((err) => {
           console.error('Error: ', err);
+          this.toasterService.toast('Error creating company.');
           return of(null);
         }),
         takeUntil(this.destroy$)
@@ -100,9 +107,13 @@ export class CompanyComponent implements OnInit, OnDestroy {
     this.companyService
       .updateCompany(this.companyId, this.companyForm.value)
       .pipe(
-        tap(() => this.router.navigate(['/companies'])),
+        tap(() => {
+          this.router.navigate(['/companies']);
+          this.toasterService.toast('Company updated successfully.');
+        }),
         catchError((err) => {
           console.error('Error: ', err);
+          this.toasterService.toast('Error updating company.');
           return of(null);
         }),
         takeUntil(this.destroy$)
@@ -114,9 +125,13 @@ export class CompanyComponent implements OnInit, OnDestroy {
     this.companyService
       .deleteCompany(this.companyId)
       .pipe(
-        tap(() => this.router.navigate(['/companies'])),
+        tap(() => {
+          this.router.navigate(['/companies']);
+          this.toasterService.toast('Company deleted successfully.');
+        }),
         catchError((err) => {
           console.error('Error: ', err);
+          this.toasterService.toast('Error deleting company.');
           return of(null);
         }),
         takeUntil(this.destroy$)

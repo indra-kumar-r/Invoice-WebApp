@@ -5,6 +5,7 @@ import { Company } from '../../../models/company.model';
 import { CompanyService } from '../../../core/services/company/company.service';
 import { FormsModule } from '@angular/forms';
 import { Subject, tap, catchError, of, takeUntil, finalize } from 'rxjs';
+import { ToasterService } from '../../../core/services/toaster/toaster.service';
 
 @Component({
   selector: 'app-manage-company',
@@ -22,7 +23,11 @@ export class ManageCompanyComponent implements OnInit, OnDestroy {
 
   searchTerm: string = '';
 
-  constructor(private router: Router, private companyService: CompanyService) {}
+  constructor(
+    private router: Router,
+    private companyService: CompanyService,
+    private toasterService: ToasterService
+  ) {}
 
   ngOnInit(): void {
     this.getCompanies();
@@ -53,6 +58,7 @@ export class ManageCompanyComponent implements OnInit, OnDestroy {
         catchError((err) => {
           console.error('Error: ', err);
           this.companies = [];
+          this.toasterService.toast('Error fetching companies.');
           return of([]);
         }),
         takeUntil(this.destroy$),
@@ -80,8 +86,10 @@ export class ManageCompanyComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.companies = this.totalCompanies.filter((company) =>
-      company.company_name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    this.companies = this.totalCompanies?.filter((company) =>
+      company?.company_name
+        ?.toLowerCase()
+        ?.includes(this.searchTerm?.toLowerCase())
     );
   }
 }
