@@ -58,9 +58,13 @@
       </div>
     </div>
 
-    <ng-container
-      *ngIf="!isLoading && totalInvoices > 0; else loadingContainer"
-    >
+    <ng-container *ngIf="isLoading">
+      <div class="loader-wrapper">
+        <div class="spinner-border" role="status"></div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!isLoading && totalInvoices > 0">
       <div class="invoices-list">
         <div class="invoices">
           <div
@@ -154,12 +158,6 @@
         </ng-container>
       </div>
     </ng-container>
-
-    <ng-template #loadingContainer>
-      <div class="loader-wrapper">
-        <div class="spinner-border" role="status"></div>
-      </div>
-    </ng-template>
 
     <ng-container *ngIf="!isLoading && totalInvoices === 0">
       <div class="no-invoices">
