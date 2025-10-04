@@ -61,13 +61,6 @@ export class StorageService {
     }
   }
 
-  clearAll() {
-    if (this.isBrowser()) {
-      localStorage.clear();
-      sessionStorage.clear();
-    }
-  }
-
   // Auth
   setAuth(value: string) {
     this.setSessionStorageData(SessionStorageKeys.AUTH, value);
