@@ -4,10 +4,11 @@ import { Invoice } from '../../../models/invoice.mode';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil, tap, catchError, of, finalize } from 'rxjs';
+import { FormatDatePipe } from "../../../core/pipes/format-date.pipe";
 
 @Component({
   selector: 'app-view-invoice',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormatDatePipe],
   templateUrl: './view-invoice.component.html',
   styleUrl: './view-invoice.component.scss',
 })
@@ -91,14 +92,5 @@ export class ViewInvoiceComponent implements OnInit, OnDestroy {
       document.body.innerHTML = originalContent;
       window.location.reload();
     }
-  }
-
-  formatDisplayDate(date?: Date): string {
-    if (!date) return '';
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
   }
 }

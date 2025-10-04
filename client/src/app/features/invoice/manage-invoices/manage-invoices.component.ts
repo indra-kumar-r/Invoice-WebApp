@@ -27,11 +27,18 @@ import {
   of,
   finalize,
 } from 'rxjs';
+import { FormatDatePipe } from '../../../core/pipes/format-date.pipe';
 
 @Component({
   selector: 'app-manage-invoices',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FormatDatePipe,
+  ],
   templateUrl: './manage-invoices.component.html',
   styleUrl: './manage-invoices.component.scss',
 })
@@ -228,14 +235,5 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
 
   private formatDateForQuery(dateStr: string): string {
     return dateStr ? new Date(dateStr).toISOString() : '';
-  }
-
-  formatDisplayDate(date?: Date): string {
-    if (!date) return '';
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
   }
 }

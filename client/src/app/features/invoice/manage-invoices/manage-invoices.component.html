@@ -75,7 +75,7 @@
               </div>
 
               <div class="invoice-date text-danger">
-                Date: {{ formatDisplayDate(invoice.date) }}
+                Date: {{ invoice.date | formatDate }}
               </div>
 
               <ng-container *ngIf="invoice.grand_total">
@@ -200,7 +200,7 @@
             </div>
 
             <div class="invoice-date text-dark fs-6 fw-bolder">
-              Date: {{ formatDisplayDate(selectedInvoice?.date) }}
+              Date: {{ selectedInvoice?.date | formatDate }}
             </div>
 
             <ng-container *ngIf="selectedInvoice?.grand_total">
