@@ -172,9 +172,10 @@ export class InvoiceItemsDetailsComponent implements OnInit, OnDestroy {
     this.invoiceService
       .updateInvoice(this.invoiceId, payload)
       .pipe(
-        tap(() =>
-          this.router.navigate(['/invoices/amount-details', this.invoiceId])
-        ),
+        tap(() => {
+          this.router.navigate(['/invoices/amount-details', this.invoiceId]);
+          this.toasterService.toast('Invoice updated successfully.');
+        }),
         catchError((err) => {
           console.error('Update Error: ', err);
           this.toasterService.toast('Error updating invoice.');
