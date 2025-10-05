@@ -67,6 +67,4 @@ The project follows a **monolithic full-stack** structure with separate `client`
 
 ### 🎬 Demo Video
 
-Watch a quick demo of the Invoice App in action:
-
-[![Invoice App Demo](https://drive.google.com/file/d/1LMfjreHxV9G17oaJj4388KlFWs30aqvT/view?usp=sharing)](https://drive.google.com/file/d/18TMeOskxJMzq2jF6xlOfqd1PpdGCm8mU/view?usp=sharing)
+Watch a quick demo of the Invoice App in action: [[Invoice App Demo]](https://drive.google.com/file/d/18TMeOskxJMzq2jF6xlOfqd1PpdGCm8mU/view?usp=sharing)
