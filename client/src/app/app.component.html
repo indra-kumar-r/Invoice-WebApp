@@ -8,7 +8,7 @@
   </div>
 </div>
 
-<ng-container *ngIf="!loggedIn">
+<ng-container *ngIf="!isLoggedIn">
   <div class="form-wrapper">
     <div class="form-container">
       <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
@@ -26,7 +26,7 @@
 
         <button
           type="submit"
-          [disabled]="loginForm.get('password')?.value !== originalPassword"
+          [disabled]="loginForm.get('password')?.value !== password"
         >
           Login
         </button>

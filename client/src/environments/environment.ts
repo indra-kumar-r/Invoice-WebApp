@@ -12,4 +12,8 @@ export const environment = {
       'Our responsibility ceases once goods leave our premises.',
     ],
   },
+
+  loginDetails: {
+    password: 'indra',
+  },
 };

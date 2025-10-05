@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { StorageService } from './core/services/storage/storage.service';
 import { ToasterComponent } from './shared/toaster/toaster.component';
 import { ToasterService } from './core/services/toaster/toaster.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -28,20 +29,20 @@ import { ToasterService } from './core/services/toaster/toaster.service';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  originalPassword = 'indra';
+  password = environment.loginDetails.password;
   loginForm!: FormGroup;
-  loggedIn = true;
+  isLoggedIn = true;
 
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private storageService: StorageService,
     private toasterService: ToasterService
   ) {}
 
   ngOnInit() {
-    this.loggedIn = !!this.storageService.getAuth();
+    this.isLoggedIn = !!this.storageService.getAuth();
 
-    this.loginForm = this.fb.group({
+    this.loginForm = this.formBuilder.group({
       password: ['', Validators.required],
     });
   }
@@ -49,8 +50,8 @@ export class AppComponent {
   onLogin() {
     const input = this.loginForm.get('password')?.value;
 
-    if (input === this.originalPassword) {
-      this.loggedIn = true;
+    if (input === this.password) {
+      this.isLoggedIn = true;
       this.storageService.setAuth('true');
       this.toasterService.toast('Login successful');
     }
