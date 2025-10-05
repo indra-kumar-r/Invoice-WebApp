@@ -174,7 +174,6 @@ export class InvoiceItemsDetailsComponent implements OnInit, OnDestroy {
       .pipe(
         tap(() => {
           this.router.navigate(['/invoices/amount-details', this.invoiceId]);
-          this.toasterService.toast('Invoice updated successfully.');
         }),
         catchError((err) => {
           console.error('Update Error: ', err);
