@@ -64,3 +64,9 @@ The project follows a **monolithic full-stack** structure with separate `client`
 -   Designed with attention to UX (animations, toaster, responsive design)
 -   Optimized printing layout (A4 ready)
 -   Reusable components and modular Angular structure
+
+### 🎬 Demo Video
+
+Watch a quick demo of the Invoice App in action:
+
+[![Invoice App Demo](https://img.icons8.com/color/48/000000/video.png)](https://drive.google.com/file/d/18TMeOskxJMzq2jF6xlOfqd1PpdGCm8mU/view?usp=sharing)
