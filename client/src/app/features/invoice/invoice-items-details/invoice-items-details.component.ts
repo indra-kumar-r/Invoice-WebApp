@@ -139,6 +139,12 @@ export class InvoiceItemsDetailsComponent implements OnInit, OnDestroy {
   deleteItem(): void {
     if (this.selectedIndex !== null) {
       this.invoiceItems.splice(this.selectedIndex, 1);
+
+      this.invoiceItems = this.invoiceItems.map((item, index) => ({
+        ...item,
+        sl_no: (index + 1).toString(),
+      }));
+
       this.resetItemForm();
     }
   }
@@ -157,6 +163,7 @@ export class InvoiceItemsDetailsComponent implements OnInit, OnDestroy {
 
   dropItem(event: CdkDragDrop<InvoiceItem[]>): void {
     moveItemInArray(this.invoiceItems, event.previousIndex, event.currentIndex);
+
     this.invoiceItems = this.invoiceItems.map((item, index) => ({
       ...item,
       sl_no: (index + 1).toString(),
