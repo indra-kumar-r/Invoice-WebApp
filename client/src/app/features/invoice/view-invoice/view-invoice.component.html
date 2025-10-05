@@ -21,13 +21,14 @@
 
           <section>
             <div class="company-name text-dark fs-4 fw-bold">
-              YASHASH HAND EMBROIDERY
+              {{ companyDetails.name }}
             </div>
             <div class="company-address text-secondary">
-              96/1A , Gopalaiah Building, Muneshwara Nagar, Kammasandra Road,
-              Hebbagodi, Bangalore -560 100
+              {{ companyDetails.address }}
             </div>
-            <div class="company-gst fs-6 fw-bold">GSTIN: 29BJBPR9780B1ZU</div>
+            <div class="company-gst fs-6 fw-bold">
+              GSTIN: {{ companyDetails.gstin }}
+            </div>
           </section>
         </div>
 
@@ -40,8 +41,9 @@
             <div>Mob:</div>
 
             <div class="numbers">
-              <div>9986883599</div>
-              <div>8123474223</div>
+              <div *ngFor="let number of companyDetails.phoneNumbers">
+                {{ number }}
+              </div>
             </div>
           </div>
         </div>
@@ -182,7 +184,7 @@
         <div class="conditions">
           <div
             class="text-secondary"
-            *ngFor="let condition of conditions; let i = index"
+            *ngFor="let condition of companyDetails?.conditions; let i = index"
           >
             {{ i + 1 }}. {{ condition }}
           </div>

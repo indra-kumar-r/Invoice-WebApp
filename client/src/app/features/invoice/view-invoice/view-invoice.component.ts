@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { Subject, takeUntil, tap, catchError, of, finalize } from 'rxjs';
 import { FormatDatePipe } from '../../../core/pipes/format-date.pipe';
 import { ToasterService } from '../../../core/services/toaster/toaster.service';
+import { environment } from '../../../../environments/environment';
+import { CompanyDetails } from '../../../models/shared.model';
 
 @Component({
   selector: 'app-view-invoice',
@@ -20,12 +22,7 @@ export class ViewInvoiceComponent implements OnInit, OnDestroy {
   isSigned: boolean = false;
   isLoading: boolean = false;
 
-  conditions = [
-    'Goods once sold cannot be taken back or exchanged.',
-    'Subject to Bangalore Jurisdictions.',
-    'Interest will be charged 24%p.a. if bill not paid within 15 days.',
-    'Our responsibility ceases once goods leave our premises',
-  ];
+  companyDetails: CompanyDetails = environment.companyDetails;
 
   constructor(
     private router: Router,
