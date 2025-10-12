@@ -31,7 +31,7 @@ export const getAllCompanies = async (_req: any, res: any) => {
             COMPANIES_CACHE_KEY,
             JSON.stringify(companies),
             'EX',
-            3600
+            60
         );
 
         res.json(companies);
