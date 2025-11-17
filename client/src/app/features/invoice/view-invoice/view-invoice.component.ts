@@ -50,6 +50,7 @@ export class ViewInvoiceComponent implements OnInit, OnDestroy {
       .pipe(
         tap((res: Invoice) => {
           this.invoice = res;
+          document.title = `Invoice - ${res.invoice_no}`;
         }),
         catchError((err) => {
           console.error('Error fetching invoice: ', err);
