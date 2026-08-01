@@ -58,7 +58,7 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private invoiceService: InvoiceService,
     private companyService: CompanyService,
-    private toasterService: ToasterService
+    private toasterService: ToasterService,
   ) {}
 
   ngOnInit(): void {
@@ -78,7 +78,7 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const clickedInside = this.companyDropdownRef?.nativeElement.contains(
-      event.target
+      event.target,
     );
     if (!clickedInside) this.showCompanyDropdown = false;
   }
@@ -102,6 +102,14 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
         tap((res: Company[]) => {
           this.companies = res;
 
+          if (res.length === 0) {
+            this.toasterService.toast(
+              'No companies found. Create a company first.',
+            );
+            this.router.navigate(['/companies/company/create']);
+            return;
+          }
+
           if (this.invoiceId !== 'create') {
             this.getInvoice();
           } else {
@@ -113,7 +121,7 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
           this.toasterService.toast('Error fetching companies.');
           return of([]);
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
@@ -131,10 +139,12 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
         }),
         catchError((err) => {
           console.error('Error: ', err);
-          this.toasterService.toast('Error setting invoice ID.');
+          this.invoiceForm.patchValue({
+            invoice_no: (parseInt('202627000') + 1).toString(),
+          });
           return of(null);
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
@@ -155,7 +165,7 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
           });
 
           const company = this.companies.find(
-            (c) => c?.company_name === res?.company_name
+            (c) => c?.company_name === res?.company_name,
           );
           if (company) this.onCompanySelect(company);
         }),
@@ -166,7 +176,7 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
 
           return of(null);
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
@@ -243,16 +253,16 @@ export class InvoiceBasicDetailsComponent implements OnInit, OnDestroy {
         catchError((err) => {
           console.error(
             this.invoiceId === 'create' ? 'Create Error: ' : 'Update Error: ',
-            err
+            err,
           );
           this.toasterService.toast(
             this.invoiceId === 'create'
               ? 'Error creating invoice.'
-              : 'Error updating invoice.'
+              : 'Error updating invoice.',
           );
           return of(null);
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
