@@ -82,7 +82,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
     private router: Router,
     private invoiceService: InvoiceService,
     private companyService: CompanyService,
-    private toasterService: ToasterService
+    private toasterService: ToasterService,
   ) {}
 
   ngOnInit(): void {
@@ -99,7 +99,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const clickedInside = this.companyDropdownRef?.nativeElement.contains(
-      event.target
+      event.target,
     );
     if (!clickedInside) this.showCompanyDropdown = false;
   }
@@ -150,7 +150,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
           } as InvoiceResponse);
         }),
         takeUntil(this.destroy$),
-        finalize(() => (this.isLoading = false))
+        finalize(() => (this.isLoading = false)),
       )
       .subscribe();
   }
@@ -166,7 +166,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
           this.companies = [];
           return of([]);
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
@@ -185,7 +185,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
     this.router.navigate(['/invoices/basic-details/', uuid]);
   }
 
-  selectInvoice(id: string): void {
+  confirmInvoiceDeletion(id: string): void {
     this.invoiceService
       .getInvoice(id)
       .pipe(
@@ -194,7 +194,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
           console.error('Error fetching invoice: ', err);
           return of(null);
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
@@ -212,7 +212,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
           this.toasterService.toast('Error deleting invoice.');
           return of(null);
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
@@ -224,7 +224,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
   applyFilters(): void {
     if (this.filters.fromDate && this.filters.toDate) {
       this.invoiceQuery.fromDate = this.formatDateForQuery(
-        this.filters.fromDate
+        this.filters.fromDate,
       );
       this.invoiceQuery.toDate = this.formatDateForQuery(this.filters.toDate);
     } else {

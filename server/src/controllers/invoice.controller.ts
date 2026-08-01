@@ -56,20 +56,26 @@ export const getAllInvoices = async (_req: any, res: any) => {
         const limit = 10;
         const skip = (parseInt(page) - 1) * limit;
 
-        const invoices = await Invoice.find(query, {
-            uuid: 1,
-            invoice_no: 1,
-            date: 1,
-            company_name: 1,
-            company_gst_no: 1,
-            igst: 1,
-            sgst: 1,
-            cgst: 1,
-            grand_total: 1,
-        })
-            .sort({ invoice_no: -1 })
-            .skip(skip)
-            .limit(limit);
+        const invoices = await Invoice.aggregate([
+          { $match: query },
+          { $sort: { invoice_no: -1 } },
+          { $skip: skip },
+          { $limit: limit },
+          {
+            $project: {
+              uuid: 1,
+              invoice_no: 1,
+              date: 1,
+              company_name: 1,
+              company_gst_no: 1,
+              igst: 1,
+              sgst: 1,
+              cgst: 1,
+              grand_total: 1,
+              invoice_items_count: { $size: "$invoice_items" },
+            },
+          },
+        ]);
 
         const total = await Invoice.countDocuments(query);
 
