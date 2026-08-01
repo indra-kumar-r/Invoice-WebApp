@@ -99,7 +99,15 @@
         <div class="items-section">
           <div class="items-list">
             <div class="list-header py-2 px-2 fw-bold">
-              <div class="name">Name</div>
+              <div class="name">
+                Name
+
+                <span class="no-print text-secondary">
+                  @if (invoice.invoice_items?.length) {
+                    &nbsp;({{ invoice.invoice_items.length }})
+                  }
+                </span>
+              </div>
               <div class="quantity">Quantity</div>
               <div class="rate">Rate</div>
               <div class="amount">Amount</div>
@@ -160,15 +168,15 @@
               <div>{{ invoice.total }} ₹</div>
 
               <ng-container *ngIf="invoice.sgst">
-                <div>{{ invoice.sgst | number : "1.0-0" }} ₹</div>
+                <div>{{ invoice.sgst | number: "1.0-0" }} ₹</div>
               </ng-container>
 
               <ng-container *ngIf="invoice.cgst">
-                <div>{{ invoice.cgst | number : "1.0-0" }} ₹</div>
+                <div>{{ invoice.cgst | number: "1.0-0" }} ₹</div>
               </ng-container>
 
               <ng-container *ngIf="invoice.igst">
-                <div>{{ invoice.igst | number : "1.0-0" }} ₹</div>
+                <div>{{ invoice.igst | number: "1.0-0" }} ₹</div>
               </ng-container>
 
               <div>{{ invoice.grand_total }} ₹</div>
