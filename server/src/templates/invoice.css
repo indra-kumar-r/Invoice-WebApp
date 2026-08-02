@@ -1,0 +1,345 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #222;
+  background: white;
+  padding: 4px;
+}
+
+.invoice-details {
+  width: 100%;
+  height: 95vh !important;
+  border: 1px solid darkgray;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 36px;
+  border-bottom: 1px solid lightgray;
+}
+
+.company-details {
+  width: 65%;
+  display: flex;
+  gap: 16px;
+}
+
+.company-logo {
+  width: 70px;
+}
+
+.company-logo img {
+  width: 60px;
+  object-fit: contain;
+}
+
+.company-details section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.company-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.company-address {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.company-gst {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.tax-invoice-title {
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.tax-invoice-title .title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.mobile {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.numbers {
+  display: flex;
+  flex-direction: column;
+}
+
+.content-section {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 16px;
+  padding: 12px 36px 0 36px;
+}
+
+.info-section {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.receiver-info-section {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.receiver-company-name {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.receiver-address,
+.receiver-gst {
+  font-weight: 600;
+}
+
+.invoice-info-section {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.invoice-no .value,
+.invoice-date .value {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.extras-section {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.items-section {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.items-section table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.items-section thead {
+  background: #f8f8f8;
+}
+
+.items-section th,
+.items-section td {
+  border: 1px solid #d8d8d8;
+  padding: 4px 10px;
+  font-size: 10px;
+}
+
+.items-section th {
+  font-weight: bold;
+}
+
+.items-section .name {
+  width: 60%;
+  text-align: left;
+  word-break: break-word;
+}
+
+.items-section th:not(.name),
+.items-section td:not(.name) {
+  width: 13%;
+  text-align: right;
+}
+
+.amount-section {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  border-top: 1px solid lightgray;
+  padding-top: 12px;
+}
+
+.grand-total-amount-section {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.grand-total-amount {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.grand-total-value {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.amount-in-words {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.amount-in-words .amount-label {
+  white-space: nowrap;
+  margin-top: none;
+}
+
+.amount-in-words .value {
+  font-weight: bold;
+}
+
+.total-amount-section {
+  width: 35%;
+}
+
+.total-amount-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.total-amount-section td {
+  padding: 4px 6px;
+  border-bottom: 1px solid #ddd;
+  font-size: 12px;
+}
+
+.total-amount-section td:last-child {
+  text-align: right;
+  font-weight: bold;
+}
+
+.grand-total-row td {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.footer-section {
+  border-top: 1px solid lightgray;
+  padding: 12px 36px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.conditions {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.signatures {
+  width: 50%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+}
+
+.signature-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.signature-area {
+  width: 170px;
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signature-area img {
+  max-height: 60px;
+  object-fit: contain;
+}
+
+.label {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+table,
+tr,
+td,
+th {
+  page-break-inside: avoid;
+}
+
+.footer-section {
+  page-break-inside: avoid;
+}
+
+.header-section {
+  page-break-inside: avoid;
+}
+
+.amount-section {
+  page-break-inside: avoid;
+}
+
+.items-section thead {
+  display: table-header-group;
+}
+
+.items-section tfoot {
+  display: table-footer-group;
+}
