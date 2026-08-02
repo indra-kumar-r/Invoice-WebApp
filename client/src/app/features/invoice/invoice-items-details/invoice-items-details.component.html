@@ -170,6 +170,13 @@
                 </ng-container>
               </div>
             </ng-container>
+
+            @if (invoiceItems.length >= 20) {
+              <div class="form-alert alert alert-warning fw-bold" role="alert">
+                20 items can be added to an invoice. <br />You can add more
+                items by creating a new invoice.
+              </div>
+            }
           </form>
         </section>
       </div>

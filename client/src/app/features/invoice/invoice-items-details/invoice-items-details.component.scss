@@ -227,6 +227,7 @@
         }
 
         form {
+          position: relative;
           width: 30%;
           height: 100%;
           display: flex;
@@ -234,7 +235,7 @@
           justify-content: flex-start;
           flex-direction: column;
           gap: 4px;
-          padding: 42px 12px;
+          padding: 24px 12px;
           border-radius: 8px;
           background-color: white;
           overflow: auto;
@@ -278,6 +279,17 @@
             button {
               font-size: 14px;
             }
+          }
+
+          .form-alert {
+            position: absolute;
+            bottom: 0;
+            width: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            font-size: 10px;
           }
         }
       }

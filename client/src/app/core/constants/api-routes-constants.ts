@@ -12,6 +12,7 @@ export const InvoiceApiRoutes = {
   GET_BY_UUID: '/api/invoices/:uuid',
   UPDATE: '/api/invoices/:uuid',
   DELETE: '/api/invoices/:uuid',
+  SHARE: '/api/invoices/:uuid/share',
 };
 
 export const GstApiRoutes = {

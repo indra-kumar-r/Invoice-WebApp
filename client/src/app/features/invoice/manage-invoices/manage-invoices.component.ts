@@ -30,6 +30,7 @@ import {
 import { FormatDatePipe } from '../../../core/pipes/format-date.pipe';
 import { ToasterService } from '../../../core/services/toaster/toaster.service';
 import { GstComponent } from '../../gst/gst.component';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-manage-invoices',
@@ -77,6 +78,10 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
   showCompanyDropdown: boolean = false;
 
   showGstModal: boolean = false;
+
+  selectedInvoiceForShare: Invoice | null = null;
+  includeSignature: boolean = false;
+  isSharingInvoice: boolean = false;
 
   constructor(
     private router: Router,
@@ -219,6 +224,65 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
 
   viewInvoice(uuid: string): void {
     this.router.navigate(['/invoices/view-invoice/', uuid]);
+  }
+
+  confirmInvoiceShare(uuid: string): void {
+    this.includeSignature = false;
+
+    this.invoiceService
+      .getInvoice(uuid)
+      .pipe(
+        tap((res: Invoice) => {
+          this.selectedInvoiceForShare = res;
+
+          const modalElement = document.getElementById('shareInvoiceModal');
+
+          if (modalElement) {
+            Modal.getOrCreateInstance(modalElement).show();
+          }
+        }),
+        catchError((err) => {
+          console.error('Error fetching invoice:', err);
+          this.toasterService.toast('Error fetching invoice.');
+          return of(null);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+  }
+
+  shareInvoice(): void {
+    if (!this.selectedInvoiceForShare) return;
+
+    this.isSharingInvoice = true;
+
+    this.invoiceService
+      .shareInvoice(this.selectedInvoiceForShare.uuid, this.includeSignature)
+      .pipe(
+        tap(() => {
+          this.toasterService.toast('Invoice shared successfully.');
+
+          const modalElement = document.getElementById('shareInvoiceModal');
+
+          if (modalElement) {
+            const modal = Modal.getOrCreateInstance(modalElement);
+            modal.hide();
+          }
+
+          this.selectedInvoiceForShare = null;
+          this.includeSignature = false;
+        }),
+        catchError((err) => {
+          console.error('Error sharing invoice:', err);
+          this.toasterService.toast('Error sharing invoice.');
+          return of(null);
+        }),
+        finalize(() => {
+          this.isSharingInvoice = false;
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   applyFilters(): void {

@@ -134,6 +134,13 @@
                 >
                   <i class="bi bi-printer fs-5"></i>
                 </div>
+
+                <div
+                  class="btn btn-light d-flex btn-sm text-warning fw-bolder"
+                  (click)="confirmInvoiceShare(invoice.uuid)"
+                >
+                  <i class="bi bi-envelope-arrow-up fs-5"></i>
+                </div>
               </ng-container>
             </div>
           </div>
@@ -204,11 +211,11 @@
       <div class="modal-content p-3">
         <div class="header">
           <div
-            class="modal-title d-flex gap-2 align-items-center justify-content-start px-3 fs-6 text-danger"
+            class="modal-title d-flex gap-2 align-items-center justify-content-start px-3 fs-3 fw-bolder text-danger"
             id="deleteInvoiceModalLabel"
           >
             Delete Invoice -
-            <span class="fs-3 fw-bolder">
+            <span>
               {{ selectedInvoice?.invoice_no }}
             </span>
           </div>
@@ -220,12 +227,12 @@
               Company: {{ selectedInvoice?.company_name }}
             </div>
 
-            <div class="invoice-date text-dark fs-6 fw-bolder">
+            <div class="invoice-date text-secondary fs-6 fw-bolder">
               Date: {{ selectedInvoice?.date | formatDate }}
             </div>
 
             <ng-container *ngIf="selectedInvoice?.grand_total">
-              <div class="invoice-amount text-success fs-6 fw-bolder">
+              <div class="invoice-amount text-secondary fs-6 fw-bolder">
                 Amount: {{ selectedInvoice?.grand_total }} ₹
               </div>
             </ng-container>
@@ -258,6 +265,108 @@
           >
             <i class="bi bi-trash3-fill"></i>
             Delete Invoice
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container>
+  <div
+    class="modal fade"
+    id="shareInvoiceModal"
+    tabindex="-1"
+    aria-labelledby="shareInvoiceModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-3">
+        <div class="header">
+          <div
+            class="modal-title d-flex gap-2 align-items-center px-3 fs-3 fw-bolder text-warning"
+            id="shareInvoiceModalLabel"
+          >
+            Share Invoice -
+            <span>
+              {{ selectedInvoiceForShare?.invoice_no }}
+            </span>
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <div class="deleting-invoice-details">
+            <div class="invoice-company text-secondary fs-6 fw-bolder">
+              Company:
+              {{ selectedInvoiceForShare?.company_name }}
+            </div>
+
+            <div class="invoice-date text-secondary fs-6 fw-bolder">
+              Date:
+              {{ selectedInvoiceForShare?.date | formatDate }}
+            </div>
+
+            <div
+              *ngIf="selectedInvoiceForShare?.grand_total"
+              class="invoice-amount text-secondary fs-6 fw-bolder"
+            >
+              Amount:
+              {{ selectedInvoiceForShare?.grand_total }} ₹
+            </div>
+          </div>
+
+          <div class="form-check mt-4">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="includeSignature"
+              [(ngModel)]="includeSignature"
+            />
+
+            <label
+              class="form-check-label fw-bold text-secondary"
+              for="includeSignature"
+            >
+              Include Signature
+            </label>
+          </div>
+
+          <div class="text-warning text-center mt-4 fw-bold">
+            Share this invoice via email?
+          </div>
+
+          <div class="image">
+            <img src="mail-delivery.png" type="image/*" alt="delete-details" />
+          </div>
+        </div>
+
+        <div
+          class="footer d-flex align-items-center justify-content-center gap-2"
+        >
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm py-2 px-4 fw-bold"
+            data-bs-dismiss="modal"
+            [disabled]="isSharingInvoice"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="text-light btn btn-warning btn-sm py-2 px-4 fw-bold"
+            (click)="shareInvoice()"
+            [disabled]="isSharingInvoice"
+          >
+            <ng-container *ngIf="!isSharingInvoice">
+              <i class="bi bi-envelope-arrow-up-fill fs-6 me-1"></i>
+              Share Invoice
+            </ng-container>
+
+            <ng-container *ngIf="isSharingInvoice">
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Sharing...
+            </ng-container>
           </button>
         </div>
       </div>

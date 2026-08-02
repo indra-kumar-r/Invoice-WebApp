@@ -98,7 +98,7 @@
 
         <div class="items-section">
           <div class="items-list">
-            <div class="list-header py-2 px-2 fw-bold">
+            <div class="list-header py-1 px-2 fw-bold">
               <div class="name">
                 Name
 
@@ -114,10 +114,15 @@
             </div>
 
             <div
-              class="list-item py-2 px-2 fw-bold"
+              class="list-item py-1 px-2 fw-bold"
               *ngFor="let item of invoice.invoice_items; let i = index"
             >
-              <div class="name">{{ item.name }}</div>
+              <div class="name">
+                <span class="no-print text-secondary">
+                  {{ i + 1 }}. &nbsp;&nbsp;&nbsp;
+                </span>
+                {{ item.name }}
+              </div>
               <div class="quantity">{{ item.quantity }}</div>
               <div class="rate">{{ item.rate }} ₹</div>
               <div class="amount">{{ item.amount }} ₹</div>
