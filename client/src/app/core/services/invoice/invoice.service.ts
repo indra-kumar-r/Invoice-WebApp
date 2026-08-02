@@ -58,4 +58,11 @@ export class InvoiceService {
       InvoiceApiRoutes.DELETE.replace(':uuid', uuid)
     );
   }
+
+  shareInvoice(uuid: string, isSigned: boolean): Observable<void> {
+    return this.api.post<void>(
+      InvoiceApiRoutes.SHARE.replace(':uuid', uuid),
+      { isSigned }
+    );
+  }
 }

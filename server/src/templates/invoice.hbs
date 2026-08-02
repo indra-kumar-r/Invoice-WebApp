@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Invoice</title>
+
+    <link rel="stylesheet" href="invoice.css" />
+  </head>
+
+  <body>
+    <div class="invoice-details">
+      <div class="header-section">
+        <div class="company-details">
+          <div class="company-logo">
+            <img src="{{logoUrl}}" alt="Logo" />
+          </div>
+
+          <section>
+            <div class="company-name">{{company.name}}</div>
+
+            <div class="company-address">{{company.address}}</div>
+
+            <div class="company-gst">GSTIN: {{company.gstin}}</div>
+          </section>
+        </div>
+
+        <div class="tax-invoice-title">
+          <span class="title"> TAX INVOICE </span>
+
+          <div class="mobile">
+            <div>Mob:</div>
+
+            <div class="numbers">
+              {{#each company.phoneNumbers}}
+                <div>{{this}}</div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <div class="info-section">
+          <div class="receiver-info-section">
+            <div class="receiver-company-name">{{invoice.company_name}}</div>
+
+            <div class="receiver-address">{{invoice.company_address}}</div>
+
+            <div class="receiver-gst">
+              Party GSTIN No: {{invoice.company_gst_no}}
+            </div>
+          </div>
+
+          <div class="invoice-info-section">
+            <div class="invoice-no">
+              <span>Invoice No:</span>
+
+              <span class="value"> {{invoice.invoice_no}} </span>
+            </div>
+
+            <div class="invoice-date">
+              Date:
+
+              <span class="value"> {{invoice.date}} </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="extras-section">
+          {{#if invoice.dc_nos.length}}
+
+            <div>
+              DC No:
+
+              <span class="bold">
+                {{#each invoice.dc_nos}}
+                  {{this}}
+                  {{#unless @last}} / {{/unless}}
+                {{/each}}
+              </span>
+            </div>
+
+          {{/if}}
+          {{#if invoice.order_nos.length}}
+
+            <div>
+              Order No:
+
+              <span class="bold">
+                {{#each invoice.order_nos}}
+                  {{this}}
+                  {{#unless @last}}
+                    /
+                  {{/unless}}
+                {{/each}}
+              </span>
+            </div>
+
+          {{/if}}
+        </div>
+
+        <div class="items-section">
+          <table>
+            <thead>
+              <tr>
+                <th class="name">Name</th>
+
+                <th>Quantity</th>
+
+                <th>Rate</th>
+
+                <th>Amount</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {{#each invoice.invoice_items}}
+
+                <tr>
+                  <td class="name">{{name}}</td>
+
+                  <td>{{quantity}}</td>
+
+                  <td>₹ {{rate}}</td>
+
+                  <td>₹ {{amount}}</td>
+                </tr>
+
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="amount-section">
+          <div class="grand-total-amount-section">
+            <div class="grand-total-amount">
+              <span>Grand Total:</span>
+
+              <span class="grand-total-value"> ₹ {{invoice.grand_total}} </span>
+            </div>
+
+            <div class="amount-in-words">
+              <span class="amount-label">Amount in Words: </span>
+
+              <span class="value">
+                {{invoice.amount_in_words}} only.
+              </span>
+            </div>
+          </div>
+
+          <div class="total-amount-section">
+            <table>
+              <tbody>
+                <tr>
+                  <td>Total</td>
+                  <td>₹ {{invoice.total}}</td>
+                </tr>
+
+                {{#if invoice.sgst}}
+
+                  <tr>
+                    <td>SGST {{invoice.sgst_rate}}%</td>
+
+                    <td>₹ {{invoice.sgst}}</td>
+                  </tr>
+
+                {{/if}}
+                {{#if invoice.cgst}}
+
+                  <tr>
+                    <td>CGST {{invoice.cgst_rate}}%</td>
+
+                    <td>₹ {{invoice.cgst}}</td>
+                  </tr>
+
+                {{/if}}
+                {{#if invoice.igst}}
+
+                  <tr>
+                    <td>IGST {{invoice.igst_rate}}%</td>
+
+                    <td>₹ {{invoice.igst}}</td>
+                  </tr>
+
+                {{/if}}
+
+                <tr class="grand-total-row">
+                  <td>Grand Total</td>
+
+                  <td>₹ {{invoice.grand_total}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <div class="conditions">
+          {{#each company.conditions}}
+
+            <div>{{inc @index}}. {{this}}</div>
+
+          {{/each}}
+        </div>
+
+        <div class="signatures">
+          <div class="signature-section">
+            <div class="signature-area"></div>
+
+            <div class="label">Receiver's Signature</div>
+          </div>
+
+          <div class="signature-section">
+            <div class="signature-area">
+              {{#if isSigned}}
+
+                <img src="{{signatureUrl}}" alt="Signature" />
+
+              {{/if}}
+            </div>
+
+            <div class="label">Authorised Signature</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

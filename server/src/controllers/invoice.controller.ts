@@ -1,127 +1,154 @@
-import { v4 as uuidv4 } from 'uuid';
-import Invoice from '../models/invoice.model.js';
+import { v4 as uuidv4 } from "uuid";
+import Invoice from "../models/invoice.model.js";
+import invoiceShareService from "../services/invoice-share.service.js";
 
 // Create
 export const createInvoice = async (req: any, res: any) => {
-    try {
-        if (Array.isArray(req.body.invoice_items)) {
-            req.body.invoice_items = req.body.invoice_items.map(
-                (item: any) => ({
-                    uuid: uuidv4(),
-                    ...item,
-                })
-            );
-        }
-
-        if (!req.body.uuid) {
-            req.body.uuid = uuidv4();
-        }
-
-        const invoice = await Invoice.create(req.body);
-        res.status(201).json(invoice);
-    } catch (error) {
-        res.status(500).json({ message: 'Error creating invoice', error });
+  try {
+    if (Array.isArray(req.body.invoice_items)) {
+      req.body.invoice_items = req.body.invoice_items.map((item: any) => ({
+        uuid: uuidv4(),
+        ...item,
+      }));
     }
+
+    if (!req.body.uuid) {
+      req.body.uuid = uuidv4();
+    }
+
+    const invoice = await Invoice.create(req.body);
+    res.status(201).json(invoice);
+  } catch (error) {
+    res.status(500).json({ message: "Error creating invoice", error });
+  }
 };
 
 // Get All (summary only)
 export const getAllInvoices = async (_req: any, res: any) => {
-    try {
-        const { search, page = 1, fromDate, toDate, company } = _req.query;
+  try {
+    const { search, page = 1, fromDate, toDate, company } = _req.query;
 
-        const query: any = {};
+    const query: any = {};
 
-        if (search) {
-            query.$or = [
-                { invoice_no: { $regex: search, $options: 'i' } },
-                { company_name: { $regex: search, $options: 'i' } },
-            ];
-        }
-
-        if (company) {
-            query.company_name = company;
-        }
-
-        if (fromDate || toDate) {
-            const dateFilter: any = {};
-            if (fromDate) dateFilter.$gte = new Date(fromDate);
-            if (toDate) {
-                const to = new Date(toDate);
-                to.setHours(23, 59, 59, 999);
-                dateFilter.$lte = to;
-            }
-            query.date = dateFilter;
-        }
-
-        const limit = 10;
-        const skip = (parseInt(page) - 1) * limit;
-
-        const invoices = await Invoice.find(query, {
-            uuid: 1,
-            invoice_no: 1,
-            date: 1,
-            company_name: 1,
-            company_gst_no: 1,
-            igst: 1,
-            sgst: 1,
-            cgst: 1,
-            grand_total: 1,
-        })
-            .sort({ invoice_no: -1 })
-            .skip(skip)
-            .limit(limit);
-
-        const total = await Invoice.countDocuments(query);
-
-        res.json({
-            data: invoices,
-            total,
-            page: parseInt(page),
-            totalPages: Math.ceil(total / limit),
-        });
-    } catch (error) {
-        res.status(500).json({ message: 'Error fetching invoices', error });
+    if (search) {
+      query.$or = [
+        { invoice_no: { $regex: search, $options: "i" } },
+        { company_name: { $regex: search, $options: "i" } },
+      ];
     }
+
+    if (company) {
+      query.company_name = company;
+    }
+
+    if (fromDate || toDate) {
+      const dateFilter: any = {};
+      if (fromDate) dateFilter.$gte = new Date(fromDate);
+      if (toDate) {
+        const to = new Date(toDate);
+        to.setHours(23, 59, 59, 999);
+        dateFilter.$lte = to;
+      }
+      query.date = dateFilter;
+    }
+
+    const limit = 10;
+    const skip = (parseInt(page) - 1) * limit;
+
+    const invoices = await Invoice.aggregate([
+      { $match: query },
+      { $sort: { invoice_no: -1 } },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $project: {
+          uuid: 1,
+          invoice_no: 1,
+          date: 1,
+          company_name: 1,
+          company_gst_no: 1,
+          igst: 1,
+          sgst: 1,
+          cgst: 1,
+          grand_total: 1,
+          invoice_items_count: { $size: "$invoice_items" },
+        },
+      },
+    ]);
+
+    const total = await Invoice.countDocuments(query);
+
+    res.json({
+      data: invoices,
+      total,
+      page: parseInt(page),
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching invoices", error });
+  }
 };
 
 // Get One
 export const getInvoiceByUUID = async (req: any, res: any) => {
-    try {
-        const invoice = await Invoice.findOne({ uuid: req.params.uuid });
-        if (!invoice)
-            return res.status(404).json({ message: 'Invoice not found' });
-        res.json(invoice);
-    } catch (error) {
-        res.status(500).json({ message: 'Error fetching invoice', error });
-    }
+  try {
+    const invoice = await Invoice.findOne({ uuid: req.params.uuid });
+    if (!invoice) return res.status(404).json({ message: "Invoice not found" });
+    res.json(invoice);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching invoice", error });
+  }
 };
 
 // Update
 export const updateInvoice = async (req: any, res: any) => {
-    try {
-        const invoice = await Invoice.findOneAndUpdate(
-            { uuid: req.params.uuid },
-            req.body,
-            { new: true }
-        );
-        if (!invoice)
-            return res.status(404).json({ message: 'Invoice not found' });
-        res.json(invoice);
-    } catch (error) {
-        res.status(500).json({ message: 'Error updating invoice', error });
-    }
+  try {
+    const invoice = await Invoice.findOneAndUpdate(
+      { uuid: req.params.uuid },
+      req.body,
+      { new: true },
+    );
+    if (!invoice) return res.status(404).json({ message: "Invoice not found" });
+    res.json(invoice);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating invoice", error });
+  }
 };
 
 // Delete
 export const deleteInvoice = async (req: any, res: any) => {
-    try {
-        const invoice = await Invoice.findOneAndDelete({
-            uuid: req.params.uuid,
-        });
-        if (!invoice)
-            return res.status(404).json({ message: 'Invoice not found' });
-        res.json({ message: 'Invoice deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ message: 'Error deleting invoice', error });
+  try {
+    const invoice = await Invoice.findOneAndDelete({
+      uuid: req.params.uuid,
+    });
+    if (!invoice) return res.status(404).json({ message: "Invoice not found" });
+    res.json({ message: "Invoice deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting invoice", error });
+  }
+};
+
+// Share Invoice
+export const shareInvoice = async (req: any, res: any) => {
+  try {
+    const { isSigned } = req.body;
+    await invoiceShareService.shareInvoice(req.params.uuid, isSigned);
+
+    res.status(200).json({
+      message: "Invoice shared successfully",
+    });
+  } catch (error: any) {
+    console.error("Error sharing invoice:", error);
+
+    if (error.message === "Invoice not found") {
+      return res.status(404).json({
+        message: error.message,
+      });
     }
+
+    res.status(500).json({
+      message: "Failed to share invoice",
+      error: error.message,
+    });
+  }
 };

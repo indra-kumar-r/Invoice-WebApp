@@ -30,6 +30,7 @@ import {
 import { FormatDatePipe } from '../../../core/pipes/format-date.pipe';
 import { ToasterService } from '../../../core/services/toaster/toaster.service';
 import { GstComponent } from '../../gst/gst.component';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-manage-invoices',
@@ -78,11 +79,15 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
 
   showGstModal: boolean = false;
 
+  selectedInvoiceForShare: Invoice | null = null;
+  includeSignature: boolean = false;
+  isSharingInvoice: boolean = false;
+
   constructor(
     private router: Router,
     private invoiceService: InvoiceService,
     private companyService: CompanyService,
-    private toasterService: ToasterService
+    private toasterService: ToasterService,
   ) {}
 
   ngOnInit(): void {
@@ -99,7 +104,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const clickedInside = this.companyDropdownRef?.nativeElement.contains(
-      event.target
+      event.target,
     );
     if (!clickedInside) this.showCompanyDropdown = false;
   }
@@ -150,7 +155,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
           } as InvoiceResponse);
         }),
         takeUntil(this.destroy$),
-        finalize(() => (this.isLoading = false))
+        finalize(() => (this.isLoading = false)),
       )
       .subscribe();
   }
@@ -166,7 +171,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
           this.companies = [];
           return of([]);
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
@@ -185,7 +190,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
     this.router.navigate(['/invoices/basic-details/', uuid]);
   }
 
-  selectInvoice(id: string): void {
+  confirmInvoiceDeletion(id: string): void {
     this.invoiceService
       .getInvoice(id)
       .pipe(
@@ -194,7 +199,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
           console.error('Error fetching invoice: ', err);
           return of(null);
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
@@ -212,7 +217,7 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
           this.toasterService.toast('Error deleting invoice.');
           return of(null);
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
@@ -221,10 +226,69 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
     this.router.navigate(['/invoices/view-invoice/', uuid]);
   }
 
+  confirmInvoiceShare(uuid: string): void {
+    this.includeSignature = false;
+
+    this.invoiceService
+      .getInvoice(uuid)
+      .pipe(
+        tap((res: Invoice) => {
+          this.selectedInvoiceForShare = res;
+
+          const modalElement = document.getElementById('shareInvoiceModal');
+
+          if (modalElement) {
+            Modal.getOrCreateInstance(modalElement).show();
+          }
+        }),
+        catchError((err) => {
+          console.error('Error fetching invoice:', err);
+          this.toasterService.toast('Error fetching invoice.');
+          return of(null);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+  }
+
+  shareInvoice(): void {
+    if (!this.selectedInvoiceForShare) return;
+
+    this.isSharingInvoice = true;
+
+    this.invoiceService
+      .shareInvoice(this.selectedInvoiceForShare.uuid, this.includeSignature)
+      .pipe(
+        tap(() => {
+          this.toasterService.toast('Invoice shared successfully.');
+
+          const modalElement = document.getElementById('shareInvoiceModal');
+
+          if (modalElement) {
+            const modal = Modal.getOrCreateInstance(modalElement);
+            modal.hide();
+          }
+
+          this.selectedInvoiceForShare = null;
+          this.includeSignature = false;
+        }),
+        catchError((err) => {
+          console.error('Error sharing invoice:', err);
+          this.toasterService.toast('Error sharing invoice.');
+          return of(null);
+        }),
+        finalize(() => {
+          this.isSharingInvoice = false;
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+  }
+
   applyFilters(): void {
     if (this.filters.fromDate && this.filters.toDate) {
       this.invoiceQuery.fromDate = this.formatDateForQuery(
-        this.filters.fromDate
+        this.filters.fromDate,
       );
       this.invoiceQuery.toDate = this.formatDateForQuery(this.filters.toDate);
     } else {
@@ -247,5 +311,17 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
 
   private formatDateForQuery(dateStr: string): string {
     return dateStr ? new Date(dateStr).toISOString() : '';
+  }
+
+  copyInvoiceID(invoiceId: string): void {
+    navigator.clipboard
+      .writeText(invoiceId)
+      .then(() => {
+        this.toasterService.toast('Invoice ID copied to clipboard.');
+      })
+      .catch((err) => {
+        console.error('Error copying invoice ID: ', err);
+        this.toasterService.toast('Error copying invoice ID.');
+      });
   }
 }

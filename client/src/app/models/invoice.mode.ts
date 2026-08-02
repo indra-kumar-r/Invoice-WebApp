@@ -20,6 +20,7 @@ export interface Invoice {
   total?: number;
   grand_total?: number;
   amount_in_words?: string;
+  invoice_items_count?: number;
   created_at?: string;
   updated_at?: string;
 }
