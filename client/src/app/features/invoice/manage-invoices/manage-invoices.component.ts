@@ -248,4 +248,16 @@ export class ManageInvoicesComponent implements OnInit, OnDestroy {
   private formatDateForQuery(dateStr: string): string {
     return dateStr ? new Date(dateStr).toISOString() : '';
   }
+
+  copyInvoiceID(invoiceId: string): void {
+    navigator.clipboard
+      .writeText(invoiceId)
+      .then(() => {
+        this.toasterService.toast('Invoice ID copied to clipboard.');
+      })
+      .catch((err) => {
+        console.error('Error copying invoice ID: ', err);
+        this.toasterService.toast('Error copying invoice ID.');
+      });
+  }
 }

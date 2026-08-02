@@ -82,7 +82,12 @@
           >
             <div class="invoice-details">
               <div class="section">
-                <div class="invoice-number fs-4 fw-bolder">
+                <div
+                  class="invoice-number fs-4 fw-bolder"
+                  (click)="
+                    copyInvoiceID(invoice.uuid); $event.stopPropagation()
+                  "
+                >
                   {{ invoice?.invoice_no }}
                 </div>
                 <div class="invoice-company text-secondary fw-bolder">
